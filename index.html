@@ -1,0 +1,93 @@
+// Frontend (React + Tailwind) - Landing Page Example
+import React from "react";
+
+export default function HomePage() {
+  return (
+    <div className="font-sans">
+      {/* Instagram Ribbon */}
+      <div className="bg-green-300 text-center py-2">
+        <a
+          href="https://www.instagram.com/ibomsportshub1?igsh=YzdqbjUxa2NrdWQ1"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold"
+        >
+          CLICK HERE TO VIEW INSTAGRAM CHANNEL
+        </a>
+      </div>
+
+      {/* Header */}
+      <div className="flex items-center justify-center gap-4 py-4">
+        <img
+          src="/logo.png"
+          alt="logo"
+          className="w-16 h-16 rounded-full"
+        />
+        <div>
+          <h1 className="text-2xl font-bold">IBOM SPORTS HUB</h1>
+          <p className="text-sm">227, Ikot Ekpene Road, Uyo</p>
+        </div>
+      </div>
+
+      {/* Description */}
+      <div className="bg-green-200 p-4 text-center" style={{ fontFamily: "Comic Sans MS" }}>
+        <p>
+          Ibom Sports Hub is a modern sports retail platform dedicated to providing high-quality football boots, jerseys, and sporting equipment for athletes and sports enthusiasts.
+        </p>
+        <p>
+          We specialize in offering top global brands such as Nike, Adidas, and Puma, with a focus on performance, style, and affordability.
+        </p>
+      </div>
+
+      {/* Search Bar */}
+      <div className="flex justify-center my-6">
+        <input
+          type="text"
+          placeholder="WHAT DO YOU WANT TO BUY"
+          className="w-3/4 p-3 border rounded-lg text-center placeholder-gray-400"
+        />
+      </div>
+
+      {/* Collections */}
+      <div className="px-6">
+        <h2 className="text-xl font-bold mb-4">Collections</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { name: "Boots", img: "/boot.jpg" },
+            { name: "Jersey & Sportswear", img: "/jersey.jpg" },
+            { name: "Gear", img: "/gear.jpg" },
+            { name: "Other Equipment", img: "/equipment.jpg" },
+          ].map((item, index) => (
+            <div key={index} className="text-center">
+              <img src={item.img} alt={item.name} className="rounded-lg" />
+              <p className="mt-2 font-semibold">{item.name}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="px-6 my-8">
+        <h2 className="text-xl font-bold mb-4">Reviews</h2>
+        <div className="flex overflow-x-scroll gap-4">
+          {["Great quality!", "Fast delivery!", "Loved the boots!"].map((review, i) => (
+            <div key={i} className="min-w-[200px] p-4 border rounded-lg">
+              {review}
+            </div>
+          ))}
+        </div>
+        <button className="mt-4 bg-green-400 text-white px-4 py-2 rounded">
+          Write a Review!
+        </button>
+      </div>
+
+      {/* Boot Wall */}
+      <div className="px-6 my-8">
+        <h2 className="text-xl font-bold mb-4">The Boot Wall</h2>
+        <img src="/bootwall.jpg" alt="Boot Wall" className="rounded-lg" />
+      </div>
+    </div>
+  );
+}
+
+
