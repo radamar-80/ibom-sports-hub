@@ -8,7 +8,13 @@ body { margin:0; font-family: Arial, Helvetica, sans-serif; background:#fff; col
 .top-banner { background:red; color:white; text-align:center; padding:10px; font-weight:bold; cursor:pointer; }
 header { display:flex; align-items:center; justify-content:space-between; padding:15px 30px; border-bottom:1px solid #ddd; }
 .logo { display:flex; align-items:center; gap:10px; }
-.logo img { height:40px; }
+.logo img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
 .collections { padding:30px; }
 .grid {
   display: flex;
