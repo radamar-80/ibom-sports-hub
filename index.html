@@ -164,6 +164,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 <div class="card" onclick="showSection('equipment')">
 <img src="equipment.jpg" alt="Equipment">
 <h3>Other Equipment</h3>
+
 </div>
 <div class="review-section">
 
@@ -375,6 +376,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 <h2>Payment Method</h2>
 <button onclick="showBank()">Bank Transfer</button>
 <div id="bankDetails" class="bank-box" style="display:none;"></div>
+</div>
 <div id="reviewPage">
 
   <h2>Rate Us!</h2>
@@ -392,6 +394,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <div class="submit-review" id="submitBtn" onclick="submitReview()">
     Submit
   </div>
+</div>
 </div><script>
 function showSection(section) {
     history.pushState({}, "", section);
@@ -495,13 +498,39 @@ function submitReview(){
 }
 setInterval(()=>{
   let slider = document.getElementById("reviewSlider");
-  slider.scrollBy({ left: 250, behavior: "smooth" });
+  slider.scrollBy({
+  left: slider.clientWidth,
+  behavior: "smooth"
+});
 
   // loop back
   if(slider.scrollLeft + slider.clientWidth >= slider.scrollWidth){
     slider.scrollTo({ left: 0, behavior: "smooth" });
   }
 }, 15000);
+function loadReviews(){
+  let reviews = JSON.parse(localStorage.getItem("reviews") || "[]");
+  let slider = document.getElementById("reviewSlider");
+
+  reviews.forEach(r => {
+    let card = document.createElement("div");
+    card.className = "review-card";
+    card.innerHTML = "⭐".repeat(r.rating) + " " + (r.text || "No comment");
+
+    slider.appendChild(card);
+  });
+}
+
+window.onload = loadReviews;
+document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+document.getElementById('reviewText').style.display='none';
+document.getElementById('submitBtn').style.display='none';
+function openReviewTab(){
+  document.querySelectorAll('#home, .section, #payment')
+    .forEach(s => s.style.display = 'none');
+
+  document.getElementById('reviewPage').style.display = 'block';
+}
 function toggleBootWall() {
   const items = document.getElementById('bootItems');
   const btn = document.getElementById('toggleBtn');
