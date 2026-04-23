@@ -15,6 +15,11 @@ header { display:flex; align-items:center; justify-content:space-between; paddin
   object-fit: cover;
   border: 2px solid #ddd;
 }
+#bootItems {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.6s ease-in-out;
+}
 .collections { padding:30px; }
 .grid {
   display: flex;
@@ -82,10 +87,10 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 <img src="equipment.jpg" alt="Equipment">
 <h3>Other Equipment</h3>
 </div>
-<div id="bootwall" class="section">
+</div>
+</div>
+<div id="bootwall">
 <h2 style="text-align:center; margin-bottom:20px;">The Boot Wall</h2>
-
-<!-- MAIN IMAGE (always visible) -->
 <div style="display:flex; justify-content:center;">
 <img src="bootwall.jpg" style="width:90%; max-width:900px; border-radius:15px;">
 </div>
@@ -94,14 +99,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 ⬇️ Show More
 </button>
 </div>
-<div id="bootItems" style="
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease;
-  margin-top: 20px;
-">
-</div>
-
+<div id="bootItems">
 </div>
 </div><div id="boots" class="section">
 <div class="product">
@@ -334,12 +332,12 @@ function toggleBootWall() {
   let items = document.getElementById('bootItems');
   let btn = document.getElementById('toggleBtn');
 
-  if (items.style.maxHeight === "0px" || items.style.maxHeight === "") {
-    items.style.maxHeight = "500px"; // expand
-    btn.innerHTML = "⬆️ Show Less";
-  } else {
-    items.style.maxHeight = "0px"; // collapse
+  if (items.style.maxHeight && items.style.maxHeight !== "0px") {
+    items.style.maxHeight = "0px";
     btn.innerHTML = "⬇️ Show More";
+  } else {
+    items.style.maxHeight = items.scrollHeight + "px";
+    btn.innerHTML = "⬆️ Show Less";
   }
 }
 
