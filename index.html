@@ -1,93 +1,305 @@
-// Frontend (React + Tailwind) - Landing Page Example
-import React from "react";
-
-export default function HomePage() {
-  return (
-    <div className="font-sans">
-      {/* Instagram Ribbon */}
-      <div className="bg-green-300 text-center py-2">
-        <a
-          href="https://www.instagram.com/ibomsportshub1?igsh=YzdqbjUxa2NrdWQ1"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-semibold"
-        >
-          CLICK HERE TO VIEW INSTAGRAM CHANNEL
-        </a>
-      </div>
-
-      {/* Header */}
-      <div className="flex items-center justify-center gap-4 py-4">
-        <img
-          src="/logo.png"
-          alt="logo"
-          className="w-16 h-16 rounded-full"
-        />
-        <div>
-          <h1 className="text-2xl font-bold">IBOM SPORTS HUB</h1>
-          <p className="text-sm">227, Ikot Ekpene Road, Uyo</p>
-        </div>
-      </div>
-
-      {/* Description */}
-      <div className="bg-green-200 p-4 text-center" style={{ fontFamily: "Comic Sans MS" }}>
-        <p>
-          Ibom Sports Hub is a modern sports retail platform dedicated to providing high-quality football boots, jerseys, and sporting equipment for athletes and sports enthusiasts.
-        </p>
-        <p>
-          We specialize in offering top global brands such as Nike, Adidas, and Puma, with a focus on performance, style, and affordability.
-        </p>
-      </div>
-
-      {/* Search Bar */}
-      <div className="flex justify-center my-6">
-        <input
-          type="text"
-          placeholder="WHAT DO YOU WANT TO BUY"
-          className="w-3/4 p-3 border rounded-lg text-center placeholder-gray-400"
-        />
-      </div>
-
-      {/* Collections */}
-      <div className="px-6">
-        <h2 className="text-xl font-bold mb-4">Collections</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { name: "Boots", img: "/boot.jpg" },
-            { name: "Jersey & Sportswear", img: "/jersey.jpg" },
-            { name: "Gear", img: "/gear.jpg" },
-            { name: "Other Equipment", img: "/equipment.jpg" },
-          ].map((item, index) => (
-            <div key={index} className="text-center">
-              <img src={item.img} alt={item.name} className="rounded-lg" />
-              <p className="mt-2 font-semibold">{item.name}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Reviews Section */}
-      <div className="px-6 my-8">
-        <h2 className="text-xl font-bold mb-4">Reviews</h2>
-        <div className="flex overflow-x-scroll gap-4">
-          {["Great quality!", "Fast delivery!", "Loved the boots!"].map((review, i) => (
-            <div key={i} className="min-w-[200px] p-4 border rounded-lg">
-              {review}
-            </div>
-          ))}
-        </div>
-        <button className="mt-4 bg-green-400 text-white px-4 py-2 rounded">
-          Write a Review!
-        </button>
-      </div>
-
-      {/* Boot Wall */}
-      <div className="px-6 my-8">
-        <h2 className="text-xl font-bold mb-4">The Boot Wall</h2>
-        <img src="/bootwall.jpg" alt="Boot Wall" className="rounded-lg" />
-      </div>
-    </div>
-  );
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ibom Sports Hub</title>
+<style>
+body { margin:0; font-family: Arial, Helvetica, sans-serif; background:#fff; color:#111; }
+.top-banner { background:red; color:white; text-align:center; padding:10px; font-weight:bold; cursor:pointer; }
+header { display:flex; align-items:center; justify-content:space-between; padding:15px 30px; border-bottom:1px solid #ddd; }
+.logo { display:flex; align-items:center; gap:10px; }
+.logo img { height:40px; }
+.collections { padding:30px; }
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
+@media (min-width: 768px) {
+  .grid {
+    flex-direction: row;
+  }
+}
+.card { cursor:pointer; text-align:center; }
+.card img { width:250px; height:250px; object-fit:cover; border-radius:10px; }
+.section { display:none; padding:30px; }
+.product img { width:300px; }
+button {
+  padding:10px 15px;
+  border:none;
+  cursor:pointer;
+  margin-top:10px;
+}
 
+/* ORDER button */
+.order-btn {
+  background: green;
+  color: white;
+}
+
+/* "I HAVE MADE PAYMENT" button */
+.pay-btn {
+  background: green;
+  color: white;
+}
+.qty { display:flex; align-items:center; gap:10px; margin-top:10px; }
+.qty button { width:30px; height:30px; }
+.order-btn { background:black; color:white; }
+.payment { display:none; padding:30px; }
+.bank-box { border:1px solid #000; padding:20px; margin-top:20px; }
+</style>
+</head>
+<body><div class="top-banner" onclick="window.open('https://www.instagram.com/ibomsportshub1?igsh=YzdqbjUxa2NrdWQ1','_blank')">
+CLICK HERE TO VIEW INSTAGRAM CHANNEL
+</div><header>
+<div class="logo">
+<img src="logo.png" alt="logo">
+<h2>IBOM SPORTS HUB</h2>
+</div>
+</header><div id="home" class="collections">
+<h2>Collections</h2>
+<div class="grid">
+<div class="card" onclick="showSection('boots')">
+<img src="boot.jpg" alt="Boots">
+<h3>Boots</h3>
+</div>
+<div class="card" onclick="showSection('gear')">
+<img src="gear.jpg" alt="Gear">
+<h3>Gear</h3>
+</div>
+</div>
+</div><div id="boots" class="section">
+<div class="product">
+<img src="photo3.jpg">
+<h3>Adidas Predator 26 Elite FT FG</h3>
+<p>Core Black/ Cloud White/ Lucid Red</p>
+<p>N45000</p>
+<p>Total: N<span id="bootTotal">45000</span></p>
+<div class="qty">
+   <button onclick="changeQty('bootQty', -1, 'bootTotal', 45000)">-</button>
+   <span id="bootQty">1</span>
+   <button onclick="changeQty('bootQty', 1, 'bootTotal', 45000)">+</button>
+</div>
+<button class="order-btn" onclick="showPayment('bootTotal')">ORDER</button>
+</div>
+
+<div class="product">
+  <img src="photo5.jpg">
+  <h3>Adidas F50 Sparkfusion Elite Low Cut FG/AG Coral Blaze</h3>
+  <p>Bliss Orange/ Lucid Blue/ Beam Orange</p>
+  <p>N45000</p>
+<p>Total: N<span id="bootTotal2">45000</span></p>
+  <div class="qty">
+   <button onclick="changeQty('bootQty2', -1, 'bootTotal2', 45000)">-</button>
+   <span id="bootQty2">1</span>
+   <button onclick="changeQty('bootQty2', 1, 'bootTotal2', 45000)">+</button>
+  </div>
+
+  <button class="order-btn" onclick="showPayment('bootTotal2')">ORDER</button>
+</div>
+
+<div class="product">
+  <img src="photo6.jpg">
+  <h3>Nike Air Zoom Mercurial Vapor XVI Elite SG-Pro</h3>
+  <p>Black/ Ice Blue</p>
+  <p>N45000</p>
+<p>Total: N<span id="bootTotal3">45000</span></p>
+  <div class="qty">
+   <button onclick="changeQty('bootQty3', -1, 'bootTotal3', 45000)">-</button>
+   <span id="bootQty3">1</span>
+   <button onclick="changeQty('bootQty3', 1, 'bootTotal3', 45000)">+</button>
+  </div>
+
+  <button class="order-btn" onclick="showPayment('bootTotal3')">ORDER</button>
+</div>
+
+<div class="product">
+  <img src="photo7.jpg">
+  <h3>Nike Superfly 10 Elite Mercurial Dream Speed FG</h3>
+  <p>Barely Green/ Crimson Pulse/ Metallic Gold</p>
+  <p>N45000</p>
+<p>Total: N<span id="bootTotal4">45000</span></p>
+  <div class="qty">
+    <button onclick="changeQty('bootQty4', -1, 'bootTotal4', 45000)">-</button>
+   <span id="bootQty4">1</span>
+   <button onclick="changeQty('bootQty4', 1, 'bootTotal4', 45000)">+</button>
+  </div>
+  <button class="order-btn" onclick="showPayment('bootTotal4')">ORDER</button>
+</div>
+
+<div class="product">
+  <img src="photo8.jpg">
+  <h3>Adidas F50 League FG/AG</h3>
+  <p>Reemergence Blue/ Pink</p>
+  <p>N45000</p>
+<p>Total: N<span id="bootTotal5">45000</span></p>
+  <div class="qty">
+   <button onclick="changeQty('bootQty5', -1, 'bootTotal5', 45000)">-</button>
+   <span id="bootQty5">1</span>
+   <button onclick="changeQty('bootQty5', 1, 'bootTotal5', 45000)">+</button>
+  </div>
+
+  <button class="order-btn" onclick="showPayment('bootTotal5')">ORDER</button>
+</div>
+
+<div class="product">
+  <img src="photo9.jpg">
+  <h3>Adidas Predator 26 Elite FT FG</h3>
+  <p>Crystal Sky/ Ray Blue/ Team Solar Yellow 2</p>
+  <p>N45000</p>
+<p>Total: N<span id="bootTotal6">45000</span></p>
+  <div class="qty">
+   <button onclick="changeQty('bootQty6', -1, 'bootTotal6', 45000)">-</button>
+   <span id="bootQty6">1</span>
+   <button onclick="changeQty('bootQty6', 1, 'bootTotal6', 45000)">+</button>
+  </div>
+
+  <button class="order-btn" onclick="showPayment('bootTotal6')">ORDER</button>
+</div>
+
+<div class="product">
+  <img src="photo10.jpg">
+  <h3>Adidas Predator 26 Elite LL FG</h3>
+  <p>Lucid Blue/ White/ Solar Red</p>
+  <p>N45000</p>
+<p>Total: N<span id="bootTotal7">45000</span></p>
+  <div class="qty">
+   <button onclick="changeQty('bootQty7', -1, 'bootTotal7', 45000)">-</button>
+   <span id="bootQty7">1</span>
+   <button onclick="changeQty('bootQty7', 1, 'bootTotal7', 45000)">+</button>
+  </div>
+
+  <button class="order-btn" onclick="showPayment('bootTotal7')">ORDER</button>
+</div>
+
+<div class="product">
+  <img src="photo11.jpg">
+  <h3>Adidas Predator 26 Elite FT FG</h3>
+  <p>Lucid Red/ Core Black/ Cloud White</p>
+  <p>N45000</p>
+<p>Total: N<span id="bootTotal8">45000</span></p>
+  <div class="qty">
+    <button onclick="changeQty('bootQty8', -1, 'bootTotal8', 45000)">-</button>
+   <span id="bootQty8">1</span>
+   <button onclick="changeQty('bootQty8', 1, 'bootTotal8', 45000)">+</button>
+  </div>
+
+  <button class="order-btn" onclick="showPayment('bootTotal8')">ORDER</button>
+</div>
+
+<div class="product">
+  <img src="photo12.jpg">
+  <h3>Kobe Phantom 6 Low Elite SE FG Black Mamba</h3>
+  <p>White/ Black/ Green</p>
+  <p>N45000</p>
+<p>Total: N<span id="bootTotal9">45000</span></p>
+  <div class="qty">
+   <button onclick="changeQty('bootQty9', -1, 'bootTotal9', 45000)">-</button>
+   <span id="bootQty9">1</span>
+   <button onclick="changeQty('bootQty9', 1, 'bootTotal9', 45000)">+</button>
+  </div>
+
+  <button class="order-btn" onclick="showPayment('bootTotal9')">ORDER</button>
+</div>
+
+<div class="product">
+  <img src="photo13.jpg">
+  <h3>Nike Phantom GX Low Cut Elite SE FG Thunder</h3>
+  <p>Purple/ Black/ White</p>
+  <p>N45000</p>
+<p>Total: N<span id="bootTotal10">45000</span></p>
+  <div class="qty">
+   <button onclick="changeQty('bootQty10', -1, 'bootTotal10', 45000)">-</button>
+   <span id="bootQty10">1</span>
+   <button onclick="changeQty('bootQty10', 1, 'bootTotal10', 45000)">+</button>
+  </div>
+
+  <button class="order-btn" onclick="showPayment('bootTotal10')">ORDER</button>
+</div>
+
+<div class="product">
+  <img src="photo14.jpg">
+  <h3>Nike Phantom 6 Low Cut Elite FG Attack</h3>
+  <p>White/ Blue/ Pink/ Black</p>
+  <p>N45000</p>
+<p>Total: N<span id="bootTotal11">45000</span></p>
+  <div class="qty">
+   <button onclick="changeQty('bootQty11', -1, 'bootTotal11', 45000)">-</button>
+   <span id="bootQty11">1</span>
+   <button onclick="changeQty('bootQty11', 1, 'bootTotal11', 45000)">+</button>
+  </div>
+
+  <button class="order-btn" onclick="showPayment('bootTotal11')">ORDER</button>
+</div>
+
+</div><div id="gear" class="section">
+<div class="product">
+<img src="photo4.jpg">
+<h3>Grip Socks</h3>
+<p>Black/ White/ Grey</p>
+<p>N3500</p>
+<p>Total: N<span id="gearTotal">3500</span></p>
+<div class="qty">
+   <button onclick="changeQty('gearQty', -1, 'gearTotal', 3500)">-</button>
+   <span id="gearQty">1</span>
+   <button onclick="changeQty('gearQty', 1, 'gearTotal', 3500)">+</button>
+</div>
+<button class="order-btn" onclick="showPayment('gearTotal')">ORDER</button>
+</div>
+</div><div id="payment" class="payment">
+<h2>Payment Method</h2>
+<button onclick="showBank()">Bank Transfer</button>
+<div id="bankDetails" class="bank-box" style="display:none;"></div>
+</div><script>
+function showSection(section) {
+    history.pushState({}, "", section);
+    document.getElementById('home').style.display='none';
+    document.getElementById(section).style.display='block';
+}
+
+function changeQty(qtyId, change, totalId, price) {
+    let qtyElement = document.getElementById(qtyId);
+    let qty = parseInt(qtyElement.innerText);
+
+    qty += change;
+    if (qty < 1) qty = 1;
+
+    qtyElement.innerText = qty;
+
+    let total = qty * price;
+    document.getElementById(totalId).innerText = total;
+}
+
+function showPayment(totalId) {
+    history.pushState({}, "", "payment");
+    document.querySelectorAll('.section').forEach(s => s.style.display='none');
+    document.getElementById('payment').style.display='block';
+
+    // get calculated total
+    let total = document.getElementById(totalId).innerText;
+
+    window.currentPrice = "N" + total;
+}
+function showBank() {
+document.getElementById('bankDetails').style.display='block';
+document.getElementById('bankDetails').innerHTML = `
+<p><strong>PRICE:</strong> ${window.currentPrice}</p>
+<p><strong>BANK NAME:</strong> OPAY</p>
+<p><strong>ACCOUNT NUMBER:</strong> 6422568271</p>
+<p><strong>ACCOUNT NAME:</strong> EFIOYOH AMOS IDEH</p>
+<button class="pay-btn" onclick="completePayment()">I HAVE MADE PAYMENT</button>
+`;
+}
+
+function completePayment() {
+document.getElementById('payment').style.display='none';
+document.getElementById('home').style.display='block';
+}
+
+window.onpopstate = function () {
+    document.querySelectorAll('.section, .payment').forEach(s => s.style.display = 'none');
+    document.getElementById('home').style.display = 'block';
+};
+</script></body>
+    </html>
