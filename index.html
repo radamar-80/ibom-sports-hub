@@ -328,15 +328,17 @@ document.getElementById('payment').style.display='none';
 document.getElementById('home').style.display='block';
 }
 function toggleBootWall() {
-  let items = document.getElementById('bootItems');
-  let btn = document.getElementById('toggleBtn');
+  const items = document.getElementById('bootItems');
+  const btn = document.getElementById('toggleBtn');
 
-  if (items.style.maxHeight && items.style.maxHeight !== "0px") {
-    items.style.maxHeight = "0px";
-    btn.innerHTML = "⬇️ Show More";
-  } else {
+  const computed = window.getComputedStyle(items).maxHeight;
+
+  if (computed === "0px") {
     items.style.maxHeight = items.scrollHeight + "px";
     btn.innerHTML = "⬆️ Show Less";
+  } else {
+    items.style.maxHeight = "0px";
+    btn.innerHTML = "⬇️ Show More";
   }
 }
 
