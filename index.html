@@ -82,9 +82,26 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 <img src="equipment.jpg" alt="Equipment">
 <h3>Other Equipment</h3>
 </div>
-<div class="card" onclick="showSection('bootwall')">
-<img src="bootwall.jpg" alt="Boot Wall">
-<h3>The Boot Wall</h3>
+<div id="bootwall" class="section">
+<h2 style="text-align:center; margin-bottom:20px;">The Boot Wall</h2>
+
+<!-- MAIN IMAGE (always visible) -->
+<div style="display:flex; justify-content:center;">
+<img src="bootwall.jpg" style="width:90%; max-width:900px; border-radius:15px;">
+</div>
+<div style="text-align:center; margin-top:15px;">
+<button onclick="toggleBootWall()" id="toggleBtn">
+⬇️ Show More
+</button>
+</div>
+<div id="bootItems" style="
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  margin-top: 20px;
+">
+</div>
+
 </div>
 </div><div id="boots" class="section">
 <div class="product">
@@ -312,6 +329,18 @@ document.getElementById('bankDetails').innerHTML = `
 function completePayment() {
 document.getElementById('payment').style.display='none';
 document.getElementById('home').style.display='block';
+}
+function toggleBootWall() {
+  let items = document.getElementById('bootItems');
+  let btn = document.getElementById('toggleBtn');
+
+  if (items.style.maxHeight === "0px" || items.style.maxHeight === "") {
+    items.style.maxHeight = "500px"; // expand
+    btn.innerHTML = "⬆️ Show Less";
+  } else {
+    items.style.maxHeight = "0px"; // collapse
+    btn.innerHTML = "⬇️ Show More";
+  }
 }
 
 window.onpopstate = function () {
