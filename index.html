@@ -20,6 +20,84 @@ header { display:flex; align-items:center; justify-content:space-between; paddin
   max-height: 0;
   transition: max-height 0.6s ease-in-out;
 }
+.review-section{
+  padding:20px;
+  margin-top:20px;
+}
+
+.review-slider{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  gap:15px;
+  padding:10px;
+  scroll-behavior:smooth;
+}
+
+.review-card{
+  min-width:80%;
+  flex:0 0 auto;
+  background:#f5f5f5;
+  padding:15px;
+  border-radius:10px;
+  scroll-snap-align:center;
+}
+
+/* hide scrollbar */
+.review-slider::-webkit-scrollbar{
+  display:none;
+}
+
+.review-btn{
+  margin-top:15px;
+  background:#b6f2b6;
+  border:none;
+  padding:12px 20px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+/* REVIEW PAGE */
+#reviewPage{
+  display:none;
+  padding:30px;
+}
+
+.stars{
+  font-size:35px;
+  cursor:pointer;
+}
+
+.star{
+  color:#ccc;
+  transition:0.2s;
+}
+
+.star.active{
+  color:gold;
+}
+
+textarea{
+  width:100%;
+  height:120px;
+  margin-top:15px;
+  display:none;
+  padding:10px;
+  position:relative;
+}
+
+textarea::placeholder{
+  opacity:0.4;
+}
+
+.submit-review{
+  color:blue;
+  cursor:pointer;
+  margin-top:10px;
+  display:none;
+  font-weight:bold;
+}
 .collections { padding:30px; }
 .grid {
   display: flex;
@@ -86,6 +164,21 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 <div class="card" onclick="showSection('equipment')">
 <img src="equipment.jpg" alt="Equipment">
 <h3>Other Equipment</h3>
+</div>
+<div class="review-section">
+
+  <div class="review-slider" id="reviewSlider">
+
+    <div class="review-card">⭐ “Great boots, very original quality!” – Daniel</div>
+    <div class="review-card">⭐ “Fast delivery, trusted seller.” – Aisha</div>
+    <div class="review-card">⭐ “Best sports shop I’ve used online 🔥” – Emeka</div>
+
+  </div>
+
+  <button class="review-btn" onclick="openReviewTab()">
+    Write a Review!
+  </button>
+
 </div>
 <div id="bootwall">
 <h2 style="text-align:center; margin-bottom:20px;">The Boot Wall</h2>
@@ -282,6 +375,23 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 <h2>Payment Method</h2>
 <button onclick="showBank()">Bank Transfer</button>
 <div id="bankDetails" class="bank-box" style="display:none;"></div>
+<div id="reviewPage">
+
+  <h2>Rate Us!</h2>
+
+  <div class="stars">
+    <span class="star" onclick="rate(1)">★</span>
+    <span class="star" onclick="rate(2)">★</span>
+    <span class="star" onclick="rate(3)">★</span>
+    <span class="star" onclick="rate(4)">★</span>
+    <span class="star" onclick="rate(5)">★</span>
+  </div>
+
+  <textarea id="reviewText" placeholder="Describe your experience (optional)"></textarea>
+
+  <div class="submit-review" id="submitBtn" onclick="submitReview()">
+    Submit
+  </div>
 </div><script>
 function showSection(section) {
     history.pushState({}, "", section);
@@ -327,6 +437,71 @@ function completePayment() {
 document.getElementById('payment').style.display='none';
 document.getElementById('home').style.display='block';
 }
+let selectedRating = 0;
+
+function openReviewTab(){
+  // hide ALL sections properly
+  document.querySelectorAll('.section').forEach(s => {
+    s.style.display = 'none';
+  });
+
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('payment').style.display = 'none';
+
+  // show review page
+  document.getElementById('reviewPage').style.display = 'block';
+}
+
+// star rating logic
+function rate(stars){
+  selectedRating = stars;
+
+  let starElements = document.querySelectorAll('.star');
+
+  starElements.forEach((s, index)=>{
+    if(index < stars){
+      s.classList.add('active');
+    } else {
+      s.classList.remove('active');
+    }
+  });
+
+  // show textarea + submit ONLY after first star
+  document.getElementById('reviewText').style.display='block';
+  document.getElementById('submitBtn').style.display='block';
+}
+
+// submit review
+function submitReview(){
+  let text = document.getElementById('reviewText').value;
+
+  let review = {
+    rating: selectedRating,
+    text: text
+  };
+
+  // save locally (temporary storage)
+  let reviews = JSON.parse(localStorage.getItem("reviews") || "[]");
+  reviews.push(review);
+  localStorage.setItem("reviews", JSON.stringify(reviews));
+
+  alert("Review submitted!");
+
+  // reset
+  selectedRating = 0;
+  document.getElementById('reviewText').value='';
+  document.getElementById('reviewPage').style.display='none';
+  document.getElementById('home').style.display='block';
+}
+setInterval(()=>{
+  let slider = document.getElementById("reviewSlider");
+  slider.scrollBy({ left: 250, behavior: "smooth" });
+
+  // loop back
+  if(slider.scrollLeft + slider.clientWidth >= slider.scrollWidth){
+    slider.scrollTo({ left: 0, behavior: "smooth" });
+  }
+}, 15000);
 function toggleBootWall() {
   const items = document.getElementById('bootItems');
   const btn = document.getElementById('toggleBtn');
@@ -343,8 +518,10 @@ function toggleBootWall() {
 }
 
 window.onpopstate = function () {
-    document.querySelectorAll('.section, .payment').forEach(s => s.style.display = 'none');
-    document.getElementById('home').style.display = 'block';
+  document.querySelectorAll('.section, .payment, #reviewPage')
+    .forEach(s => s.style.display = 'none');
+
+  document.getElementById('home').style.display = 'block';
 };
 </script></body>
     </html>
