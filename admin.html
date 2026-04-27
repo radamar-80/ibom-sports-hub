@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin - Add Product</title>
+
+<style>
+body { font-family: Arial; padding:20px; }
+
+.label {
+  color: grey;
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+.box {
+  border: 1px solid #ccc;
+  padding: 12px;
+  margin-top: 5px;
+  text-align: center;
+  color: #aaa;
+  cursor: pointer;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.soleplate {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.sp-box {
+  border:1px solid #ccc;
+  padding:8px;
+  cursor:pointer;
+  color:grey;
+}
+
+.sp-box.active {
+  border-color:green;
+  color:green;
+}
+
+.color-container input {
+  margin-bottom: 5px;
+}
+
+.upload-btn {
+  background: green;
+  color: white;
+  padding: 15px;
+  border: none;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>Add Boot</h2>
+
+<!-- 1 IMAGE -->
+<div class="label">(product photo)</div>
+<input type="file" id="image">
+
+<!-- 2 BRAND + MODEL -->
+<div class="row">
+  <div style="flex:1">
+    <div class="label">(product brand)</div>
+    <input id="brand">
+  </div>
+
+  <div style="flex:1">
+    <div class="label">(product model)</div>
+    <input id="model">
+  </div>
+</div>
+
+<!-- 3 NAME -->
+<div class="label">(product name)</div>
+<input id="name">
+
+<!-- 4 COLORWAYS -->
+<div class="label">(product colorway)</div>
+<div id="colors" class="color-container">
+  <input placeholder="+">
+</div>
+
+<!-- 5 SOLEPLATES -->
+<div class="label">(product soleplates)</div>
+<div class="soleplate">
+  <div class="sp-box">FG</div>
+  <div class="sp-box">AG</div>
+  <div class="sp-box">SG</div>
+  <div class="sp-box">TF</div>
+  <div class="sp-box">IC</div>
+  <div class="sp-box">MG</div>
+</div>
+
+<!-- 6 PRICE -->
+<div class="label">(product price)</div>
+<input id="price">
+
+<button class="upload-btn" onclick="uploadProduct()">UPLOAD PRODUCT</button>
+
+<script>
+// dynamic color fields
+const colorBox = document.getElementById("colors");
+
+colorBox.addEventListener("input", () => {
+  const inputs = colorBox.querySelectorAll("input");
+  const last = inputs[inputs.length - 1];
+
+  if (last.value !== "") {
+    const newInput = document.createElement("input");
+    newInput.placeholder = "+";
+    colorBox.appendChild(newInput);
+  }
+});
+
+// soleplates toggle
+document.querySelectorAll(".sp-box").forEach(box => {
+  box.onclick = () => {
+    box.classList.toggle("active");
+  };
+});
+
+// upload
+async function uploadProduct() {
+  const formData = new FormData();
+
+  const image = document.getElementById("image").files[0];
+  formData.append("image", image);
+
+  formData.append("brand", brand.value);
+  formData.append("model", model.value);
+  formData.append("name", name.value);
+  formData.append("price", price.value);
+
+  const colors = [...document.querySelectorAll("#colors input")]
+    .map(i => i.value)
+    .filter(v => v !== "");
+
+  const soleplates = [...document.querySelectorAll(".sp-box.active")]
+    .map(s => s.innerText);
+
+  formData.append("colorways", JSON.stringify(colors));
+  formData.append("soleplates", JSON.stringify(soleplates));
+
+  await fetch("http://localhost:5000/add-product", {
+    method: "POST",
+    body: formData
+  });
+
+  alert("Uploaded!");
+}
+</script>
+
+</body>
+    </html>
