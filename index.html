@@ -195,167 +195,48 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>
 </div>
 </div><div id="boots" class="section">
-<div class="product">
-<img src="photo3.jpg">
-<h3>Adidas Predator 26 Elite FT FG</h3>
-<p>Core Black/ Cloud White/ Lucid Red</p>
-<p>N45000</p>
-<p>Total: N<span id="bootTotal">45000</span></p>
-<div class="qty">
-   <button onclick="changeQty('bootQty', -1, 'bootTotal', 45000)">-</button>
-   <span id="bootQty">1</span>
-   <button onclick="changeQty('bootQty', 1, 'bootTotal', 45000)">+</button>
-</div>
-<button class="order-btn" onclick="showPayment('bootTotal')">ORDER</button>
-</div>
+async function loadProducts() {
+  const res = await fetch("http://localhost:5000/products");
+  const products = await res.json();
 
-<div class="product">
-  <img src="photo5.jpg">
-  <h3>Adidas F50 Sparkfusion Elite Low Cut FG/AG Coral Blaze</h3>
-  <p>Bliss Orange/ Lucid Blue/ Beam Orange</p>
-  <p>N45000</p>
-<p>Total: N<span id="bootTotal2">45000</span></p>
-  <div class="qty">
-   <button onclick="changeQty('bootQty2', -1, 'bootTotal2', 45000)">-</button>
-   <span id="bootQty2">1</span>
-   <button onclick="changeQty('bootQty2', 1, 'bootTotal2', 45000)">+</button>
-  </div>
+  const container = document.getElementById("boots");
+  container.innerHTML = "";
 
-  <button class="order-btn" onclick="showPayment('bootTotal2')">ORDER</button>
-</div>
+  products.forEach(p => {
+    const div = document.createElement("div");
 
-<div class="product">
-  <img src="photo6.jpg">
-  <h3>Nike Air Zoom Mercurial Vapor XVI Elite SG-Pro</h3>
-  <p>Black/ Ice Blue</p>
-  <p>N45000</p>
-<p>Total: N<span id="bootTotal3">45000</span></p>
-  <div class="qty">
-   <button onclick="changeQty('bootQty3', -1, 'bootTotal3', 45000)">-</button>
-   <span id="bootQty3">1</span>
-   <button onclick="changeQty('bootQty3', 1, 'bootTotal3', 45000)">+</button>
-  </div>
+    const colors = p.colorways.join(" / ");
 
-  <button class="order-btn" onclick="showPayment('bootTotal3')">ORDER</button>
-</div>
+    div.innerHTML = `
+      <div class="product">
+        <img src="http://localhost:5000/uploads/${p.image}">
+        <h3>${p.name}</h3>
+        <p>${colors}</p>
+        <p>N${p.price}</p>
 
-<div class="product">
-  <img src="photo7.jpg">
-  <h3>Nike Superfly 10 Elite Mercurial Dream Speed FG</h3>
-  <p>Barely Green/ Crimson Pulse/ Metallic Gold</p>
-  <p>N45000</p>
-<p>Total: N<span id="bootTotal4">45000</span></p>
-  <div class="qty">
-    <button onclick="changeQty('bootQty4', -1, 'bootTotal4', 45000)">-</button>
-   <span id="bootQty4">1</span>
-   <button onclick="changeQty('bootQty4', 1, 'bootTotal4', 45000)">+</button>
-  </div>
-  <button class="order-btn" onclick="showPayment('bootTotal4')">ORDER</button>
-</div>
+        <div class="sizes">
+          <div>US: <span>8</span></div>
+          <div>UK: <span>7</span></div>
+          <div>EU: <span>41</span></div>
+          <div>JPN: <span>26</span></div>
+          <div>CHN: <span>260</span></div>
+        </div>
 
-<div class="product">
-  <img src="photo8.jpg">
-  <h3>Adidas F50 League FG/AG</h3>
-  <p>Reemergence Blue/ Pink</p>
-  <p>N45000</p>
-<p>Total: N<span id="bootTotal5">45000</span></p>
-  <div class="qty">
-   <button onclick="changeQty('bootQty5', -1, 'bootTotal5', 45000)">-</button>
-   <span id="bootQty5">1</span>
-   <button onclick="changeQty('bootQty5', 1, 'bootTotal5', 45000)">+</button>
-  </div>
+        <div class="qty">
+          <button>-</button>
+          <span>1</span>
+          <button>+</button>
+        </div>
 
-  <button class="order-btn" onclick="showPayment('bootTotal5')">ORDER</button>
-</div>
+        <button class="order-btn">ORDER</button>
+      </div>
+    `;
 
-<div class="product">
-  <img src="photo9.jpg">
-  <h3>Adidas Predator 26 Elite FT FG</h3>
-  <p>Crystal Sky/ Ray Blue/ Team Solar Yellow 2</p>
-  <p>N45000</p>
-<p>Total: N<span id="bootTotal6">45000</span></p>
-  <div class="qty">
-   <button onclick="changeQty('bootQty6', -1, 'bootTotal6', 45000)">-</button>
-   <span id="bootQty6">1</span>
-   <button onclick="changeQty('bootQty6', 1, 'bootTotal6', 45000)">+</button>
-  </div>
+    container.appendChild(div);
+  });
+}
 
-  <button class="order-btn" onclick="showPayment('bootTotal6')">ORDER</button>
-</div>
-
-<div class="product">
-  <img src="photo10.jpg">
-  <h3>Adidas Predator 26 Elite LL FG</h3>
-  <p>Lucid Blue/ White/ Solar Red</p>
-  <p>N45000</p>
-<p>Total: N<span id="bootTotal7">45000</span></p>
-  <div class="qty">
-   <button onclick="changeQty('bootQty7', -1, 'bootTotal7', 45000)">-</button>
-   <span id="bootQty7">1</span>
-   <button onclick="changeQty('bootQty7', 1, 'bootTotal7', 45000)">+</button>
-  </div>
-
-  <button class="order-btn" onclick="showPayment('bootTotal7')">ORDER</button>
-</div>
-
-<div class="product">
-  <img src="photo11.jpg">
-  <h3>Adidas Predator 26 Elite FT FG</h3>
-  <p>Lucid Red/ Core Black/ Cloud White</p>
-  <p>N45000</p>
-<p>Total: N<span id="bootTotal8">45000</span></p>
-  <div class="qty">
-    <button onclick="changeQty('bootQty8', -1, 'bootTotal8', 45000)">-</button>
-   <span id="bootQty8">1</span>
-   <button onclick="changeQty('bootQty8', 1, 'bootTotal8', 45000)">+</button>
-  </div>
-
-  <button class="order-btn" onclick="showPayment('bootTotal8')">ORDER</button>
-</div>
-
-<div class="product">
-  <img src="photo12.jpg">
-  <h3>Kobe Phantom 6 Low Elite SE FG Black Mamba</h3>
-  <p>White/ Black/ Green</p>
-  <p>N45000</p>
-<p>Total: N<span id="bootTotal9">45000</span></p>
-  <div class="qty">
-   <button onclick="changeQty('bootQty9', -1, 'bootTotal9', 45000)">-</button>
-   <span id="bootQty9">1</span>
-   <button onclick="changeQty('bootQty9', 1, 'bootTotal9', 45000)">+</button>
-  </div>
-
-  <button class="order-btn" onclick="showPayment('bootTotal9')">ORDER</button>
-</div>
-
-<div class="product">
-  <img src="photo13.jpg">
-  <h3>Nike Phantom GX Low Cut Elite SE FG Thunder</h3>
-  <p>Purple/ Black/ White</p>
-  <p>N45000</p>
-<p>Total: N<span id="bootTotal10">45000</span></p>
-  <div class="qty">
-   <button onclick="changeQty('bootQty10', -1, 'bootTotal10', 45000)">-</button>
-   <span id="bootQty10">1</span>
-   <button onclick="changeQty('bootQty10', 1, 'bootTotal10', 45000)">+</button>
-  </div>
-
-  <button class="order-btn" onclick="showPayment('bootTotal10')">ORDER</button>
-</div>
-
-<div class="product">
-  <img src="photo14.jpg">
-  <h3>Nike Phantom 6 Low Cut Elite FG Attack</h3>
-  <p>White/ Blue/ Pink/ Black</p>
-  <p>N45000</p>
-<p>Total: N<span id="bootTotal11">45000</span></p>
-  <div class="qty">
-   <button onclick="changeQty('bootQty11', -1, 'bootTotal11', 45000)">-</button>
-   <span id="bootQty11">1</span>
-   <button onclick="changeQty('bootQty11', 1, 'bootTotal11', 45000)">+</button>
-  </div>
-
-  <button class="order-btn" onclick="showPayment('bootTotal11')">ORDER</button>
+window.onload = loadProducts;
 </div>
 
 </div><div id="gear" class="section">
