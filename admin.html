@@ -13,12 +13,23 @@ body { font-family: Arial; padding:20px; }
 }
 
 .box {
+  width: 100%;
+  aspect-ratio: 1 / 1;   /* 👈 THIS makes it a perfect square */
   border: 1px solid #ccc;
-  padding: 12px;
   margin-top: 5px;
-  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   color: #aaa;
+  font-size: 30px;       /* makes the + bigger */
   cursor: pointer;
+}
+
+.box:hover {
+  border-color: green;
+  color: green;
 }
 
 input {
