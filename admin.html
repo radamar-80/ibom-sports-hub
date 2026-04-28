@@ -70,42 +70,6 @@ input::placeholder {
   border-radius: 10px;
 }
 
-.brand-wrapper {
-  position: relative;
-}
-
-.dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-
-  margin-top: 5px;
-  max-height: 200px;
-  overflow-y: auto;
-
-  z-index: 999;
-}
-
-.dropdown div {
-  padding: 10px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.dropdown div:hover {
-  background: #f2f2f2;
-  color: green;
-}
-
-.hidden {
-  display: none;
-}
-
 .soleplate {
   display: flex;
   gap: 10px;
@@ -237,10 +201,7 @@ input::placeholder {
 <div class="row">
   <div style="flex:1">
     <div class="label">(product brand)</div>
-    <div class="brand-wrapper">
-  <input id="brand" placeholder="Select or type brand" autocomplete="off">
-  
-  <div id="brandList" class="dropdown hidden"></div>
+    <input id="brand">
 </div>
 
   <div style="flex:1">
@@ -326,59 +287,6 @@ imageInput.addEventListener("change", () => {
 
   // reset input so same image can be selected again if needed
   imageInput.value = "";
-});
-
-const brands = [
-  "Nike",
-  "Adidas",
-  "Puma",
-  "Skechers",
-  "Nasuno",
-  "Mizuno",
-  "Umbro",
-  "Under Armour",
-  "Joma",
-  "New Balance"
-];
-
-const brandInput = document.getElementById("brand");
-const brandList = document.getElementById("brandList");
-
-// show dropdown when focused
-brandInput.addEventListener("focus", showBrands);
-
-// filter as user types
-brandInput.addEventListener("input", showBrands);
-
-function showBrands() {
-  const value = brandInput.value.toLowerCase();
-
-  const filtered = brands.filter(b =>
-    b.toLowerCase().includes(value)
-  );
-
-  brandList.innerHTML = "";
-
-  filtered.forEach(brand => {
-    const div = document.createElement("div");
-    div.innerText = brand;
-
-    div.onclick = () => {
-      brandInput.value = brand;
-      brandList.classList.add("hidden");
-    };
-
-    brandList.appendChild(div);
-  });
-
-  brandList.classList.remove("hidden");
-}
-
-// hide when clicking outside
-document.addEventListener("click", (e) => {
-  if (!e.target.closest(".brand-wrapper")) {
-    brandList.classList.add("hidden");
-  }
 });
 
 function openFilePicker(e) {
