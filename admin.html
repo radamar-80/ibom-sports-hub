@@ -115,7 +115,7 @@ input {
 <!-- 4 COLORWAYS -->
 <div class="label">(product colorway)</div>
 <div id="colors" class="color-container">
-  <input placeholder="Enter colorway">
+  <input placeholder="+">
 </div>
 
 <!-- 5 SOLEPLATES -->
@@ -156,7 +156,7 @@ colorBox.addEventListener("input", () => {
 
   if (last.value !== "") {
     const newInput = document.createElement("input");
-    newInput.placeholder = Enter colorway;
+    newInput.placeholder = +;
     colorBox.appendChild(newInput);
   }
 });
