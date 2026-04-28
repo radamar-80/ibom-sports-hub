@@ -255,7 +255,7 @@ async function loadProducts() {
 
     div.innerHTML = `
       <div class="product">
-        <img src="http://localhost:5000/uploads/${p.image}">
+        <img src="data:image/jpeg;base64,${p.image}">
         <h3>${p.name}</h3>
         <p>${colors}</p>
         <p>N${p.price}</p>
