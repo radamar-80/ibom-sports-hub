@@ -200,7 +200,7 @@ formData.append("sizes", JSON.stringify(sizes));
   formData.append("colorways", JSON.stringify(colors));
   formData.append("soleplates", JSON.stringify(soleplates));
 
-  await fetch("http://localhost:5000/add-product", {
+  await fetch("https://your-replit-link.repl.co/products"), {
     method: "POST",
     body: formData
   });
