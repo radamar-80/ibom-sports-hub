@@ -153,6 +153,19 @@ input::placeholder {
   width: 100%;
   margin-top: 20px;
   border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* when clicking */
+.upload-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.upload-btn.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .sizes {
@@ -263,7 +276,9 @@ input::placeholder {
 
 </div>
 
-<button class="upload-btn" onclick="uploadProduct()">UPLOAD PRODUCT</button>
+<button class="upload-btn" id="uploadBtn" onclick="uploadProduct()">
+  UPLOAD PRODUCT
+</button>
 
 <script>
 const imageInput = document.getElementById("image");
@@ -349,13 +364,18 @@ const soleplates = selected ? selected.innerText.replace("✓", "").trim() : "";
   formData.append("colorways", JSON.stringify(colors));
   formData.append("soleplates", JSON.stringify(soleplates));
 
-  await fetch("https://your-replit-link.repl.co/products", {
-    method: "POST",
-    body: formData
-  });
+  const res = await fetch("https://your-replit-link.repl.co/products", {
+  method: "POST",
+  body: formData
+});
 
-  alert("Uploaded!");
+if (res.ok) {
+  alert("Uploaded successfully!");
+  location.reload(); // refresh page
+} else {
+  alert("Upload failed. Try again.");
 }
+
 </script>
 
 </body>
