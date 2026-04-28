@@ -154,23 +154,30 @@ input::placeholder {
   margin-top: 20px;
   border-radius: 10px;
 }
+
 .sizes {
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 10px;
 }
 
 .size-box {
-  border:1px solid #ccc;
-  padding:8px;
-  cursor:pointer;
-  color:grey;
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: grey;
+  transition: 0.2s ease;
+  user-select: none;
 }
 
 .size-box.active {
-  border-color:green;
-  color:green;
+  border-color: green;
+  color: green;
+  background: rgba(0, 128, 0, 0.05);
 }
+
 </style>
 
 </head>
@@ -224,22 +231,31 @@ input::placeholder {
   <div class="sp-option"><span class="tick"></span> MG</div>
 </div>
 
-<!-- 6 PRICE -->
-<div class="label">(product price)</div>
-<input id="price">
+<div class="row">
+
+  <!-- PRICE -->
+  <div style="flex:1">
+    <div class="label">(product price)</div>
+    <input id="price" placeholder="Enter price">
+  </div>
+
+  <!-- SIZES -->
+  <div style="flex:1">
+    <div class="label">(product sizes)</div>
+
+    <div class="sizes">
+      <div class="size-box">UK</div>
+      <div class="size-box">US</div>
+      <div class="size-box">EU</div>
+      <div class="size-box">JPN</div>
+      <div class="size-box">CHN</div>
+    </div>
+
+  </div>
+
+</div>
 
 <button class="upload-btn" onclick="uploadProduct()">UPLOAD PRODUCT</button>
-
-<!-- 7 SIZES -->
-<div class="label">(product sizes)</div>
-
-<div class="sizes">
-  <div class="size-box">UK</div>
-  <div class="size-box">US</div>
-  <div class="size-box">EU</div>
-  <div class="size-box">JPN</div>
-  <div class="size-box">CHN</div>
-</div>
 
 <script>
 const imageInput = document.getElementById("image");
