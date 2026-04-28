@@ -35,8 +35,26 @@ body { font-family: Arial; padding:20px; }
 
 input {
   width: 100%;
-  padding: 10px;
+  padding: 12px 14px;
   margin-top: 5px;
+
+  border: 1px solid #ccc;
+  border-radius: 12px;   /* 👈 rounded edges */
+  outline: none;
+
+  font-size: 14px;
+  transition: 0.2s ease;
+  background: #fff;
+}
+
+/* when user clicks inside */
+input:focus {
+  border-color: green;
+  box-shadow: 0 0 0 3px rgba(0, 128, 0, 0.15);
+}
+
+input::placeholder {
+  color: #aaa;
 }
 
 .row {
