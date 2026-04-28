@@ -59,7 +59,15 @@ input::placeholder {
 
 .row {
   display: flex;
-  gap: 10px;
+  gap: 20px;   /* 👈 increase separation */
+  margin-bottom: 10px;
+}
+
+.row > div {
+  flex: 1;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .soleplate {
