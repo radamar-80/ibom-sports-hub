@@ -242,7 +242,7 @@ function showSection(section) {
 }
 
 async function loadProducts() {
-  const res = await fetch("http://localhost:5000/products");
+  const res = await fetch("https://your-replit-link.repl.co/products");
   const products = await res.json();
 
   const container = document.getElementById("boots");
@@ -261,18 +261,25 @@ async function loadProducts() {
         <p>N${p.price}</p>
 
         <div class="sizes">
-          <div>US: <span>8</span></div>
-          <div>UK: <span>7</span></div>
-          <div>EU: <span>41</span></div>
-          <div>JPN: <span>26</span></div>
-          <div>CHN: <span>260</span></div>
-        </div>
+  <div>US: <span class="us">8</span></div>
+  <div>UK: <span class="uk">7</span></div>
+  <div>EU: <span class="eu">41</span></div>
+  <div>JPN: <span class="jpn">26</span></div>
+  <div>CHN: <span class="chn">260</span></div>
+</div>
+
+<div class="size-buttons">
+  <button class="size-btn" data-index="0">8</button>
+  <button class="size-btn" data-index="1">9</button>
+  <button class="size-btn" data-index="2">10</button>
+  <button class="size-btn" data-index="3">11</button>
+</div>
 
         <div class="qty">
-          <button>-</button>
-          <span>1</span>
-          <button>+</button>
-        </div>
+  <button onclick="updateQty(this, -1)">-</button>
+  <span>1</span>
+  <button onclick="updateQty(this, 1)">+</button>
+</div>
 
         <button class="order-btn">ORDER</button>
       </div>
@@ -286,10 +293,19 @@ buttons.forEach(btn => {
     const index = btn.getAttribute("data-index");
     syncSizes(index, div);
   });
+  });
 });
 }
 
-window.onload = loadProducts;
+function updateQty(btn, change){
+  let span = btn.parentElement.querySelector("span");
+  let qty = parseInt(span.innerText);
+
+  qty += change;
+  if(qty < 1) qty = 1;
+
+  span.innerText = qty;
+}
 
 function changeQty(qtyId, change, totalId, price) {
     let qtyElement = document.getElementById(qtyId);
@@ -331,18 +347,7 @@ document.getElementById('home').style.display='block';
 }
 let selectedRating = 0;
 
-function openReviewTab(){
-  // hide ALL sections properly
-  document.querySelectorAll('.section').forEach(s => {
-    s.style.display = 'none';
-  });
 
-  document.getElementById('home').style.display = 'none';
-  document.getElementById('payment').style.display = 'none';
-
-  // show review page
-  document.getElementById('reviewPage').style.display = 'block';
-}
 
 // star rating logic
 function rate(stars){
@@ -410,7 +415,11 @@ function loadReviews(){
   });
 }
 
-window.onload = loadReviews;
+window.addEventListener("load", () => {
+  loadProducts();
+  loadReviews();
+});
+
 document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
 document.getElementById('reviewText').style.display='none';
 document.getElementById('submitBtn').style.display='none';
@@ -447,7 +456,7 @@ const sizeMap = [
   { US:10, UK:9, EU:43, JPN:28, CHN:280 },
   { US:11, UK:10, EU:44, JPN:29, CHN:290 }
 ];
-function selectSize(index, container) {
+function syncSizes(index, container) {
   const sizes = sizeMap[index];
 
   container.querySelector(".us").innerText = sizes.US;
