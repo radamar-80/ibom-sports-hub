@@ -63,6 +63,23 @@ input {
   margin-top: 20px;
   border-radius: 10px;
 }
+.sizes {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.size-box {
+  border:1px solid #ccc;
+  padding:8px;
+  cursor:pointer;
+  color:grey;
+}
+
+.size-box.active {
+  border-color:green;
+  color:green;
+}
 </style>
 
 </head>
@@ -98,7 +115,7 @@ input {
 <!-- 4 COLORWAYS -->
 <div class="label">(product colorway)</div>
 <div id="colors" class="color-container">
-  <input placeholder="+">
+  <input placeholder="Enter colorway">
 </div>
 
 <!-- 5 SOLEPLATES -->
@@ -118,6 +135,17 @@ input {
 
 <button class="upload-btn" onclick="uploadProduct()">UPLOAD PRODUCT</button>
 
+<!-- 7 SIZES -->
+<div class="label">(product sizes)</div>
+
+<div class="sizes">
+  <div class="size-box">UK</div>
+  <div class="size-box">US</div>
+  <div class="size-box">EU</div>
+  <div class="size-box">JPN</div>
+  <div class="size-box">CHN</div>
+</div>
+
 <script>
 // dynamic color fields
 const colorBox = document.getElementById("colors");
@@ -128,7 +156,7 @@ colorBox.addEventListener("input", () => {
 
   if (last.value !== "") {
     const newInput = document.createElement("input");
-    newInput.placeholder = "+";
+    newInput.placeholder = Enter colorway;
     colorBox.appendChild(newInput);
   }
 });
@@ -139,7 +167,12 @@ document.querySelectorAll(".sp-box").forEach(box => {
     box.classList.toggle("active");
   };
 });
-
+// sizes toggle
+document.querySelectorAll(".size-box").forEach(box => {
+  box.onclick = () => {
+    box.classList.toggle("active");
+  };
+});
 // upload
 async function uploadProduct() {
   const formData = new FormData();
@@ -151,6 +184,11 @@ async function uploadProduct() {
   formData.append("model", model.value);
   formData.append("name", name.value);
   formData.append("price", price.value);
+
+const sizes = [...document.querySelectorAll(".size-box.active")]
+  .map(s => s.innerText);
+
+formData.append("sizes", JSON.stringify(sizes));
 
   const colors = [...document.querySelectorAll("#colors input")]
     .map(i => i.value)
