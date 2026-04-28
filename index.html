@@ -279,7 +279,14 @@ async function loadProducts() {
     `;
 
     container.appendChild(div);
+const buttons = div.querySelectorAll(".size-btn");
+
+buttons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const index = btn.getAttribute("data-index");
+    syncSizes(index, div);
   });
+});
 }
 
 window.onload = loadProducts;
@@ -434,5 +441,20 @@ window.onpopstate = function () {
 
   document.getElementById('home').style.display = 'block';
 };
+const sizeMap = [
+  { US:8, UK:7, EU:41, JPN:26, CHN:260 },
+  { US:9, UK:8, EU:42, JPN:27, CHN:270 },
+  { US:10, UK:9, EU:43, JPN:28, CHN:280 },
+  { US:11, UK:10, EU:44, JPN:29, CHN:290 }
+];
+function selectSize(index, container) {
+  const sizes = sizeMap[index];
+
+  container.querySelector(".us").innerText = sizes.US;
+  container.querySelector(".uk").innerText = sizes.UK;
+  container.querySelector(".eu").innerText = sizes.EU;
+  container.querySelector(".jpn").innerText = sizes.JPN;
+  container.querySelector(".chn").innerText = sizes.CHN;
+}
 </script></body>
     </html>
