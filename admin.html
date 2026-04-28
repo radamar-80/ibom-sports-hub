@@ -17,7 +17,8 @@ body { font-family: Arial; padding:20px; }
   aspect-ratio: 1 / 1;   /* 👈 THIS makes it a perfect square */
   border: 1px solid #ccc;
   margin-top: 5px;
-
+  overflow: hidden;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -155,8 +156,10 @@ input {
 <!-- 1 IMAGE -->
 <div class="label">(product photo)</div>
 <div class="box" onclick="document.getElementById('image').click()">
-  +
+  <span id="plus">+</span>
+  <img id="preview" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:4px;">
 </div>
+
 <input type="file" id="image" hidden>
 
 <!-- 2 BRAND + MODEL -->
@@ -211,6 +214,26 @@ input {
 </div>
 
 <script>
+const imageInput = document.getElementById("image");
+const preview = document.getElementById("preview");
+const plus = document.getElementById("plus");
+
+imageInput.addEventListener("change", () => {
+  const file = imageInput.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      preview.src = e.target.result;
+      preview.style.display = "block";
+      plus.style.display = "none";
+    };
+
+    reader.readAsDataURL(file);
+  }
+});
+
 // dynamic color fields
 const colorBox = document.getElementById("colors");
 
