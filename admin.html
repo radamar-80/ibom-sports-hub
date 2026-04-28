@@ -38,16 +38,40 @@ input {
   margin-top: 10px;
 }
 
-.sp-box {
-  border:1px solid #ccc;
-  padding:8px;
-  cursor:pointer;
-  color:grey;
+.sp-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: grey;
+  font-size: 14px;
 }
 
-.sp-box.active {
-  border-color:green;
-  color:green;
+.tick {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.sp-option.active {
+  color: green;
+}
+
+.sp-option.active .tick {
+  border-color: green;
+  background: green;
+  position: relative;
+}
+
+.sp-option.active .tick::after {
+  content: "✓";
+  color: white;
+  font-size: 12px;
+  position: absolute;
+  top: -2px;
+  left: 2px;
 }
 
 .color-container input {
@@ -121,12 +145,12 @@ input {
 <!-- 5 SOLEPLATES -->
 <div class="label">(product soleplates)</div>
 <div class="soleplate">
-  <div class="sp-box">FG</div>
-  <div class="sp-box">AG</div>
-  <div class="sp-box">SG</div>
-  <div class="sp-box">TF</div>
-  <div class="sp-box">IC</div>
-  <div class="sp-box">MG</div>
+  <div class="sp-option"><span class="tick"></span> FG</div>
+  <div class="sp-option"><span class="tick"></span> AG</div>
+  <div class="sp-option"><span class="tick"></span> SG</div>
+  <div class="sp-option"><span class="tick"></span> TF</div>
+  <div class="sp-option"><span class="tick"></span> IC</div>
+  <div class="sp-option"><span class="tick"></span> MG</div>
 </div>
 
 <!-- 6 PRICE -->
@@ -168,9 +192,17 @@ document.querySelectorAll(".sp-box").forEach(box => {
   };
 });
 // sizes toggle
-document.querySelectorAll(".size-box").forEach(box => {
+document.querySelectorAll(".sp-option").forEach(box => {
   box.onclick = () => {
-    box.classList.toggle("active");
+    const isActive = box.classList.contains("active");
+
+    // remove all active
+    document.querySelectorAll(".sp-option").forEach(b => b.classList.remove("active"));
+
+    // if it was NOT active, activate it
+    if (!isActive) {
+      box.classList.add("active");
+    }
   };
 });
 // upload
@@ -194,8 +226,8 @@ formData.append("sizes", JSON.stringify(sizes));
     .map(i => i.value)
     .filter(v => v !== "");
 
-  const soleplates = [...document.querySelectorAll(".sp-box.active")]
-    .map(s => s.innerText);
+ const selected = document.querySelector(".sp-option.active");
+const soleplates = selected ? selected.innerText.trim() : "";
 
   formData.append("colorways", JSON.stringify(colors));
   formData.append("soleplates", JSON.stringify(soleplates));
