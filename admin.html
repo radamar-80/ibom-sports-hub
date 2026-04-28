@@ -339,6 +339,13 @@ document.querySelectorAll(".sp-option").forEach(box => {
 });
 // upload
 async function uploadProduct() {
+  const btn = document.getElementById("uploadBtn");
+
+  // lock button
+  btn.disabled = true;
+  btn.classList.add("loading");
+  btn.innerText = "UPLOADING...";
+
   const formData = new FormData();
 
   const image = document.getElementById("image").files[0];
@@ -349,33 +356,45 @@ async function uploadProduct() {
   formData.append("name", name.value);
   formData.append("price", price.value);
 
-const sizes = [...document.querySelectorAll(".size-box.active")]
-  .map(s => s.innerText);
+  const sizes = [...document.querySelectorAll(".size-box.active")]
+    .map(s => s.innerText);
 
-formData.append("sizes", JSON.stringify(sizes));
+  formData.append("sizes", JSON.stringify(sizes));
 
   const colors = [...document.querySelectorAll("#colors input")]
     .map(i => i.value)
     .filter(v => v !== "");
 
- const selected = document.querySelector(".sp-option.active");
-const soleplates = selected ? selected.innerText.replace("✓", "").trim() : "";
+  const selected = document.querySelector(".sp-option.active");
+  const soleplates = selected ? selected.innerText.replace("✓", "").trim() : "";
 
   formData.append("colorways", JSON.stringify(colors));
   formData.append("soleplates", JSON.stringify(soleplates));
 
-  const res = await fetch("https://your-replit-link.repl.co/products", {
-  method: "POST",
-  body: formData
-});
+  try {
+    const res = await fetch("https://your-replit-link.repl.co/products", {
+      method: "POST",
+      body: formData
+    });
 
-if (res.ok) {
-  alert("Uploaded successfully!");
-  location.reload(); // refresh page
-} else {
-  alert("Upload failed. Try again.");
+    if (res.ok) {
+      btn.innerText = "SUCCESS ✔";
+
+      setTimeout(() => {
+        location.reload();
+      }, 800);
+    } else {
+      throw new Error("Upload failed");
+    }
+
+  } catch (err) {
+    alert("Upload failed. Try again.");
+
+    btn.disabled = false;
+    btn.classList.remove("loading");
+    btn.innerText = "UPLOAD PRODUCT";
+  }
 }
-
 </script>
 
 </body>
