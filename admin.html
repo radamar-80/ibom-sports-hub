@@ -53,6 +53,11 @@ input {
   border: 2px solid #ccc;
   display: inline-block;
   border-radius: 3px;
+  transition: all 0.25s ease; /* 👈 smooth animation */
+}
+
+.sp-option {
+  transition: color 0.2s ease;
 }
 
 .sp-option.active {
@@ -72,6 +77,30 @@ input {
   position: absolute;
   top: -2px;
   left: 2px;
+  opacity: 0;
+  transform: scale(0.5);
+  animation: popTick 0.2s ease forwards;
+}
+
+.sp-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: grey;
+  font-size: 14px;
+  transition: transform 0.1s ease;
+}
+
+.sp-option:active {
+  transform: scale(0.95);
+}
+
+@keyframes popTick {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .color-container input {
@@ -180,17 +209,11 @@ colorBox.addEventListener("input", () => {
 
   if (last.value !== "") {
     const newInput = document.createElement("input");
-    newInput.placeholder = Enter colorway;
+    newInput.placeholder = "Enter colorway";
     colorBox.appendChild(newInput);
   }
 });
 
-// soleplates toggle
-document.querySelectorAll(".sp-box").forEach(box => {
-  box.onclick = () => {
-    box.classList.toggle("active");
-  };
-});
 // sizes toggle
 document.querySelectorAll(".sp-option").forEach(box => {
   box.onclick = () => {
@@ -227,12 +250,12 @@ formData.append("sizes", JSON.stringify(sizes));
     .filter(v => v !== "");
 
  const selected = document.querySelector(".sp-option.active");
-const soleplates = selected ? selected.innerText.trim() : "";
+const soleplates = selected ? selected.innerText.replace("✓", "").trim() : "";
 
   formData.append("colorways", JSON.stringify(colors));
   formData.append("soleplates", JSON.stringify(soleplates));
 
-  await fetch("https://your-replit-link.repl.co/products"), {
+  await fetch("https://your-replit-link.repl.co/products", {
     method: "POST",
     body: formData
   });
