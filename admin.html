@@ -155,9 +155,11 @@ input {
 
 <!-- 1 IMAGE -->
 <div class="label">(product photo)</div>
-<div class="box" onclick="document.getElementById('image').click()">
+<div class="box" onclick="openFilePicker()">
   <span id="plus">+</span>
-  <img id="preview" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:4px;">
+  <img id="preview"
+       style="display:none; width:100%; height:100%; object-fit:cover; border-radius:10px;"
+       onclick="openFilePicker(event)">
 </div>
 
 <input type="file" id="image" hidden>
@@ -232,7 +234,15 @@ imageInput.addEventListener("change", () => {
 
     reader.readAsDataURL(file);
   }
+
+  // reset input so same image can be selected again if needed
+  imageInput.value = "";
 });
+
+function openFilePicker(e) {
+  if (e) e.stopPropagation(); // prevents double triggering
+  document.getElementById("image").click();
+}
 
 // dynamic color fields
 const colorBox = document.getElementById("colors");
