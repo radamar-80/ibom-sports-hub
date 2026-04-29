@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Dashboard</title>
+
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #f5f5f5;
+}
+
+/* HEADER */
+.header {
+  background: green;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+/* SECTION BOXES */
+.container {
+  padding: 20px;
+}
+
+.section {
+  background: white;
+  padding: 18px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.arrow {
+  font-size: 18px;
+  color: green;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+  IBOM SPORTS HUB<br>
+  ADMIN DASHBOARD
+</div>
+
+<div class="container">
+
+  <div class="section" onclick="openPage('add-products.html')">
+    ADD PRODUCTS <span class="arrow">→</span>
+  </div>
+
+  <div class="section" onclick="openPage('edit-products.html')">
+    EDIT PRODUCTS <span class="arrow">→</span>
+  </div>
+
+  <div class="section" onclick="openPage('view-sales.html')">
+    VIEW SALES <span class="arrow">→</span>
+  </div>
+
+  <div class="section" onclick="openPage('analytics.html')">
+    SALES ANALYTICS DASHBOARD <span class="arrow">→</span>
+  </div>
+
+</div>
+
+<script>
+function openPage(page) {
+  window.open(page, "_blank");
+}
+</script>
+
+</body>
+</html>
