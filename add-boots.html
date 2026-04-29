@@ -346,6 +346,13 @@ async function uploadProduct() {
   const formData = new FormData();
 
   const image = document.getElementById("image").files[0];
+if (!image) {
+  alert("Please select an image");
+  btn.disabled = false;
+  btn.classList.remove("loading");
+  btn.innerText = "UPLOAD PRODUCT";
+  return;
+}
   formData.append("image", image);
 
   formData.append("brand", brand.value);
