@@ -1,9 +1,19 @@
+const express = require("express");
+const multer = require("multer");
+const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const SECRET = "your_secret_key"; // 🔐 change this later
-
+const SECRET = process.env.JWT_SECRET || "your_secret_key";
 const ADMIN_DB = "admins.json";
+const DB_FILE = "products.json";
+const UPLOAD_DIR = "uploads";
+
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
 
 function readAdmins() {
   if (!fs.existsSync(ADMIN_DB)) return [];
@@ -13,30 +23,6 @@ function readAdmins() {
 function writeAdmins(data) {
   fs.writeFileSync(ADMIN_DB, JSON.stringify(data, null, 2));
 }
-const express = require("express");
-const multer = require("multer");
-const cors = require("cors");
-const fs = require("fs");
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use("/uploads", express.static("uploads"));
-
-// storage for images
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  }
-});
-
-const upload = multer({ storage });
-
-// fake database (JSON file)
-const DB_FILE = "products.json";
 
 function readDB() {
   if (!fs.existsSync(DB_FILE)) return [];
@@ -45,6 +31,38 @@ function readDB() {
 
 function writeDB(data) {
   fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+}
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use("/uploads", express.static(UPLOAD_DIR));
+
+// Serve static frontend assets (HTML, images, etc.) from project root
+app.use(express.static(__dirname, { extensions: ["html"] }));
+
+// storage for images
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, UPLOAD_DIR + "/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  }
+});
+
+const upload = multer({ storage });
+
+function verifyToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader) return res.status(403).json({ message: "No token" });
+
+  const token = authHeader.split(" ")[1];
+  jwt.verify(token, SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: "Token expired" });
+    req.user = user;
+    next();
+  });
 }
 
 // ADD PRODUCT
@@ -74,17 +92,10 @@ app.get("/products", (req, res) => {
   res.json(readDB());
 });
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
-});
-
+// CREATE ADMIN
 app.post("/create-admin", async (req, res) => {
   const { username, password } = req.body;
-
   const hashedPassword = await bcrypt.hash(password, 10);
-
   const admins = readAdmins();
 
   admins.push({
@@ -94,23 +105,20 @@ app.post("/create-admin", async (req, res) => {
   });
 
   writeAdmins(admins);
-
   res.json({ message: "Admin created" });
 });
 
+// LOGIN
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
-
   const admins = readAdmins();
   const admin = admins.find(a => a.username === username);
 
   if (!admin) return res.status(401).json({ message: "Invalid user" });
 
   const match = await bcrypt.compare(password, admin.password);
-
   if (!match) return res.status(401).json({ message: "Wrong password" });
 
-  // 🎟️ create token (expires in 1 hour)
   const token = jwt.sign(
     { id: admin.id, username: admin.username },
     SECRET,
@@ -120,17 +128,9 @@ app.post("/login", async (req, res) => {
   res.json({ token });
 });
 
-function verifyToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
+const PORT = parseInt(process.env.PORT, 10) || 5000;
+const HOST = "0.0.0.0";
 
-  if (!authHeader) return res.status(403).json({ message: "No token" });
-
-  const token = authHeader.split(" ")[1];
-
-  jwt.verify(token, SECRET, (err, user) => {
-    if (err) return res.status(403).json({ message: "Token expired" });
-
-    req.user = user;
-    next();
-  });
-}
+app.listen(PORT, HOST, () => {
+  console.log(`Server running on http://${HOST}:${PORT}`);
+});

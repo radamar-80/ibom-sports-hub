@@ -383,7 +383,7 @@ if (!image) {
   try {
     const token = localStorage.getItem("token");
 
-const res = await fetch("https://your-replit-link.repl.co/add-product", {
+const res = await fetch("/add-product", {
   method: "POST",
   headers: {
     "Authorization": "Bearer " + token
