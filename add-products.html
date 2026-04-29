@@ -8,6 +8,12 @@ body {
   font-family: Arial;
   margin: 0;
   background: #f5f5f5;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+body.loaded {
+  opacity: 1;
 }
 
 .header {
@@ -75,9 +81,15 @@ body {
 </div>
 
 <script>
+
+window.onload = () => {
+  document.body.classList.add("loaded");
+};
+
 function openPage(page) {
   window.location.href = page;
 }
+
 </script>
 
 </body>
