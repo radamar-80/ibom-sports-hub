@@ -85,6 +85,11 @@ body.loaded {
 
 <script>
 
+if (localStorage.getItem("adminLoggedIn") !== "true") {
+  window.location.href = "admin-login.html";
+}
+
+
 window.onload = () => {
   document.body.classList.add("loaded");
 };
