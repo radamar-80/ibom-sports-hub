@@ -52,6 +52,23 @@ body.loaded {
   font-size: 18px;
   color: green;
 }
+
+.logout-btn {
+  margin: 10px 20px;
+  padding: 10px 15px;
+  background: white;
+  color: green;
+  border: 1px solid green;
+  border-radius: 8px;
+  cursor: pointer;
+  float: right;
+}
+
+.logout-btn:hover {
+  background: green;
+  color: white;
+}
+
 </style>
 
 </head>
@@ -62,6 +79,8 @@ body.loaded {
   IBOM SPORTS HUB<br>
   ADMIN DASHBOARD
 </div>
+
+<button class="logout-btn" onclick="logout()">Logout</button>
 
 <div class="container">
 
@@ -96,6 +115,11 @@ window.onload = () => {
 
 function openPage(page) {
   window.location.href = page;
+}
+
+function logout() {
+  localStorage.removeItem("adminLoggedIn");
+  window.location.href = "admin-login.html";
 }
 
 </script>
