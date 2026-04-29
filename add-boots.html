@@ -281,6 +281,11 @@ input::placeholder {
 </button>
 
 <script>
+
+if (localStorage.getItem("adminLoggedIn") !== "true") {
+  window.location.href = "admin-login.html";
+}
+
 const imageInput = document.getElementById("image");
 const preview = document.getElementById("preview");
 const plus = document.getElementById("plus");
