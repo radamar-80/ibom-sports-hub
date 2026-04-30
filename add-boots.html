@@ -360,10 +360,10 @@ if (!image) {
 }
   formData.append("image", image);
 
-  formData.append("brand", brand.value);
-  formData.append("model", model.value);
-  formData.append("name", name.value);
-  formData.append("price", price.value);
+  formData.append("brand", brand.value.toLowerCase().trim());
+formData.append("model", model.value.toLowerCase().trim());
+formData.append("name", name.value.trim());
+formData.append("price", price.value);
 
   const sizes = [...document.querySelectorAll(".size-box.active")]
     .map(s => s.innerText);
@@ -375,10 +375,13 @@ if (!image) {
     .filter(v => v !== "");
 
   const selected = document.querySelector(".sp-option.active");
-  const soleplates = selected ? selected.innerText.replace("✓", "").trim() : "";
+
+const soleplates = selected
+  ? selected.innerText.replace("✓", "").trim().toLowerCase()
+  : "";
 
   formData.append("colorways", JSON.stringify(colors));
-  formData.append("soleplates", JSON.stringify(soleplates));
+  formData.append("soleplates", soleplates.toLowerCase().trim());
 
   try {
     const token = localStorage.getItem("token");

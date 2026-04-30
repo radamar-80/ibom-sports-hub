@@ -254,44 +254,67 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>
 <div id="bootItems">
 </div>
+  <div id="dynamicData" style="display:none;">
+
+  <!-- MODELS -->
+  <div id="vapor"></div>
+  <div id="superfly"></div>
+  <div id="phantom"></div>
+  <div id="tiempo"></div>
+  <div id="f50"></div>
+  <div id="predator"></div>
+
+  <!-- SURFACES -->
+  <div id="fg"></div>
+  <div id="ag"></div>
+  <div id="sg"></div>
+  <div id="tf"></div>
+  <div id="ic"></div>
+  <div id="mg"></div>
+
+  <!-- BRANDS -->
+  <div id="nike"></div>
+  <div id="adidas"></div>
+  <div id="puma"></div>
+  <div id="mizuno"></div>
+  <div id="skechers"></div>
+  <div id="nasuno"></div>
+  <div id="umbro"></div>
+  <div id="ua"></div>
+  <div id="joma"></div>
+  <div id="nb"></div>
+
+    <div id="resultView" style="display:none; padding:20px;"></div>
+
+    <div class="mini-card" onclick="filterProducts('model','vapor')">
+  <img src="vapor.jpg">
+  <p>Vapor →</p>
 </div>
-<div id="boots" class="section">
 
-  <!-- SHOP BY MODEL -->
-  <h3 class="sub-title">Shop by Model</h3>
-  <div class="two-grid">
+<div class="mini-card" onclick="filterProducts('model','superfly')">
+  <img src="superfly.jpg">
+  <p>Superfly →</p>
+</div>
 
-    <div class="mini-card" onclick="openTab('vapor')">
-      <img src="vapor.jpg">
-      <p>Vapor →</p>
-    </div>
+<div class="mini-card" onclick="filterProducts('model','phantom')">
+  <img src="phantom.jpg">
+  <p>Phantom →</p>
+</div>
 
-    <div class="mini-card" onclick="openTab('superfly')">
-      <img src="superfly.jpg">
-      <p>Superfly →</p>
-    </div>
+<div class="mini-card" onclick="filterProducts('model','tiempo')">
+  <img src="tiempo.jpg">
+  <p>Tiempo →</p>
+</div>
 
-    <div class="mini-card" onclick="openTab('phantom')">
-      <img src="phantom.jpg">
-      <p>Phantom →</p>
-    </div>
+<div class="mini-card" onclick="filterProducts('model','f50')">
+  <img src="f50.jpg">
+  <p>F50 →</p>
+</div>
 
-    <div class="mini-card" onclick="openTab('tiempo')">
-      <img src="tiempo.jpg">
-      <p>Tiempo →</p>
-    </div>
-
-    <div class="mini-card" onclick="openTab('f50')">
-      <img src="f50.jpg">
-      <p>F50 →</p>
-    </div>
-
-    <div class="mini-card" onclick="openTab('predator')">
-      <img src="predator.jpg">
-      <p>Predator →</p>
-    </div>
-
-  </div>
+<div class="mini-card" onclick="filterProducts('model','predator')">
+  <img src="predator.jpg">
+  <p>Predator →</p>
+</div>
 
 
   <!-- SHOP BY SURFACE -->
@@ -299,35 +322,35 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
   <div class="slider" id="surfaceSlider">
 
-    <div class="slide" onclick="openTab('fg')">
-      <img src="fg.jpg">
-      <p>Firm Ground (FG) →</p>
-    </div>
+    <div class="slide" onclick="filterProducts('soleplates','fg')">
+  <img src="fg.jpg">
+  <p>Firm Ground (FG) →</p>
+</div>
 
-    <div class="slide" onclick="openTab('ag')">
-      <img src="ag.jpg">
-      <p>Artificial Grass (AG) →</p>
-    </div>
+<div class="slide" onclick="filterProducts('soleplates','ag')">
+  <img src="ag.jpg">
+  <p>Artificial Grass (AG) →</p>
+</div>
 
-    <div class="slide" onclick="openTab('sg')">
-      <img src="sg.jpg">
-      <p>Soft Ground (SG) →</p>
-    </div>
+<div class="slide" onclick="filterProducts('soleplates','sg')">
+  <img src="sg.jpg">
+  <p>Soft Ground (SG) →</p>
+</div>
 
-    <div class="slide" onclick="openTab('tf')">
-      <img src="tf.jpg">
-      <p>Turf (TF) →</p>
-    </div>
+<div class="slide" onclick="filterProducts('soleplates','tf')">
+  <img src="tf.jpg">
+  <p>Turf (TF) →</p>
+</div>
 
-    <div class="slide" onclick="openTab('ic')">
-      <img src="ic.jpg">
-      <p>Court (IC) →</p>
-    </div>
+<div class="slide" onclick="filterProducts('soleplates','ic')">
+  <img src="ic.jpg">
+  <p>Court (IC) →</p>
+</div>
 
-    <div class="slide" onclick="openTab('mg')">
-      <img src="mg.jpg">
-      <p>Multiground (MG) →</p>
-    </div>
+<div class="slide" onclick="filterProducts('soleplates','mg')">
+  <img src="mg.jpg">
+  <p>Multiground (MG) →</p>
+</div>
 
   </div>
 
@@ -343,16 +366,55 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
   <div class="two-grid">
 
-    <div class="mini-card" onclick="openTab('nike')"><img src="nike.jpg"><p>Nike →</p></div>
-    <div class="mini-card" onclick="openTab('adidas')"><img src="adidas.jpg"><p>Adidas →</p></div>
-    <div class="mini-card" onclick="openTab('puma')"><img src="puma.jpg"><p>Puma →</p></div>
-    <div class="mini-card" onclick="openTab('mizuno')"><img src="mizuno.jpg"><p>Mizuno →</p></div>
-    <div class="mini-card" onclick="openTab('skechers')"><img src="skechers.jpg"><p>Skechers →</p></div>
-    <div class="mini-card" onclick="openTab('nasuno')"><img src="nasuno.jpg"><p>Nasuno →</p></div>
-    <div class="mini-card" onclick="openTab('umbro')"><img src="umbro.jpg"><p>Umbro →</p></div>
-    <div class="mini-card" onclick="openTab('ua')"><img src="ua.jpg"><p>Under Armour →</p></div>
-    <div class="mini-card" onclick="openTab('joma')"><img src="joma.jpg"><p>Joma →</p></div>
-    <div class="mini-card" onclick="openTab('nb')"><img src="nb.jpg"><p>New Balance →</p></div>
+    <div class="mini-card" onclick="filterProducts('brand','nike')">
+  <img src="nike.jpg">
+  <p>Nike →</p>
+</div>
+
+<div class="mini-card" onclick="filterProducts('brand','adidas')">
+  <img src="adidas.jpg">
+  <p>Adidas →</p>
+</div>
+
+<div class="mini-card" onclick="filterProducts('brand','puma')">
+  <img src="puma.jpg">
+  <p>Puma →</p>
+</div>
+
+<div class="mini-card" onclick="filterProducts('brand','mizuno')">
+  <img src="mizuno.jpg">
+  <p>Mizuno →</p>
+</div>
+
+<div class="mini-card" onclick="filterProducts('brand','skechers')">
+  <img src="skechers.jpg">
+  <p>Skechers →</p>
+</div>
+
+<div class="mini-card" onclick="filterProducts('brand','nasuno')">
+  <img src="nasuno.jpg">
+  <p>Nasuno →</p>
+</div>
+
+<div class="mini-card" onclick="filterProducts('brand','umbro')">
+  <img src="umbro.jpg">
+  <p>Umbro →</p>
+</div>
+
+<div class="mini-card" onclick="filterProducts('brand','ua')">
+  <img src="ua.jpg">
+  <p>Under Armour →</p>
+</div>
+
+<div class="mini-card" onclick="filterProducts('brand','joma')">
+  <img src="joma.jpg">
+  <p>Joma →</p>
+</div>
+
+<div class="mini-card" onclick="filterProducts('brand','nb')">
+  <img src="nb.jpg">
+  <p>New Balance →</p>
+</div>
 
   </div>
 
@@ -396,6 +458,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </div>
 </div>
 </div><script>
+  let allProducts = [];
 function showSection(section) {
     history.pushState({}, "", "#" + section);
     document.getElementById('home').style.display='none';
@@ -406,57 +469,29 @@ async function loadProducts() {
   const res = await fetch("/products");
   const products = await res.json();
 
-  const container = document.getElementById("boots");
-  container.innerHTML = "";
+  allProducts = products; // ✅ store globally
+
+  renderBootWall(products); // initial view
+}
+
+  function renderBootWall(products) {
+  const bootWall = document.getElementById("bootItems");
+  bootWall.innerHTML = "";
 
   products.forEach(p => {
     const div = document.createElement("div");
-
-    const colors = p.colorways.join(" / ");
 
     div.innerHTML = `
       <div class="product">
         <img src="data:image/jpeg;base64,${p.image}">
         <h3>${p.name}</h3>
-        <p>${colors}</p>
         <p>N${p.price}</p>
-
-        <div class="sizes">
-  <div>US: <span class="us">8</span></div>
-  <div>UK: <span class="uk">7</span></div>
-  <div>EU: <span class="eu">41</span></div>
-  <div>JPN: <span class="jpn">26</span></div>
-  <div>CHN: <span class="chn">260</span></div>
-</div>
-
-<div class="size-buttons">
-  <button class="size-btn" data-index="0">8</button>
-  <button class="size-btn" data-index="1">9</button>
-  <button class="size-btn" data-index="2">10</button>
-  <button class="size-btn" data-index="3">11</button>
-</div>
-
-        <div class="qty">
-  <button onclick="updateQty(this, -1)">-</button>
-  <span>1</span>
-  <button onclick="updateQty(this, 1)">+</button>
-</div>
-
-        <button class="order-btn">ORDER</button>
       </div>
     `;
 
-    container.appendChild(div);
-const buttons = div.querySelectorAll(".size-btn");
-
-buttons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    const index = btn.getAttribute("data-index");
-    syncSizes(index, div);
+    bootWall.appendChild(div);
   });
-  });
-});
-}
+      }
 
 function updateQty(btn, change){
   let span = btn.parentElement.querySelector("span");
@@ -632,9 +667,65 @@ function syncSizes(index, container) {
   container.querySelector(".jpn").innerText = sizes.JPN;
   container.querySelector(".chn").innerText = sizes.CHN;
 }
-  function openTab(name){
-  window.open(name + ".html", "_blank");
-}
+
+  function filterProducts(type, value) {
+  const resultView = document.getElementById("resultView");
+
+  resultView.style.display = "block";
+  document.getElementById("boots").style.display = "none";
+  document.getElementById("home").style.display = "none";
+
+  let filtered = [];
+
+  if (type === "model") {
+    filtered = allProducts.filter(p =>
+      p.model?.toLowerCase() === value.toLowerCase()
+    );
+  }
+
+  if (type === "brand") {
+    filtered = allProducts.filter(p =>
+      p.brand?.toLowerCase() === value.toLowerCase()
+    );
+  }
+
+  if (type === "soleplates") {
+    filtered = allProducts.filter(p =>
+      p.soleplates?.toLowerCase() === value.toLowerCase()
+    );
+  }
+
+  renderResults(filtered, value);
+  }
+
+  function renderResults(products, title) {
+  const resultView = document.getElementById("resultView");
+
+  resultView.innerHTML = `
+    <button onclick="backHome()">← Back</button>
+    <h2>${title.toUpperCase()}</h2>
+  `;
+
+  products.forEach(p => {
+    const div = document.createElement("div");
+
+    div.innerHTML = `
+      <div class="product">
+        <img src="data:image/jpeg;base64,${p.image}">
+        <h3>${p.name}</h3>
+        <p>N${p.price}</p>
+      </div>
+    `;
+
+    resultView.appendChild(div);
+  });
+  }
+
+  function backHome() {
+  document.getElementById("resultView").style.display = "none";
+  document.getElementById("boots").style.display = "block";
+  document.getElementById("home").style.display = "block";
+  }
 
 /* SLIDER CONTROL */
 const slider = document.getElementById("surfaceSlider");
