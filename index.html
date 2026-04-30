@@ -397,7 +397,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>
 </div><script>
 function showSection(section) {
-    history.pushState({}, "", section);
+    history.pushState({}, "", "#" + section);
     document.getElementById('home').style.display='none';
     document.getElementById(section).style.display='block';
 }
@@ -606,10 +606,16 @@ function toggleBootWall() {
 }
 
 window.onpopstate = function () {
+  const hash = location.hash.replace("#", "");
+
   document.querySelectorAll('.section, .payment, #reviewPage')
     .forEach(s => s.style.display = 'none');
 
-  document.getElementById('home').style.display = 'block';
+  if(hash){
+    document.getElementById(hash).style.display = 'block';
+  } else {
+    document.getElementById('home').style.display = 'block';
+  }
 };
 const sizeMap = [
   { US:8, UK:7, EU:41, JPN:26, CHN:260 },
