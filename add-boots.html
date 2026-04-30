@@ -383,7 +383,7 @@ if (!image) {
   try {
     const token = localStorage.getItem("token");
 
-const res = await fetch("/add-product", {
+const res = await fetch("https://ibom-sports-hub.radamar-80.repl.co/add-product", {
   method: "POST",
   headers: {
     "Authorization": "Bearer " + token

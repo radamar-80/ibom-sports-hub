@@ -36,6 +36,11 @@ function writeDB(data) {
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
+app.use(express.static("."));
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
+});
 app.use("/uploads", express.static(UPLOAD_DIR));
 
 // Serve static frontend assets (HTML, images, etc.) from project root
@@ -128,9 +133,8 @@ app.post("/login", async (req, res) => {
   res.json({ token });
 });
 
-const PORT = parseInt(process.env.PORT, 10) || 5000;
-const HOST = "0.0.0.0";
+const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, HOST, () => {
-  console.log(`Server running on http://${HOST}:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
 });
