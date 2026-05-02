@@ -252,10 +252,13 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 ⬇️ Show More
 </button>
 </div>
+  
 <div id="bootItems">
 </div>
-  <div id="dynamicData" style="display:none;">
-
+  :none;">
+  
+<div id="boots" class="section">
+  
   <!-- MODELS -->
   <div id="vapor"></div>
   <div id="superfly"></div>
@@ -701,10 +704,8 @@ function syncSizes(index, container) {
   function renderResults(products, title) {
   const resultView = document.getElementById("resultView");
 
-  resultView.innerHTML = `
-    <button onclick="backHome()">← Back</button>
-    <h2>${title.toUpperCase()}</h2>
-  `;
+  resultView.innerHTML = `<button onclick="backHome()">← Back</button>
+<h2>${title.toUpperCase()}</h2>`;
 
   products.forEach(p => {
     const div = document.createElement("div");
