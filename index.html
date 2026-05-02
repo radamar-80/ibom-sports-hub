@@ -200,6 +200,7 @@ button {
 .bank-box { border:1px solid #000; padding:20px; margin-top:20px; }
 </style>
 </head>
+  <div id="resultView" style="display:none; padding:20px;"></div>
 <body><div class="top-banner" onclick="window.open('https://www.instagram.com/ibomsportshub1?igsh=YzdqbjUxa2NrdWQ1','_blank')">
 CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div><header>
@@ -255,9 +256,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   
 <div id="bootItems">
 </div>
-  :none;">
-  
-<div id="boots" class="section">
+
+  <div id="boots" class="section">
   
   <!-- MODELS -->
   <div id="vapor"></div>
@@ -287,7 +287,6 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <div id="joma"></div>
   <div id="nb"></div>
 
-    <div id="resultView" style="display:none; padding:20px;"></div>
 
     <div class="mini-card" onclick="filterProducts('model','vapor')">
   <img src="vapor.jpg">
@@ -421,8 +420,6 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
   </div>
 
-</div>
-
 <div id="gear" class="section">
 <div class="product">
 <img src="photo4.jpg">
@@ -437,11 +434,13 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>
 <button class="order-btn" onclick="showPayment('gearTotal')">ORDER</button>
 </div>
+  
 </div><div id="payment" class="payment">
 <h2>Payment Method</h2>
 <button onclick="showBank()">Bank Transfer</button>
 <div id="bankDetails" class="bank-box" style="display:none;"></div>
 </div>
+  
 <div id="reviewPage">
 
   <h2>Rate Us!</h2>
@@ -675,7 +674,8 @@ function syncSizes(index, container) {
   const resultView = document.getElementById("resultView");
 
   resultView.style.display = "block";
-  document.getElementById("boots").style.display = "none";
+  document.getElementById("boots").style.display = "block";
+document.getElementById("resultView").style.display = "block";
   document.getElementById("home").style.display = "none";
 
   let filtered = [];
@@ -729,12 +729,31 @@ function syncSizes(index, container) {
   }
 
 /* SLIDER CONTROL */
-const slider = document.getElementById("surfaceSlider");
-let currentSlide = 1;
+let slider;
 
-slider.addEventListener("scroll", () => {
-  const width = slider.clientWidth;
-  currentSlide = Math.round(slider.scrollLeft / width) + 1;
+window.addEventListener("load", () => {
+  slider = document.getElementById("surfaceSlider");
+
+  if(slider){
+    slider.addEventListener("scroll", () => {
+      const width = slider.clientWidth;
+      currentSlide = Math.round(slider.scrollLeft / width) + 1;
+      document.getElementById("slideCount").innerText = currentSlide + "/6";
+    });
+  }
+});
+  
+window.addEventListener("load", () => {
+  slider = document.getElementById("surfaceSlider");
+
+  if (!slider) return;
+
+  slider.addEventListener("scroll", () => {
+    const width = slider.clientWidth;
+    currentSlide = Math.round(slider.scrollLeft / width) + 1;
+    document.getElementById("slideCount").innerText = currentSlide + "/6";
+  });
+});
   document.getElementById("slideCount").innerText = currentSlide + "/6";
 });
 
