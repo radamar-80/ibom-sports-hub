@@ -6,14 +6,90 @@
 <style>
 body { margin:0; font-family: Arial, Helvetica, sans-serif; 6background:#fff; color:#111; }
 .top-banner { background:red; color:white; text-align:center; padding:10px; font-weight:bold; cursor:pointer; }
-header { display:flex; align-items:center; justify-content:space-between; padding:15px 30px; border-bottom:1px solid #ddd; }
-.logo { display:flex; align-items:center; gap:10px; }
+header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1000;
+  transition: box-shadow 0.3s ease;
+  padding: 15px 30px;
+  margin-top: 12px;
+}
+
+/* shadow when scrolling */
+header.scrolled {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+  .logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .logo img {
   width: 55px;
   height: 55px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #ddd;
+}
+
+/* TEXT STACK */
+.logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+/* BRAND NAME */
+.logo-text h2 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+/* ADDRESS (PREMIUM LOOK) */
+.address {
+  font-size: 13px;
+  color: #777;
+  margin-top: 3px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+  transition: 0.3s;
+}
+
+/* subtle underline animation */
+.address::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 1px;
+  background: black;
+  transition: 0.3s;
+}
+
+.address:hover {
+  color: black;
+}
+
+.address:hover::after {
+  width: 100%;
+}
+
+  .icon {
+  margin-right: 5px;
+  fill: #777;
+  transition: 0.3s;
+}
+
+.address:hover .icon {
+  fill: black;
 }
   
 #bootItems {
@@ -218,10 +294,24 @@ button {
 CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div><header>
 <div class="logo">
-<img src="logo.png" alt="logo">
-<h2>IBOM SPORTS HUB</h2>
+  <img src="logo.png" alt="logo">
+
+  <div class="logo-text">
+    <h2>IBOM SPORTS HUB</h2>
+
+    <a href="https://www.google.com/maps?q=227+Ikot+Ekpene+Road,+Uyo" target="_blank" class="address">
+  <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="black">
+    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 
+    9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 
+    1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+  </svg>
+  227, Ikot Ekpene Road, Uyo
+    </a>
+  </div>
 </div>
-</header><div id="home" class="collections">
+</header>
+  
+  <div id="home" class="collections">
 <h2>Collections</h2>
 <div class="grid">
 <div class="card" onclick="showSection('boots')">
@@ -724,6 +814,16 @@ function prevSlide(){
   slider.scrollBy({ left: -slider.clientWidth, behavior: "smooth" });
   }
 
+    window.addEventListener("scroll", () => {
+  const header = document.querySelector("header");
+
+  if (window.scrollY > 10) {
+    header.classList.add("scrolled");
+  } else {
+    header.classList.remove("scrolled");
+  }
+});
+    
     window.addEventListener("load", () => {
 
   // seed initial history state so back button returns here
