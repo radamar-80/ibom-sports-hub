@@ -138,46 +138,85 @@ header.scrolled {
 }
 
   /* SWITCH */
-.theme-switch {
-  position: relative;
-  width: 50px;
-  height: 26px;
-  margin-left: auto;
+/* TOOLBAR */
+#toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px 14px;
 }
 
-.theme-switch input {
-  display: none;
+#searchForm {
+  flex: 1;
+  display: flex;
 }
 
-.slider {
-  position: absolute;
+.search-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid #ccc;
+  border-radius: 25px;
+  padding: 0 14px;
+  background: #f9f9f9;
+  transition: border-color 0.2s;
+}
+
+.search-wrapper:focus-within {
+  border-color: #555;
+}
+
+.search-icon {
+  flex-shrink: 0;
+  color: #999;
+}
+
+#searchInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 10px 0;
+  font-size: 14px;
+  color: inherit;
+}
+
+#searchInput::placeholder {
+  opacity: 0.45;
+}
+
+.search-submit {
+  background: none;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  inset: 0;
-  background: #ddd;
-  border-radius: 50px;
-  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  color: #999;
 }
 
-/* circle */
-.slider::before {
-  content: "";
-  position: absolute;
-  height: 20px;
-  width: 20px;
-  left: 3px;
-  top: 3px;
-  background: white;
-  border-radius: 50%;
-  transition: 0.3s;
+#darkToggleBtn {
+  background: none;
+  border: 1.5px solid #ccc;
+  border-radius: 10px;
+  padding: 7px 10px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
-/* ON state */
-input:checked + .slider {
-  background: #111;
+body.dark .search-wrapper {
+  border-color: #333;
+  background: #1a1a1a;
 }
-
-input:checked + .slider::before {
-  transform: translateX(24px);
+body.dark #searchInput {
+  color: #f5f5f5;
+}
+body.dark #darkToggleBtn {
+  border-color: #444;
+  background: #1a1a1a;
 }
   
 #bootItems {
@@ -385,11 +424,6 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>
 
   <header>
-<label class="theme-switch">
-  <input type="checkbox" id="themeToggle">
-  <span class="slider"></span>
-</label>
-    
 <div class="logo">
   <img src="logo.png" alt="logo">
 
@@ -407,7 +441,24 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </div>
 </div>
 </header>
-  
+
+<div id="toolbar">
+  <form id="searchForm" onsubmit="doSearch(); return false;">
+    <div class="search-wrapper">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="search" id="searchInput" placeholder="what are you looking for?" autocomplete="off" enterkeyhint="search">
+      <button type="submit" class="search-submit" aria-label="Search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    </div>
+  </form>
+  <button id="darkToggleBtn" onclick="toggleDark()" aria-label="Toggle dark mode">🌙</button>
+</div>
+
   <div id="home" class="collections">
 <h2 style="text-align:center;">Collections</h2>
 <div class="grid">
@@ -869,6 +920,16 @@ function showFilterResults(type, value) {
   if (type === "model") filtered = allProducts.filter(p => p.model?.toLowerCase() === value.toLowerCase());
   if (type === "brand") filtered = allProducts.filter(p => p.brand?.toLowerCase() === value.toLowerCase());
   if (type === "soleplates") filtered = allProducts.filter(p => p.soleplates?.toLowerCase() === value.toLowerCase());
+  if (type === "search") {
+    const q = value.toLowerCase();
+    filtered = allProducts.filter(p =>
+      p.name?.toLowerCase().includes(q) ||
+      p.brand?.toLowerCase().includes(q) ||
+      p.model?.toLowerCase().includes(q) ||
+      (Array.isArray(p.colorways) ? p.colorways.some(c => c.toLowerCase().includes(q)) : p.colorways?.toLowerCase().includes(q)) ||
+      p.soleplates?.toLowerCase().includes(q)
+    );
+  }
 
   renderResults(filtered, value);
 }
@@ -949,30 +1010,31 @@ function prevSlide(){
 
 });
 
-    const toggle = document.getElementById("themeToggle");
-
-// detect system preference
+// Apply saved / system theme on load
 const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-// check saved choice
-let savedTheme = localStorage.getItem("theme");
-
-// APPLY INITIAL THEME
+const savedTheme = localStorage.getItem("theme");
 if (savedTheme === "dark" || (!savedTheme && systemDark)) {
   document.body.classList.add("dark");
-  toggle.checked = true;
+  document.getElementById("darkToggleBtn").textContent = "☀️";
 }
 
-// TOGGLE CLICK
-toggle.addEventListener("change", () => {
-  if (toggle.checked) {
-    document.body.classList.add("dark");
+function toggleDark() {
+  const btn = document.getElementById("darkToggleBtn");
+  if (document.body.classList.toggle("dark")) {
     localStorage.setItem("theme", "dark");
+    btn.textContent = "☀️";
   } else {
-    document.body.classList.remove("dark");
     localStorage.setItem("theme", "light");
+    btn.textContent = "🌙";
   }
-});
+}
+
+// Search
+function doSearch() {
+  const query = document.getElementById("searchInput").value.trim().toLowerCase();
+  if (!query) return;
+  navigate({ page: "filter", type: "search", value: query });
+}
   
 </script>
 </body>
