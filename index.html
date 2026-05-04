@@ -940,6 +940,16 @@ function showFilterResults(type, value) {
   resultView.innerHTML = `<button onclick="backHome()">← Back</button>
 <h2>${title.toUpperCase()}</h2>`;
 
+  if (products.length === 0) {
+    resultView.innerHTML += `
+      <div style="text-align:center; padding:40px 20px; color:#888;">
+        <div style="font-size:48px; margin-bottom:12px;">🔍</div>
+        <p style="font-size:16px; font-weight:bold; margin:0;">No results found</p>
+        <p style="font-size:13px; margin-top:6px;">Try a different keyword or browse the collections.</p>
+      </div>`;
+    return;
+  }
+
   products.forEach(p => {
     const div = document.createElement("div");
 
