@@ -452,26 +452,38 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <script>
   let allProducts = [];
 
-function showSection(section) {
-  // hide everything
+function hideAll() {
   document.getElementById('home').style.display = 'none';
   document.getElementById('payment').style.display = 'none';
   document.getElementById('reviewPage').style.display = 'none';
   document.getElementById('resultView').style.display = 'none';
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+}
 
-  // remove active from sections
-  document.querySelectorAll('.section').forEach(sec => {
-    sec.classList.remove('active');
-  });
-
-  // show selected
-  const target = document.getElementById(section);
-  if (target) {
-    target.classList.add('active');
-  } else {
-    console.error(`Section "${section}" not found!`);
+function restoreState(state) {
+  hideAll();
+  if (!state || state.page === 'home') {
+    document.getElementById('home').style.display = 'block';
+  } else if (state.page === 'section') {
+    const target = document.getElementById(state.id);
+    if (target) target.classList.add('active');
+  } else if (state.page === 'filter') {
+    showFilterResults(state.type, state.value);
+  } else if (state.page === 'payment') {
+    document.getElementById('payment').style.display = 'block';
+  } else if (state.page === 'review') {
+    document.getElementById('reviewPage').style.display = 'block';
   }
-    }
+}
+
+function navigate(state) {
+  history.pushState(state, '');
+  restoreState(state);
+}
+
+function showSection(section) {
+  navigate({ page: 'section', id: section });
+}
     
 async function loadProducts() {
   const res = await fetch("/products");
@@ -525,14 +537,9 @@ function changeQty(qtyId, change, totalId, price) {
 }
 
 function showPayment(totalId) {
-    history.pushState({}, "", "payment");
-    document.querySelectorAll('.section').forEach(s => s.style.display='none');
-    document.getElementById('payment').style.display='block';
-
-    // get calculated total
     let total = document.getElementById(totalId).innerText;
-
     window.currentPrice = "N" + total;
+    navigate({ page: 'payment' });
 }
 function showBank() {
 document.getElementById('bankDetails').style.display='block';
@@ -546,8 +553,7 @@ document.getElementById('bankDetails').innerHTML = `
 }
 
 function completePayment() {
-document.getElementById('payment').style.display='none';
-document.getElementById('home').style.display='block';
+  navigate({ page: 'home' });
 }
 let selectedRating = 0;
 
@@ -623,10 +629,7 @@ document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
 document.getElementById('reviewText').style.display='none';
 document.getElementById('submitBtn').style.display='none';
 function openReviewTab(){
-  document.querySelectorAll('#home, .section, #payment')
-    .forEach(s => s.style.display = 'none');
-
-  document.getElementById('reviewPage').style.display = 'block';
+  navigate({ page: 'review' });
 }
 function toggleBootWall() {
   const items = document.getElementById('bootItems');
@@ -643,17 +646,8 @@ function toggleBootWall() {
   }
 }
 
-window.onpopstate = function () {
-  const hash = location.hash.replace("#", "");
-
-  document.querySelectorAll('.section, .payment, #reviewPage')
-    .forEach(s => s.style.display = 'none');
-
-  if(hash){
-    document.getElementById(hash).style.display = 'block';
-  } else {
-    document.getElementById('home').style.display = 'block';
-  }
+window.onpopstate = function(e) {
+  restoreState(e.state);
 };
 const sizeMap = [
   { US:8, UK:7, EU:41, JPN:26, CHN:260 },
@@ -671,35 +665,21 @@ function syncSizes(index, container) {
   container.querySelector(".chn").innerText = sizes.CHN;
 }
 
-  function filterProducts(type, value) {
-  const resultView = document.getElementById("resultView");
+function filterProducts(type, value) {
+  navigate({ page: 'filter', type, value });
+}
 
+function showFilterResults(type, value) {
+  const resultView = document.getElementById("resultView");
   resultView.style.display = "block";
-  document.getElementById("boots").style.display = "none";
-  document.getElementById("home").style.display = "none";
 
   let filtered = [];
-
-  if (type === "model") {
-    filtered = allProducts.filter(p =>
-      p.model?.toLowerCase() === value.toLowerCase()
-    );
-  }
-
-  if (type === "brand") {
-    filtered = allProducts.filter(p =>
-      p.brand?.toLowerCase() === value.toLowerCase()
-    );
-  }
-
-  if (type === "soleplates") {
-    filtered = allProducts.filter(p =>
-      p.soleplates?.toLowerCase() === value.toLowerCase()
-    );
-  }
+  if (type === "model") filtered = allProducts.filter(p => p.model?.toLowerCase() === value.toLowerCase());
+  if (type === "brand") filtered = allProducts.filter(p => p.brand?.toLowerCase() === value.toLowerCase());
+  if (type === "soleplates") filtered = allProducts.filter(p => p.soleplates?.toLowerCase() === value.toLowerCase());
 
   renderResults(filtered, value);
-    }
+}
 
   function renderResults(products, title) {
   const resultView = document.getElementById("resultView");
@@ -723,10 +703,8 @@ function syncSizes(index, container) {
   }
 
   function backHome() {
-  document.getElementById("resultView").style.display = "none";
-  document.getElementById("boots").style.display = "block";
-  document.getElementById("home").style.display = "block";
-                      }
+  history.back();
+}
 
 /* SLIDER CONTROL */
 let slider;
@@ -742,6 +720,9 @@ function prevSlide(){
   }
 
     window.addEventListener("load", () => {
+
+  // seed initial history state so back button returns here
+  history.replaceState({ page: 'home' }, '');
 
   // load products
   loadProducts();
