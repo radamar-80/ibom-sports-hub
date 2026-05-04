@@ -161,6 +161,8 @@ header.scrolled {
   padding: 0 14px;
   background: #f9f9f9;
   transition: border-color 0.2s;
+  height: 44px;
+  box-sizing: border-box;
 }
 
 .search-wrapper:focus-within {
@@ -204,7 +206,7 @@ header.scrolled {
   background: none;
   border: 1.5px solid #ccc;
   border-radius: 10px;
-  padding: 0 12px;
+  padding: 0;
   cursor: pointer;
   font-size: 20px;
   line-height: 0;
@@ -213,8 +215,9 @@ header.scrolled {
   align-items: center;
   justify-content: center;
   align-self: center;
-  height: 40px;
+  height: 44px;
   width: 44px;
+  box-sizing: border-box;
 }
 
 body.dark .search-wrapper {
