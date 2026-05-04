@@ -190,21 +190,29 @@ header.scrolled {
   background: none;
   border: none;
   padding: 0;
+  margin: 0;
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
+  align-self: center;
   color: #999;
+  line-height: 0;
 }
 
 #darkToggleBtn {
   background: none;
   border: 1.5px solid #ccc;
   border-radius: 10px;
-  padding: 7px 10px;
+  padding: 0 12px;
   cursor: pointer;
   font-size: 20px;
   line-height: 1;
   flex-shrink: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 body.dark .search-wrapper {
