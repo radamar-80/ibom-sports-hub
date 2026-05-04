@@ -500,6 +500,37 @@ body.dark .nav-item {
   margin-bottom: 10px;
 }
 
+  .cart-icon-wrapper {
+  position: relative;
+}
+
+/* badge */
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background: red;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 3px 6px;
+  min-width: 16px;
+  text-align: center;
+  display: none; /* hidden when 0 */
+  transform: scale(0);
+  transition: transform 0.2s ease;
+}
+
+.cart-badge.show {
+  transform: scale(1);
+}
+
+/* dark mode tweak */
+body.dark .cart-badge {
+  background: #ff3b3b;
+}
+
 body.dark #cartDrawer {
   background: #1a1a1a;
 }
@@ -1150,6 +1181,30 @@ function toggleCart() {
   const cart = document.getElementById("cartDrawer");
   cart.classList.toggle("open");
     }
+
+    let cartCount = 0;
+
+function updateCartCount() {
+  const badge = document.getElementById("cartCount");
+
+  if (cartCount > 0) {
+    badge.style.display = "block";
+    badge.innerText = cartCount;
+  } else {
+    badge.style.display = "none";
+  }
+    }
+
+function addToCart() {
+  cartCount++;
+  updateCartCount();
+}
+    
+    if (cartCount > 0) {
+  badge.style.display = "block";
+  badge.innerText = cartCount;
+  badge.classList.add("show");
+    }
   
 </script>
 
@@ -1195,6 +1250,8 @@ function toggleCart() {
       <circle cx="18" cy="21" r="1.5"/>
       <path d="M2 3h2l3 12h11l3-8H6"/>
     </svg>
+    <!-- BADGE -->
+    <span id="cartCount" class="cart-badge">0</span>
     <span>Cart</span>
   </div>
 
