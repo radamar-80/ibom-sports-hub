@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ibom Sports Hub</title>
 <style>
-body { margin:0; font-family: Arial, Helvetica, sans-serif; background:#fff; color:#111; }
+body { margin:0; font-family: Arial, Helvetica, sans-serif; 6background:#fff; color:#111; }
 .top-banner { background:red; color:white; text-align:center; padding:10px; font-weight:bold; cursor:pointer; }
 header { display:flex; align-items:center; justify-content:space-between; padding:15px 30px; border-bottom:1px solid #ddd; }
 .logo { display:flex; align-items:center; gap:10px; }
@@ -14,14 +14,6 @@ header { display:flex; align-items:center; justify-content:space-between; paddin
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #ddd;
-}
-
-  .section {
-  display: none;
-}
-
-.section.active {
-  display: block;
 }
   
 #bootItems {
@@ -182,7 +174,15 @@ textarea::placeholder{
 }
 .card { cursor:pointer; text-align:center; }
 .card img { width:250px; height:250px; object-fit:cover; border-radius:10px; }
-.section { display:none; padding:30px; }
+.section {
+  display: none;
+  padding: 30px;
+}
+
+.section.active {
+  display: block;
+}
+  
 .product img { width:300px; }
 button {
   padding:10px 15px;
@@ -263,11 +263,10 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>
   
 <div id="bootItems"></div>
-</div>   
-  </div>
-  
+</div>  <!-- closes grid -->
+</div>  <!-- closes home -->
 
-  <div id="boots" class="section">
+<div id="boots" class="section">
   <h2>Boots</h2>
 <h3 class="sub-title">Shop by Model</h3>
 <div class="two-grid">
@@ -301,6 +300,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <p>Predator →</p>
 </div>
 
+</div><!-- closes model two-grid -->
 
   <!-- SHOP BY SURFACE -->
   <h3 class="sub-title">Shop by Surface</h3>
@@ -403,6 +403,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
 </div>
 
+  </div>
+
 <div id="gear" class="section">
 <div class="product">
 <img src="photo4.jpg">
@@ -450,18 +452,25 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   let allProducts = [];
 
 function showSection(section) {
-
-  // hide home
+  // hide everything
   document.getElementById('home').style.display = 'none';
+  document.getElementById('payment').style.display = 'none';
+  document.getElementById('reviewPage').style.display = 'none';
+  document.getElementById('resultView').style.display = 'none';
 
-  // hide all sections properly
-  const sections = document.querySelectorAll('.section');
-  sections.forEach(sec => sec.classList.remove('active'));
+  // remove active from sections
+  document.querySelectorAll('.section').forEach(sec => {
+    sec.classList.remove('active');
+  });
 
-  // show the one you clicked
+  // show selected
   const target = document.getElementById(section);
-  if (target) target.classList.add('active');
-}
+  if (target) {
+    target.classList.add('active');
+  } else {
+    console.error(`Section "${section}" not found!`);
+  }
+    }
     
 async function loadProducts() {
   const res = await fetch("/products");
