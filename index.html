@@ -4,9 +4,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ibom Sports Hub</title>
 <style>
-body { margin:0; font-family: Arial, Helvetica, sans-serif; 6background:#fff; color:#111; }
+
+body { 
+  margin:0; font-family: Arial, Helvetica, sans-serif; 6background:#fff; color:#111;
+       /* smooth transition */
+  transition: background 0.3s, color 0.3s;
+}
+
+/* DARK MODE */
+body.dark {
+  background: #0f0f0f;
+  color: #f5f5f5;
+}
+
+/* header */
+body.dark header {
+  background: #111;
+  border-bottom: 1px solid #222;
+}
+
+/* cards / sections */
+body.dark .card,
+body.dark .product,
+body.dark .review-card {
+  background: #1a1a1a;
+  color: #f5f5f5;
+}
+
+/* buttons */
+body.dark button {
+  background: #222;
+  color: #fff;
+}
+
+/* address */
+body.dark .address {
+  color: #aaa;
+}
+
+/* icon */
+body.dark .icon {
+  fill: #aaa;
+}
+  
 .top-banner { background:red; color:white; text-align:center; padding:10px; font-weight:bold; cursor:pointer; }
-header {
+
+  header {
   position: sticky;
   top: 0;
   background: white;
@@ -93,12 +136,56 @@ header.scrolled {
 .address:hover .icon {
   fill: black;
 }
+
+  /* SWITCH */
+.theme-switch {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  margin-left: auto;
+}
+
+.theme-switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #ddd;
+  border-radius: 50px;
+  transition: 0.3s;
+}
+
+/* circle */
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+/* ON state */
+input:checked + .slider {
+  background: #111;
+}
+
+input:checked + .slider::before {
+  transform: translateX(24px);
+}
   
 #bootItems {
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.6s ease-in-out;
 }
+  
   .sub-title{
   font-style: italic;
   color: black;
@@ -295,7 +382,14 @@ button {
 </head>
 <body><div class="top-banner" onclick="window.open('https://www.instagram.com/ibomsportshub1?igsh=YzdqbjUxa2NrdWQ1','_blank')">
 CLICK HERE TO VIEW INSTAGRAM CHANNEL
-</div><header>
+</div>
+
+  <header>
+<label class="theme-switch">
+  <input type="checkbox" id="themeToggle">
+  <span class="slider"></span>
+</label>
+    
 <div class="logo">
   <img src="logo.png" alt="logo">
 
@@ -853,6 +947,31 @@ function prevSlide(){
     });
   }
 
+});
+
+    const toggle = document.getElementById("themeToggle");
+
+// detect system preference
+const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+// check saved choice
+let savedTheme = localStorage.getItem("theme");
+
+// APPLY INITIAL THEME
+if (savedTheme === "dark" || (!savedTheme && systemDark)) {
+  document.body.classList.add("dark");
+  toggle.checked = true;
+}
+
+// TOGGLE CLICK
+toggle.addEventListener("change", () => {
+  if (toggle.checked) {
+    document.body.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  } else {
+    document.body.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  }
 });
   
 </script>
