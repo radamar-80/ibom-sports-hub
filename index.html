@@ -12,7 +12,7 @@ body {
   padding-bottom: 70px;
 }
 
-/* DARK MODE */
+/* DARK MODE: */
 body.dark {
   background: #0f0f0f;
   color: #f5f5f5;
@@ -143,20 +143,23 @@ header.scrolled {
 #toolbar {
   display: flex;
   align-items: center;
+  justify-content: space-between
   gap: 10px;
-  padding: 10px 0 14px;
-  margin-top: -5px /* remove side padding */
+  padding: 10px 10px 14px;
+  margin-top: -5px; /* remove side padding */
   }
 
 #searchForm {
-  flex: 0 1 50%;
-  min-width: 120px;
+  flex: 1 ;
+  max-width: 60%
+  min-width: 0;
   display: flex;
   align-items: stretch;
 }
 
 .search-wrapper {
   flex: 1;
+  height: 38px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -170,6 +173,7 @@ header.scrolled {
 
 .search-wrapper:focus-within {
   border-color: #555;
+  padding: 0 10px;
 }
 
 .search-icon {
@@ -210,14 +214,17 @@ header.scrolled {
   border: 1.5px solid #ccc;
   border-radius: 10px;
   padding: 0;
+  margin: 0;
+  margin-left: 20px;
   cursor: pointer;
-  font-size: 20px;
-  line-height: 0;
+  font-size: 18px;
+  line-height: 1;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
+  height: 38px
+  width: 38px;
   box-sizing: border-box;
 }
 
@@ -245,7 +252,7 @@ body.dark #darkToggleBtn {
 }
 @keyframes slideOutToLeft {
   from { transform: translateX(0); }
-  to   { transform: translateX(-30%); }
+  to   { transform: translateX(-15%); }
 }
 @keyframes slideInFromLeft {
   from { transform: translateX(-30%); }
@@ -266,14 +273,16 @@ body.dark #darkToggleBtn {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 44px;
+  width: 38px;
+  height: 38px;
+  margin-left: 15px;
   box-sizing: border-box;
   text-decoration: none;
 }
 
 #whatsappBtn svg {
-  width: 36px;
-  height: 36px;
+  width: 26px;
+  height: 26px;
   display: block;
 }
   
@@ -894,7 +903,9 @@ function hideAll() {
 
 function showTarget(state, inClass) {
   let el = null;
+
   hideAll();
+
   if (!state || state.page === 'home') {
     el = document.getElementById('home');
     el.style.display = 'block';
@@ -911,11 +922,16 @@ function showTarget(state, inClass) {
     el = document.getElementById('reviewPage');
     el.style.display = 'block';
   }
+
+  // ✅ apply animation
   if (el && inClass) {
     el.classList.add(inClass);
-    setTimeout(() => el.classList.remove(inClass), 350);
+
+    setTimeout(() => {
+      el.classList.remove(inClass);
+    }, 300);
   }
-}
+    }
 
 function restoreState(state, direction) {
   direction = direction || 'forward';
@@ -934,9 +950,27 @@ function restoreState(state, direction) {
 }
 
 function navigate(state) {
-  history.pushState(state, '');
-  restoreState(state, 'forward');
-}
+  const current = getCurrentEl();
+
+  // animate current OUT (forward)
+  if (current) {
+    current.classList.add('page-out-left');
+
+    setTimeout(() => {
+      current.classList.remove('page-out-left');
+
+      history.pushState(state, '');
+
+      // animate new page IN
+      showTarget(state, 'page-in-right');
+
+    }, 260);
+
+  } else {
+    history.pushState(state, '');
+    showTarget(state, 'page-in-right');
+  }
+    }
 
 function showSection(section) {
   navigate({ page: 'section', id: section });
@@ -1324,6 +1358,24 @@ function addToCart() {
     tracking = false;
   }, { passive: true });
 })();
+
+    window.onpopstate = function (event) {
+  const current = getCurrentEl();
+
+  if (current) {
+    current.classList.add('page-out-right');
+
+    setTimeout(() => {
+      current.classList.remove('page-out-right');
+
+      showTarget(event.state, 'page-in-left');
+
+    }, 260);
+
+  } else {
+    showTarget(event.state, 'page-in-left');
+  }
+};
 
 </script>
 
