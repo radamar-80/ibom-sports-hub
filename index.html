@@ -459,9 +459,13 @@ textarea::placeholder{
 .card { cursor:pointer; text-align:center; 
   width: 100%;
   max-width: 420px;   /* 👈 keeps it neat on large screens */
+  position: relative;
+  overflow: hidden;       /* 👈 important for rounded corners */
+  border-radius: 16px;    /* 👈 smooth rounded edges */
 }
 
 .card img {
+  display: block;
   width: 100%;
   height: 220px;      /* 👈 key: rectangular, not square */
   object-fit: cover;
@@ -472,6 +476,60 @@ textarea::placeholder{
 
 .card:active img {
   transform: scale(0.98);
+  }
+
+/* TEXT + ARROW ROW */
+.card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ARROW STYLE */
+.card-title .arrow {
+  display: flex;          /* 👈 important for SVG alignment */
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  opacity: 0.6;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+  .card-title .arrow svg {
+  width: 18px;
+  height: 18px;
+  }
+c
+/* INTERACTION */
+.card:hover .arrow {
+  transform: translateX(5px);
+  opacity: 1;
+}
+
+.card:active .arrow {
+  transform: translateX(2px);
+}
+
+  .card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 45%;
+
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.55),   /* darkest at bottom */
+    rgba(0,0,0,0.25),
+    rgba(0,0,0,0.08),
+    transparent
+  );
+
+  pointer-events: none;
   }
 
   .section {
@@ -675,20 +733,48 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 <div class="grid">
 <div class="card" onclick="showSection('boots')">
 <img src="boot.jpg" alt="Boots">
-<h3>Boots</h3>
+  <h3 class="card-title">
+    Boots 
+    <span class="arrow">
+  <svg width="18" height="18" viewBox="0 0 24 24">
+    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+  </svg>
+    </span>
+  </h3>
 </div>
 <div class="card" onclick="showSection('jersey')">
 <img src="jersey.jpg" alt="Jerseys">
-<h3>Jerseys & Sportswear</h3>
+<h3>
+  <h3 class="card-title">
+ Jerseys & Sportswear
+    <span class="arrow">
+  <svg width="18" height="18" viewBox="0 0 24 24">
+    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+  </svg>
+    </span>
+  </h3>
 </div>
 <div class="card" onclick="showSection('gear')">
 <img src="gear.jpg" alt="Gear">
-<h3>Gear</h3>
+  <h3 class="card-title">
+  Gear 
+<span class="arrow">
+  <svg width="18" height="18" viewBox="0 0 24 24">
+    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+  </svg>
+</span>
+  </h3>
 </div>
 <div class="card" onclick="showSection('equipment')">
 <img src="equipment.jpg" alt="Equipment">
-<h3>Other Equipment</h3>
-
+<h3 class="card-title">
+  Other Equipment 
+  <span class="arrow">
+  <svg width="18" height="18" viewBox="0 0 24 24">
+    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+  </svg>
+  </span>
+</h3>
 </div>
 <div class="review-section">
 
