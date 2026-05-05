@@ -149,7 +149,8 @@ header.scrolled {
   }
 
 #searchForm {
-  flex: 1;
+  flex: 0 1 50%;
+  min-width: 120px;
   display: flex;
   align-items: stretch;
 }
@@ -231,6 +232,34 @@ body.dark #darkToggleBtn {
   border-color: #444;
   background: #1a1a1a;
 }
+
+/* ── PAGE TRANSITION ANIMATIONS ── */
+#pageContainer {
+  overflow-x: hidden;
+  position: relative;
+}
+
+@keyframes slideInFromRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes slideOutToLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-30%); }
+}
+@keyframes slideInFromLeft {
+  from { transform: translateX(-30%); }
+  to   { transform: translateX(0); }
+}
+@keyframes slideOutToRight {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
+
+.page-in-right  { animation: slideInFromRight 0.3s cubic-bezier(0.25,0.46,0.45,0.94) both; }
+.page-out-left  { animation: slideOutToLeft   0.26s cubic-bezier(0.25,0.46,0.45,0.94) both; }
+.page-in-left   { animation: slideInFromLeft  0.3s cubic-bezier(0.25,0.46,0.45,0.94) both; }
+.page-out-right { animation: slideOutToRight  0.3s cubic-bezier(0.25,0.46,0.45,0.94) both; }
 
 #whatsappBtn {
   display: flex;
@@ -608,6 +637,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </a>
 </div>
 
+<div id="pageContainer">
   <div id="home" class="collections">
 <h2 style="text-align:center;">Collections</h2>
 <div class="grid">
@@ -840,9 +870,19 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>
  
   <div id="resultView" style="display:none; padding:20px;"></div>
-  
+
+</div><!-- closes #pageContainer -->
+
   <script>
   let allProducts = [];
+
+function getCurrentEl() {
+  if (document.getElementById('home').style.display !== 'none') return document.getElementById('home');
+  if (document.getElementById('payment').style.display === 'block') return document.getElementById('payment');
+  if (document.getElementById('reviewPage').style.display === 'block') return document.getElementById('reviewPage');
+  if (document.getElementById('resultView').style.display !== 'none') return document.getElementById('resultView');
+  return document.querySelector('.section.active') || null;
+}
 
 function hideAll() {
   document.getElementById('home').style.display = 'none';
@@ -852,25 +892,50 @@ function hideAll() {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
 }
 
-function restoreState(state) {
+function showTarget(state, inClass) {
+  let el = null;
   hideAll();
   if (!state || state.page === 'home') {
-    document.getElementById('home').style.display = 'block';
+    el = document.getElementById('home');
+    el.style.display = 'block';
   } else if (state.page === 'section') {
-    const target = document.getElementById(state.id);
-    if (target) target.classList.add('active');
+    el = document.getElementById(state.id);
+    if (el) el.classList.add('active');
   } else if (state.page === 'filter') {
+    el = document.getElementById('resultView');
     showFilterResults(state.type, state.value);
   } else if (state.page === 'payment') {
-    document.getElementById('payment').style.display = 'block';
+    el = document.getElementById('payment');
+    el.style.display = 'block';
   } else if (state.page === 'review') {
-    document.getElementById('reviewPage').style.display = 'block';
+    el = document.getElementById('reviewPage');
+    el.style.display = 'block';
+  }
+  if (el && inClass) {
+    el.classList.add(inClass);
+    setTimeout(() => el.classList.remove(inClass), 350);
+  }
+}
+
+function restoreState(state, direction) {
+  direction = direction || 'forward';
+  const outEl = getCurrentEl();
+  const outClass = direction === 'forward' ? 'page-out-left' : 'page-out-right';
+  const inClass  = direction === 'forward' ? 'page-in-right' : 'page-in-left';
+  if (outEl) {
+    outEl.classList.add(outClass);
+    setTimeout(() => {
+      outEl.classList.remove(outClass);
+      showTarget(state, inClass);
+    }, 270);
+  } else {
+    showTarget(state, inClass);
   }
 }
 
 function navigate(state) {
   history.pushState(state, '');
-  restoreState(state);
+  restoreState(state, 'forward');
 }
 
 function showSection(section) {
@@ -1039,7 +1104,7 @@ function toggleBootWall() {
 }
 
 window.onpopstate = function(e) {
-  restoreState(e.state);
+  restoreState(e.state, 'back');
 };
 const sizeMap = [
   { US:8, UK:7, EU:41, JPN:26, CHN:260 },
@@ -1063,7 +1128,7 @@ function filterProducts(type, value) {
 
 function showFilterResults(type, value) {
   const resultView = document.getElementById("resultView");
-  resultView.style.display = "block";
+  resultView.style.display = "block"; // needed so renderResults can populate it
 
   let filtered = [];
   if (type === "model") filtered = allProducts.filter(p => p.model?.toLowerCase() === value.toLowerCase());
@@ -1235,7 +1300,31 @@ function addToCart() {
   badge.innerText = cartCount;
   badge.classList.add("show");
     }
-  
+
+// ── SWIPE-BACK GESTURE (left-edge swipe like iPhone) ──
+(function() {
+  let startX = 0, startY = 0, tracking = false;
+  const EDGE_ZONE   = 30;   // px from left edge to start tracking
+  const MIN_SWIPE   = 80;   // px rightward movement to trigger back
+  const MAX_VERT    = 70;   // px vertical tolerance
+
+  document.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    tracking = startX < EDGE_ZONE;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    if (!tracking) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = Math.abs(e.changedTouches[0].clientY - startY);
+    if (dx > MIN_SWIPE && dy < MAX_VERT && history.length > 1) {
+      history.back();
+    }
+    tracking = false;
+  }, { passive: true });
+})();
+
 </script>
 
   <!-- BOTTOM NAV -->
