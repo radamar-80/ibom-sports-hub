@@ -436,22 +436,45 @@ textarea::placeholder{
   display:none;
   font-weight:bold;
 }
-.collections { padding:30px; }
+.collections { padding:20px 15px; }
 .grid {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 25px;
   align-items: center;
 }
+
+  .card h3 {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: left;
+  }
 
 @media (min-width: 768px) {
   .grid {
     flex-direction: row;
   }
 }
-.card { cursor:pointer; text-align:center; }
-.card img { width:250px; height:250px; object-fit:cover; border-radius:10px; }
-.section {
+.card { cursor:pointer; text-align:center; 
+  width: 100%;
+  max-width: 420px;   /* 👈 keeps it neat on large screens */
+}
+
+.card img {
+  width: 100%;
+  height: 220px;      /* 👈 key: rectangular, not square */
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.card:active img {
+  transform: scale(0.98);
+  }
+
+  .section {
   display: none;
   padding: 30px;
 }
