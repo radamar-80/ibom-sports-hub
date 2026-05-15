@@ -145,9 +145,141 @@ header.scrolled {
   align-items: center;
   justify-content: space-between
   gap: 10px;
-  padding: 10px 10px 14px;
-  margin-top: -5px; /* remove side padding */
+  padding: 14px;
+  margin: 100px auto 8px;
+  position: relative;
+  z-index: 100;
+ /* remove side padding */
+}
+
+  /* HERO SECTION */
+.hero-slider{
+  position: relative;
+  width: 100%;
+  height: 470px;
+  overflow: hidden;
+  margin-bottom: -35px; /* allows toolbar overlap */
+}
+
+.hero-track{
+  display:flex;
+  width:300%;
+  height:100%;
+  transition: transform 0.7s ease;
+}
+
+.hero-slide{
+  position:relative;
+  width:100%;
+  flex-shrink:0;
+  overflow:hidden;
+}
+
+.hero-slide img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* DARK OVERLAY */
+.hero-overlay{
+  position:absolute;
+  inset:0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.72),
+    rgba(0,0,0,0.25),
+    rgba(0,0,0,0.05)
+  );
+}
+
+/* TEXT */
+.hero-content{
+  position:absolute;
+  left:25px;
+  bottom:70px;
+  color:white;
+  z-index:5;
+}
+
+.hero-content h1{
+  font-size:42px;
+  margin:0;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.hero-content p{
+  margin-top:8px;
+  font-size:18px;
+  opacity:0.92;
+  letter-spacing:1px;
+}
+
+/* SHOP BUTTON */
+.shop-btn{
+  margin-top:22px;
+  background:white;
+  color:black;
+  border:none;
+  padding:14px 20px;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  border-radius:0;
+  font-size:15px;
+}
+
+.shop-btn span{
+  font-size:24px;
+  line-height:1;
+}
+
+/* DOTS */
+.hero-dots{
+  position:absolute;
+  bottom:20px;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  z-index:10;
+}
+
+.hero-dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.45);
+  transition:0.3s;
+}
+
+.hero-dot.active{
+  background:white;
+  transform:scale(1.2);
+}
+
+/* MOBILE OPTIMIZATION */
+@media(max-width:768px){
+
+  .hero-slider{
+    height:420px;
   }
+
+  .hero-content h1{
+    font-size:34px;
+  }
+
+  .hero-content p{
+    font-size:16px;
+  }
+
+  .shop-btn{
+    padding:12px 16px;
+  }
+
+}
 
 #searchForm {
   flex: 1 ;
@@ -703,6 +835,70 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </div>
 </div>
 </header>
+
+  <!-- HERO SLIDER -->
+<div class="hero-slider">
+
+  <div class="hero-track" id="heroTrack">
+
+    <!-- SLIDE 1 -->
+    <div class="hero-slide">
+      <img src="bootmodel.jpg" alt="">
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <h1>ADIDAS PREDATOR</h1>
+        <p>NALA PACK</p>
+
+        <button class="shop-btn">
+          SHOP NOW
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="hero-slide">
+      <img src="jerseymodel.jpg" alt="">
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <h1>2026 JERSEYS</h1>
+        <p>NEW ARRIVALS</p>
+
+        <button class="shop-btn">
+          SHOP NOW
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="hero-slide">
+      <img src="sneakermodel.jpg" alt="">
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <h1>STREET SNEAKERS</h1>
+        <p>LIFESTYLE COLLECTION</p>
+
+        <button class="shop-btn">
+          SHOP NOW
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INDICATORS -->
+  <div class="hero-dots" id="heroDots">
+    <span class="hero-dot active"></span>
+    <span class="hero-dot"></span>
+    <span class="hero-dot"></span>
+  </div>
+
+</div>
 
 <div id="toolbar" class="container">
   <form id="searchForm" onsubmit="doSearch(); return false;">
@@ -1485,6 +1681,73 @@ function addToCart() {
     showTarget(event.state, 'page-in-left');
   }
 };
+
+    /* HERO SLIDER */
+
+let heroIndex = 0;
+
+const heroTrack = document.getElementById("heroTrack");
+const heroDots = document.querySelectorAll(".hero-dot");
+
+function updateHeroSlider() {
+
+  heroTrack.style.transform =
+    `translateX(-${heroIndex * 100}%)`;
+
+  heroDots.forEach(dot =>
+    dot.classList.remove("active")
+  );
+
+  heroDots[heroIndex].classList.add("active");
+}
+
+/* AUTO SLIDE */
+setInterval(() => {
+
+  heroIndex++;
+
+  if(heroIndex > 2){
+    heroIndex = 0;
+  }
+
+  updateHeroSlider();
+
+}, 15000);
+
+/* TOUCH SWIPE */
+let startX = 0;
+
+heroTrack.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+});
+
+heroTrack.addEventListener("touchend", e => {
+
+  let endX = e.changedTouches[0].clientX;
+
+  if(startX - endX > 50){
+
+    heroIndex++;
+
+    if(heroIndex > 2){
+      heroIndex = 0;
+    }
+
+  }
+
+  else if(endX - startX > 50){
+
+    heroIndex--;
+
+    if(heroIndex < 0){
+      heroIndex = 2;
+    }
+
+  }
+
+  updateHeroSlider();
+
+});
 
 </script>
 
