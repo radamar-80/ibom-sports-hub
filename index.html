@@ -842,6 +842,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>
 </header>
 
+  <div id="topHomeArea">
+
   <!-- HERO SLIDER -->
 <div class="hero-slider">
 
@@ -854,7 +856,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
       <div class="hero-content">
         <h1>ADIDAS PREDATOR</h1>
-        <p>KAKA SPECIAL</p>
+        <p>KAKÁ SPECIAL</p>
 
         <button class="shop-btn">
           SHOP NOW
@@ -870,7 +872,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
       <div class="hero-content">
         <h1>2026 JERSEYS</h1>
-        <p>MAN CITY AWAY</p>
+        <p>MAN CITY AWAY KIT</p>
 
         <button class="shop-btn">
           SHOP NOW
@@ -1213,6 +1215,7 @@ function hideAll() {
 }
 
 function showTarget(state, inClass) {
+  document.getElementById("topHomeArea").style.display = "block";
   let el = null;
 
   hideAll();
@@ -1432,6 +1435,8 @@ document.getElementById('reviewText').style.display='none';
 document.getElementById('submitBtn').style.display='none';
 function openReviewTab(){
   navigate({ page: 'review' });
+  document.getElementById("topHomeArea").style.display = "none";
+  document.getElementById("topHomeArea").style.display = "block";
 }
 function toggleBootWall() {
   const items = document.getElementById('bootItems');
