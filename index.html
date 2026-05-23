@@ -1287,27 +1287,33 @@ function hideAll() {
 }
 
 function showTarget(state, inClass) {
+  const page = state ? state.page : 'home';
+  const isReview = (page === 'review' || page === 'reviewDetail');
+
   document.getElementById("topHomeArea").style.display = "block";
+  document.querySelector('.hero-slider').style.display = (page === 'home') ? '' : 'none';
+  document.getElementById('toolbar').style.display = isReview ? 'none' : '';
+
   let el = null;
 
   hideAll();
 
-  if (!state || state.page === 'home') {
+  if (!state || page === 'home') {
     el = document.getElementById('home');
     el.style.display = 'block';
-  } else if (state.page === 'section') {
+  } else if (page === 'section') {
     el = document.getElementById(state.id);
     if (el) el.classList.add('active');
-  } else if (state.page === 'filter') {
+  } else if (page === 'filter') {
     el = document.getElementById('resultView');
     showFilterResults(state.type, state.value);
-  } else if (state.page === 'payment') {
+  } else if (page === 'payment') {
     el = document.getElementById('payment');
     el.style.display = 'block';
-  } else if (state.page === 'review') {
+  } else if (page === 'review') {
     el = document.getElementById('reviewPage');
     el.style.display = 'block';
-  } else if (state.page === 'reviewDetail') {
+  } else if (page === 'reviewDetail') {
     el = document.getElementById('reviewDetail');
     el.style.display = 'block';
     renderReviewDetail(state.index);
