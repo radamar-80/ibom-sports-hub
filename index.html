@@ -492,76 +492,144 @@ body.dark #darkToggleBtn {
   font-weight:bold;
   font-size:18px;
 }
-.review-section{
-  padding:20px;
-  margin-top:20px;
+/* REVIEW SECTION */
+.review-section { padding: 20px; margin-top: 20px; }
+
+.avg-rating-panel {
+  background: #28b570;
+  border-radius: 14px;
+  padding: 14px 20px;
+  display: none;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.avg-rating-star { font-size: 40px; color: #72cca0; line-height: 1; }
+.avg-rating-value { font-size: 34px; font-weight: 700; color: #72cca0; line-height: 1; }
+.avg-rating-count { font-size: 12px; color: rgba(114,204,160,0.85); margin-top: 3px; }
+
+#reviewListContainer { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+
+.review-card-new {
+  background: #f5f5f5;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+body.dark .review-card-new { background: #1e1e1e; }
+
+.review-card-left { flex: 1; min-width: 0; }
+.review-card-stars { font-size: 15px; color: gold; margin-bottom: 5px; }
+.review-card-text {
+  font-size: 13px;
+  color: #444;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+}
+body.dark .review-card-text { color: #bbb; }
+.review-card-more { color: #28b570; cursor: pointer; font-size: 13px; font-weight: 600; }
+.review-card-name { font-size: 12px; color: #888; margin-top: 6px; }
+
+.review-card-right {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #e8e8e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+body.dark .review-card-right { background: #2a2a2a; }
+.review-card-right img { width: 100%; height: 100%; object-fit: cover; }
+
+.review-btn {
+  margin-top: 15px;
+  background: #b6f2b6;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
-.review-slider{
-  display:flex;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  gap:15px;
-  padding:10px;
-  scroll-behavior:smooth;
-}
+/* REVIEW PAGE (write form) */
+#reviewPage { display: none; padding: 30px; }
+.stars { font-size: 35px; cursor: pointer; }
+.star { color: #ccc; transition: 0.2s; }
+.star.active { color: gold; }
 
-.review-card{
-  min-width:80%;
-  flex:0 0 auto;
-  background:#f5f5f5;
-  padding:15px;
-  border-radius:10px;
-  scroll-snap-align:center;
+textarea {
+  width: 100%;
+  height: 120px;
+  margin-top: 15px;
+  display: none;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1.5px solid #ccc;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
 }
+textarea::placeholder { opacity: 0.4; }
+body.dark textarea { border-color: #444; background: #1a1a1a; color: #f0f0f0; }
 
-/* hide scrollbar */
-.review-slider::-webkit-scrollbar{
-  display:none;
+.review-name-input {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  box-sizing: border-box;
+  background: transparent;
+  color: inherit;
+  display: none;
 }
+.review-name-input::placeholder { opacity: 0.4; }
+body.dark .review-name-input { border-color: #444; }
 
-.review-btn{
-  margin-top:15px;
-  background:#b6f2b6;
-  border:none;
-  padding:12px 20px;
-  border-radius:12px;
-  cursor:pointer;
-  font-weight:bold;
+.photo-upload-box {
+  margin-top: 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 10px;
+  width: 100%;
+  aspect-ratio: 1;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
 }
+.photo-upload-box .photo-hint { font-size: 14px; color: #888; text-align: center; line-height: 1.4; }
+.photo-upload-box .photo-plus { font-size: 32px; color: #aaa; margin-top: 8px; line-height: 1; }
+.photo-upload-box img#photoPreview {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: none;
+}
+body.dark .photo-upload-box { border-color: #444; }
 
-/* REVIEW PAGE */
-#reviewPage{
-  display:none;
-  padding:30px;
-}
-
-.stars{
-  font-size:35px;
-  cursor:pointer;
-}
-
-.star{
-  color:#ccc;
-  transition:0.2s;
-}
-
-.star.active{
-  color:gold;
-}
-
-textarea{
-  width:100%;
-  height:120px;
-  margin-top:15px;
-  display:none;
-  padding:10px;
-  position:relative;
-}
-
-textarea::placeholder{
-  opacity:0.4;
-}
+/* REVIEW DETAIL PAGE */
+#reviewDetail { display: none; padding: 24px 20px; }
+.review-detail-name { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+.review-detail-stars { font-size: 26px; color: gold; margin-bottom: 14px; }
+.review-detail-photo { width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; margin-bottom: 16px; display: block; }
+.review-detail-text { font-size: 15px; line-height: 1.7; color: #333; }
+body.dark .review-detail-text { color: #ccc; }
 
 .submit-review{
   color:blue;
@@ -981,19 +1049,15 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </h3>
 </div>
 <div class="review-section">
-
-  <div class="review-slider" id="reviewSlider">
-
-    <div class="review-card">⭐ “Great boots, very original quality!” – Daniel</div>
-    <div class="review-card">⭐ “Fast delivery, trusted seller.” – Aisha</div>
-    <div class="review-card">⭐ “Best sports shop I’ve used online 🔥” – Emeka</div>
-
+  <div class="avg-rating-panel" id="avgRatingPanel">
+    <div class="avg-rating-star">★</div>
+    <div>
+      <div class="avg-rating-value" id="avgRatingValue">—</div>
+      <div class="avg-rating-count" id="avgRatingCount"></div>
+    </div>
   </div>
-
-  <button class="review-btn" onclick="openReviewTab()">
-    Write a Review!
-  </button>
-
+  <div id="reviewListContainer"></div>
+  <button class="review-btn" onclick="openReviewTab()">Write a Review!</button>
 </div>
 <div id="bootwall">
 <h2 style="text-align:center; margin-bottom:20px;">The Boot Wall</h2>
@@ -1172,9 +1236,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>
   
 <div id="reviewPage">
-
   <h2>Rate Us!</h2>
-
   <div class="stars">
     <span class="star" onclick="rate(1)">★</span>
     <span class="star" onclick="rate(2)">★</span>
@@ -1182,26 +1244,35 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
     <span class="star" onclick="rate(4)">★</span>
     <span class="star" onclick="rate(5)">★</span>
   </div>
-
   <textarea id="reviewText" placeholder="Describe your experience (optional)"></textarea>
-
-  <div class="submit-review" id="submitBtn" onclick="submitReview()">
-    Submit
+  <input type="text" id="reviewName" class="review-name-input" placeholder="Your name (optional)">
+  <div class="photo-upload-box" id="photoBox" onclick="triggerPhotoUpload()">
+    <span class="photo-hint">Add a photo (recommended)</span>
+    <span class="photo-plus">+</span>
+    <img id="photoPreview" alt="preview">
   </div>
-</div>
+  <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event)">
+  <div class="submit-review" id="submitBtn" onclick="submitReview()">Submit</div>
 </div>
  
+  <div id="reviewDetail" style="display:none; padding:24px 20px;">
+    <button onclick="history.back()" style="background:none;border:none;font-size:15px;cursor:pointer;padding:0 0 16px 0;color:inherit;">&#8592; Back</button>
+    <div id="reviewDetailContent"></div>
+  </div>
+
   <div id="resultView" style="display:none; padding:20px;"></div>
 
 </div><!-- closes #pageContainer -->
 
   <script>
   let allProducts = [];
+  let allReviews = [];
 
 function getCurrentEl() {
   if (document.getElementById('home').style.display !== 'none') return document.getElementById('home');
   if (document.getElementById('payment').style.display === 'block') return document.getElementById('payment');
   if (document.getElementById('reviewPage').style.display === 'block') return document.getElementById('reviewPage');
+  if (document.getElementById('reviewDetail').style.display === 'block') return document.getElementById('reviewDetail');
   if (document.getElementById('resultView').style.display !== 'none') return document.getElementById('resultView');
   return document.querySelector('.section.active') || null;
 }
@@ -1210,6 +1281,7 @@ function hideAll() {
   document.getElementById('home').style.display = 'none';
   document.getElementById('payment').style.display = 'none';
   document.getElementById('reviewPage').style.display = 'none';
+  document.getElementById('reviewDetail').style.display = 'none';
   document.getElementById('resultView').style.display = 'none';
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
 }
@@ -1235,6 +1307,10 @@ function showTarget(state, inClass) {
   } else if (state.page === 'review') {
     el = document.getElementById('reviewPage');
     el.style.display = 'block';
+  } else if (state.page === 'reviewDetail') {
+    el = document.getElementById('reviewDetail');
+    el.style.display = 'block';
+    renderReviewDetail(state.index);
   }
 
   // ✅ apply animation
@@ -1364,79 +1440,137 @@ let selectedRating = 0;
 
 
 
-// star rating logic
-function rate(stars){
+// ── REVIEW SYSTEM ──
+function rate(stars) {
   selectedRating = stars;
-
-  let starElements = document.querySelectorAll('.star');
-
-  starElements.forEach((s, index)=>{
-    if(index < stars){
-      s.classList.add('active');
-    } else {
-      s.classList.remove('active');
-    }
+  document.querySelectorAll('.star').forEach((s, i) => {
+    s.classList.toggle('active', i < stars);
   });
-
-  // show textarea + submit ONLY after first star
-  document.getElementById('reviewText').style.display='block';
-  document.getElementById('submitBtn').style.display='block';
+  document.getElementById('reviewText').style.display = 'block';
+  document.getElementById('reviewName').style.display = 'block';
+  document.getElementById('photoBox').style.display = 'flex';
+  document.getElementById('submitBtn').style.display = 'block';
 }
 
-// submit review
-function submitReview(){
-  let text = document.getElementById('reviewText').value;
+function triggerPhotoUpload() {
+  document.getElementById('photoInput').click();
+}
 
-  let review = {
-    rating: selectedRating,
-    text: text
+function handlePhotoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const preview = document.getElementById('photoPreview');
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+    document.querySelector('.photo-hint').style.display = 'none';
+    document.querySelector('.photo-plus').style.display = 'none';
   };
-
-  // save locally (temporary storage)
-  let reviews = JSON.parse(localStorage.getItem("reviews") || "[]");
-  reviews.push(review);
-  localStorage.setItem("reviews", JSON.stringify(reviews));
-
-  alert("Review submitted!");
-
-  // reset
-  selectedRating = 0;
-  document.getElementById('reviewText').value='';
-  document.getElementById('reviewPage').style.display='none';
-  document.getElementById('home').style.display='block';
+  reader.readAsDataURL(file);
 }
-setInterval(()=>{
-  let slider = document.getElementById("reviewSlider");
-  slider.scrollBy({
-  left: slider.clientWidth,
-  behavior: "smooth"
-});
 
-  // loop back
-  if(slider.scrollLeft + slider.clientWidth >= slider.scrollWidth){
-    slider.scrollTo({ left: 0, behavior: "smooth" });
+async function submitReview() {
+  if (!selectedRating) { alert("Please tap a star to rate us first!"); return; }
+  const text = document.getElementById('reviewText').value.trim();
+  const name = document.getElementById('reviewName').value.trim();
+  const preview = document.getElementById('photoPreview');
+  const photo = preview.style.display !== 'none' ? preview.src : '';
+  try {
+    await fetch('/submit-review', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rating: selectedRating, text, name, photo })
+    });
+    alert("Thank you for your review!");
+    selectedRating = 0;
+    document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+    document.getElementById('reviewText').value = '';
+    document.getElementById('reviewText').style.display = 'none';
+    document.getElementById('reviewName').value = '';
+    document.getElementById('reviewName').style.display = 'none';
+    document.getElementById('photoBox').style.display = 'none';
+    preview.style.display = 'none';
+    document.querySelector('.photo-hint').style.display = '';
+    document.querySelector('.photo-plus').style.display = '';
+    document.getElementById('submitBtn').style.display = 'none';
+    navigate({ page: 'home' });
+    loadReviews();
+  } catch(e) {
+    alert("Could not submit review. Please check your connection.");
   }
-}, 15000);
-function loadReviews(){
-  let reviews = JSON.parse(localStorage.getItem("reviews") || "[]");
-  let slider = document.getElementById("reviewSlider");
-
-  reviews.forEach(r => {
-    let card = document.createElement("div");
-    card.className = "review-card";
-    card.innerHTML = "⭐".repeat(r.rating) + " " + (r.text || "No comment");
-
-    slider.appendChild(card);
-  });
 }
 
+async function loadReviews() {
+  try {
+    const res = await fetch('/reviews');
+    allReviews = await res.json();
+    renderReviewCards(allReviews);
+  } catch(e) { /* no reviews yet */ }
+}
+
+function renderReviewCards(reviews) {
+  const container = document.getElementById('reviewListContainer');
+  const panel = document.getElementById('avgRatingPanel');
+  if (!reviews.length) { container.innerHTML = ''; panel.style.display = 'none'; return; }
+
+  const avg = (reviews.reduce((s, r) => s + (r.rating || 0), 0) / reviews.length).toFixed(1);
+  document.getElementById('avgRatingValue').textContent = avg;
+  document.getElementById('avgRatingCount').textContent = reviews.length + ' review' + (reviews.length !== 1 ? 's' : '');
+  panel.style.display = 'flex';
+
+  const cameraIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
+
+  container.innerHTML = reviews.map((r, i) => {
+    const filled = '★'.repeat(r.rating || 0);
+    const empty  = '☆'.repeat(5 - (r.rating || 0));
+    const name   = r.name ? '–' + r.name : '–Anonymous';
+    const long   = r.text && r.text.length > 100;
+    const photoHtml = r.photo
+      ? `<img src="${r.photo}" alt="photo" onclick="showReviewDetail(${i})" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`
+      : `<div onclick="showReviewDetail(${i})" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">${cameraIcon}</div>`;
+    return `
+      <div class="review-card-new">
+        <div class="review-card-left">
+          <div class="review-card-stars">${filled}<span style="color:#ccc">${empty}</span></div>
+          <div class="review-card-text">${r.text || '(No comment)'}</div>
+          ${long ? `<span class="review-card-more" onclick="showReviewDetail(${i})">...more</span>` : ''}
+          <div class="review-card-name">${name}</div>
+        </div>
+        <div class="review-card-right">${photoHtml}</div>
+      </div>`;
+  }).join('');
+}
+
+function showReviewDetail(index) {
+  navigate({ page: 'reviewDetail', index });
+}
+
+function renderReviewDetail(index) {
+  const r = allReviews[index];
+  if (!r) return;
+  const filled = '★'.repeat(r.rating || 0);
+  const empty  = '☆'.repeat(5 - (r.rating || 0));
+  const name   = r.name || 'Anonymous';
+  const photoHtml = r.photo
+    ? `<img class="review-detail-photo" src="${r.photo}" alt="Product photo">`
+    : `<div style="text-align:center;padding:24px;color:#aaa;"><svg viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5" width="52" height="52"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`;
+  document.getElementById('reviewDetailContent').innerHTML = `
+    <div class="review-detail-name">${name}</div>
+    <div class="review-detail-stars">${filled}<span style="color:#ccc">${empty}</span></div>
+    ${photoHtml}
+    <div class="review-detail-text">${r.text || '(No comment)'}</div>`;
+}
+
+// init — hide review form fields until a star is tapped
 document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
-document.getElementById('reviewText').style.display='none';
-document.getElementById('submitBtn').style.display='none';
-function openReviewTab(){
+document.getElementById('reviewText').style.display = 'none';
+document.getElementById('reviewName').style.display = 'none';
+document.getElementById('photoBox').style.display = 'none';
+document.getElementById('submitBtn').style.display = 'none';
+
+function openReviewTab() {
   navigate({ page: 'review' });
-  document.getElementById("topHomeArea").style.display = "none";
-  document.getElementById("topHomeArea").style.display = "block";
 }
 function toggleBootWall() {
   const items = document.getElementById('bootItems');

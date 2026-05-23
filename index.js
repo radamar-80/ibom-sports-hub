@@ -9,7 +9,16 @@ const jwt = require("jsonwebtoken");
 const SECRET = process.env.JWT_SECRET || "your_secret_key";
 const ADMIN_DB = "admins.json";
 const DB_FILE = "products.json";
+const REVIEWS_FILE = "reviews.json";
 const UPLOAD_DIR = "uploads";
+
+function readReviews() {
+  if (!fs.existsSync(REVIEWS_FILE)) return [];
+  try { return JSON.parse(fs.readFileSync(REVIEWS_FILE)); } catch(e) { return []; }
+}
+function writeReviews(data) {
+  fs.writeFileSync(REVIEWS_FILE, JSON.stringify(data, null, 2));
+}
 
 if (!fs.existsSync(UPLOAD_DIR)) {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
@@ -95,6 +104,27 @@ app.post("/add-product", verifyToken, upload.single("image"), (req, res) => {
 // GET PRODUCTS
 app.get("/products", (req, res) => {
   res.json(readDB());
+});
+
+// GET REVIEWS
+app.get("/reviews", (req, res) => {
+  res.json(readReviews());
+});
+
+// SUBMIT REVIEW
+app.post("/submit-review", express.json({ limit: "10mb" }), (req, res) => {
+  const { rating, text, name, photo } = req.body;
+  const reviews = readReviews();
+  reviews.push({
+    id: Date.now(),
+    rating: parseInt(rating) || 0,
+    text: text || "",
+    name: name || "",
+    photo: photo || "",
+    timestamp: new Date().toISOString()
+  });
+  writeReviews(reviews);
+  res.json({ message: "Review submitted!" });
 });
 
 // CREATE ADMIN
