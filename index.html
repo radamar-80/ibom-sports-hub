@@ -143,13 +143,14 @@ header.scrolled {
 #toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between
+  justify-content: space-between;
   gap: 10px;
-  padding: 14px;
-  margin: 10px auto 8px;
+  padding: 10px 14px;
+  margin: 6px auto 6px;
   position: relative;
   z-index: 100;
- /* remove side padding */
+  box-sizing: border-box;
+  width: 100%;
 }
 
   /* HERO SECTION */
@@ -264,28 +265,21 @@ header.scrolled {
 
 /* MOBILE OPTIMIZATION */
 @media(max-width:768px){
-
-  .hero-slider{
-    height:420px;
-  }
-
-  .hero-content h1{
-    font-size:34px;
-  }
-
-  .hero-content p{
-    font-size:16px;
-  }
-
-  .shop-btn{
-    padding:12px 16px;
-  }
-
+  .hero-slider { height: 380px; }
+  .hero-content h1 { font-size: 30px; }
+  .hero-content p { font-size: 15px; }
+  .shop-btn { padding: 11px 16px; font-size: 14px; }
+}
+@media(max-width:480px){
+  .hero-slider { height: 300px; }
+  .hero-content { left: 16px; bottom: 50px; }
+  .hero-content h1 { font-size: 24px; letter-spacing: 1px; }
+  .hero-content p { font-size: 13px; }
 }
 
 #searchForm {
-  flex: 1 ;
-  max-width: 60%
+  flex: 1;
+  max-width: 60%;
   min-width: 0;
   display: flex;
   align-items: stretch;
@@ -349,7 +343,7 @@ header.scrolled {
   border-radius: 10px;
   padding: 0;
   margin: 0;
-  margin-left: 20px;
+  margin-left: 8px;
   cursor: pointer;
   font-size: 18px;
   line-height: 1;
@@ -357,8 +351,9 @@ header.scrolled {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 38px
+  height: 38px;
   width: 38px;
+  min-width: 38px;
   box-sizing: border-box;
 }
 
@@ -475,8 +470,8 @@ body.dark #darkToggleBtn {
 }
 
 .slide img{
-  width:280px;
-  height:280px;
+  width: min(280px, 80vw);
+  height: min(280px, 80vw);
   object-fit:contain;
   border-radius:16px;
   background:#f0f0f0;
@@ -657,17 +652,20 @@ body.dark .review-detail-text { color: #ccc; }
   text-align: left;
   }
 
-@media (min-width: 768px) {
-  .grid {
-    flex-direction: row;
-  }
-}
-.card { cursor:pointer; text-align:center; 
+.card { cursor:pointer; text-align:center;
   width: 100%;
-  max-width: 420px;   /* 👈 keeps it neat on large screens */
   position: relative;
-  overflow: hidden;       /* 👈 important for rounded corners */
-  border-radius: 16px;    /* 👈 smooth rounded edges */
+  overflow: hidden;
+  border-radius: 16px;
+}
+@media (min-width: 600px) {
+  .grid { flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; }
+  .card { width: calc(50% - 14px); }
+}
+@media (min-width: 1024px) {
+  .grid { flex-wrap: nowrap; gap: 20px; }
+  .card { width: calc(25% - 15px); }
+  .card img { height: 240px; }
 }
 
 .card img {
@@ -708,7 +706,7 @@ body.dark .review-detail-text { color: #ccc; }
   width: 18px;
   height: 18px;
   }
-c
+
 /* INTERACTION */
 .card:hover .arrow {
   transform: translateX(5px);
@@ -747,7 +745,7 @@ c
   display: block;
 }
   
-.product img { width:300px; }
+.product img { width: 100%; max-width: 340px; height: auto; border-radius: 10px; display: block; }
 button {
   padding:10px 15px;
   border:none;
@@ -883,7 +881,103 @@ body.dark .cart-badge {
 body.dark #cartDrawer {
   background: #1a1a1a;
 }
-  
+
+/* ══════════════════════════════════════════
+   FULLY RESPONSIVE — all breakpoints
+   ══════════════════════════════════════════ */
+
+/* Make every block honour the viewport width */
+*, *::before, *::after { box-sizing: border-box; }
+img { max-width: 100%; height: auto; }
+
+/* ── HEADER ── */
+header { padding: 10px 0; }
+
+/* ── SECTION PADDING ── */
+.section { padding: 20px 16px; }
+#reviewPage { padding: 24px 16px; }
+#reviewDetail { padding: 20px 16px; }
+
+/* ── PHOTO UPLOAD BOX: square but capped ── */
+.photo-upload-box { max-width: 100%; }
+
+/* ── TWO-GRID ── */
+@media (max-width: 360px) {
+  .two-grid { grid-template-columns: 1fr; }
+}
+
+/* ── MINI CARD IMAGES ── */
+@media (max-width: 480px) {
+  .mini-card img { height: 100px; }
+}
+
+/* ── TOOLBAR: tiny phones ── */
+@media (max-width: 380px) {
+  #toolbar { padding: 8px 10px; gap: 6px; }
+  #searchForm { max-width: none; }
+  #darkToggleBtn, #whatsappBtn { height: 34px; width: 34px; min-width: 34px; font-size: 16px; }
+  #whatsappBtn svg { width: 22px; height: 22px; }
+}
+
+/* ── LOGO: very small phones ── */
+@media (max-width: 360px) {
+  .logo img { width: 40px; height: 40px; }
+  .logo-text h2 { font-size: 15px; letter-spacing: 0; }
+  .address { font-size: 11px; }
+}
+
+/* ── REVIEW FORM: cap width on large screens ── */
+@media (min-width: 768px) {
+  #reviewPage { max-width: 600px; margin: 0 auto; padding: 40px 30px; }
+  #reviewDetail { max-width: 600px; margin: 0 auto; padding: 40px 30px; }
+  .photo-upload-box { max-width: 320px; }
+}
+
+/* ── PRODUCT SECTION ── */
+@media (min-width: 768px) {
+  .section { padding: 30px 40px; }
+}
+@media (min-width: 1024px) {
+  .section { padding: 40px 60px; }
+  .hero-slider { height: 520px; }
+  .hero-content h1 { font-size: 50px; }
+  .hero-content p { font-size: 20px; }
+  .hero-content { bottom: 90px; left: 50px; }
+  .two-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ── BOTTOM NAV: centre on wide screens ── */
+@media (min-width: 768px) {
+  #bottomNav {
+    max-width: 600px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 20px 20px 0 0;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+  }
+  body.dark #bottomNav {
+    border-left-color: #222;
+    border-right-color: #222;
+  }
+}
+
+/* ── CART DRAWER: centre on wide screens ── */
+@media (min-width: 768px) {
+  #cartDrawer {
+    max-width: 500px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 20px 20px 0 0;
+  }
+  #cartDrawer.open { bottom: 0; }
+}
+
+/* ── HERO: large desktop ── */
+@media (min-width: 1400px) {
+  .hero-slider { height: 600px; }
+}
+
 </style>
 </head>
   
