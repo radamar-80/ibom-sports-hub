@@ -1286,7 +1286,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>  <!-- closes home -->
 
 <div id="boots" class="section">
-  <h2>Boots</h2>
+  <h2 style="text-align:center; font-size:22px; font-weight:800; letter-spacing:1px; margin:0 0 20px;">BOOTS<span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px auto 0;"></span></h2>
 <h3 class="sub-title">Shop by Model</h3>
 <div class="two-grid">
     <div class="mini-card" onclick="filterProducts('model','vapor')">
@@ -1425,6 +1425,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </div>
 
 <div id="gear" class="section">
+<h2 style="text-align:center; font-size:22px; font-weight:800; letter-spacing:1px; margin:0 0 20px;">GEAR<span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px auto 0;"></span></h2>
 <div class="product">
 <img src="photo4.jpg">
 <h3>Grip Socks</h3>
@@ -1947,7 +1948,7 @@ function showFilterResults(type, value) {
   const resultView = document.getElementById("resultView");
 
   resultView.innerHTML = `<button onclick="backHome()">← Back</button>
-<h2>${title.toUpperCase()}</h2>`;
+<h2 style="text-align:center; font-size:22px; font-weight:800; letter-spacing:1px; margin:0 0 20px;">${title.toUpperCase()}<span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px auto 0;"></span></h2>`;
 
   if (products.length === 0) {
     resultView.innerHTML += `
