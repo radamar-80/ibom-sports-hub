@@ -1961,16 +1961,14 @@ function toggleBootWall() {
   const items = document.getElementById('bootItems');
   const btn = document.getElementById('toggleBtn');
 
-  const computed = window.getComputedStyle(items).maxHeight;
-
-  if (computed === "0px") {
-    items.style.maxHeight = items.scrollHeight + "px";
-    btn.classList.add('open');
-    btn.innerHTML = '<span class="btn-icon">▾</span> Collapse';
-  } else {
+  if (btn.classList.contains('open')) {
     items.style.maxHeight = "0px";
     btn.classList.remove('open');
     btn.innerHTML = '<span class="btn-icon">▾</span> Reveal';
+  } else {
+    items.style.maxHeight = items.scrollHeight + "px";
+    btn.classList.add('open');
+    btn.innerHTML = '<span class="btn-icon">▾</span> Collapse';
   }
 }
 
