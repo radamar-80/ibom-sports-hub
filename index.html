@@ -68,7 +68,7 @@ body.dark .icon {
   top: 0;
   background: white;
   z-index: 1000;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
   padding: 15px 0;
   margin-top: 12px;
   display: flex;
@@ -78,6 +78,11 @@ body.dark .icon {
 /* shadow when scrolling */
 header.scrolled {
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+/* hide on scroll down */
+header.hide {
+  transform: translateY(-110%);
 }
 
   .logo {
@@ -1780,15 +1785,18 @@ function prevSlide(){
   slider.scrollBy({ left: -slider.clientWidth, behavior: "smooth" });
   }
 
-    window.addEventListener("scroll", () => {
+    let lastScrollY = 0;
   const header = document.querySelector("header");
-
-  if (window.scrollY > 10) {
-    header.classList.add("scrolled");
-  } else {
-    header.classList.remove("scrolled");
-  }
-});
+  window.addEventListener("scroll", () => {
+    const y = window.scrollY;
+    if (y > lastScrollY && y > 60) {
+      header.classList.add("hide");
+    } else {
+      header.classList.remove("hide");
+    }
+    header.classList.toggle("scrolled", y > 10);
+    lastScrollY = y;
+  }, { passive: true });
     
     window.addEventListener("load", () => {
 
