@@ -1057,7 +1057,11 @@ header { padding: 10px 0; }
 /* ── HERO: large desktop — aspect-ratio handles sizing ── */
 
 /* ── BOOT WALL IMAGE ── */
-.bootwall-wrap { position: relative; }
+.bootwall-wrap {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
 .bootwall-wrap img { width: 100%; max-width: 100%; display: block; }
 .bootwall-overlay {
   position: absolute;
