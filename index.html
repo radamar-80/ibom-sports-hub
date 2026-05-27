@@ -1056,6 +1056,21 @@ header { padding: 10px 0; }
 
 /* ── HERO: large desktop — aspect-ratio handles sizing ── */
 
+/* ── BOOT WALL IMAGE ── */
+.bootwall-img {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  -webkit-mask-image:
+    linear-gradient(to bottom, black 55%, transparent 100%),
+    linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, black 55%, transparent 100%),
+    linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%);
+  mask-composite: intersect;
+}
+
 /* ── CONFETTI CANVAS ── */
 #confettiCanvas {
   position: fixed;
@@ -1271,14 +1286,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>
 <div id="bootwall">
 <h2 style="text-align:center; font-size:22px; font-weight:800; letter-spacing:1px; margin:0 0 20px;">THE BOOT WALL<span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px auto 0;"></span></h2>
-<div style="
-  -webkit-mask-image: linear-gradient(to top, transparent 0%, black 18%, black 100%), linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to top, transparent 0%, black 18%, black 100%), linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-  mask-composite: intersect;
-">
-<img src="bootwall.jpg" style="width:100%; max-width:100%; display:block;">
-</div>
+<img src="bootwall.jpg" class="bootwall-img">
 <div style="text-align:center; margin-top:15px;">
 <button onclick="toggleBootWall()" id="toggleBtn">
 ⬇️ Show More
