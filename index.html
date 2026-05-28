@@ -695,6 +695,10 @@ body.dark .review-detail-text { color: #ccc; }
   .card img { height: 240px; }
 }
 
+.img-dark { display: none; }
+body.dark .img-dark { display: block; }
+body.dark .img-light { display: none; }
+
 .card img {
   display: block;
   width: 100%;
@@ -1286,7 +1290,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 <h2 style="text-align:center; font-size:26px; font-weight:800; letter-spacing:2px;">COLLECTIONS<span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px auto 0;"></span></h2>
 <div class="grid">
 <div class="card" onclick="showSection('boots')">
-<img src="boot.jpg" alt="Boots">
+<img class="img-light" src="boot.jpg" alt="Boots">
+<img class="img-dark" src="boot dark.jpg" alt="Boots">
   <h3 class="card-title">
     Boots 
     <span class="arrow">
@@ -1297,7 +1302,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </h3>
 </div>
 <div class="card" onclick="showSection('jersey')">
-<img src="jersey.jpg" alt="Jerseys">
+<img class="img-light" src="jersey.jpg" alt="Jerseys">
+<img class="img-dark" src="jersey dark.jpg" alt="Jerseys">
 <h3>
   <h3 class="card-title">
  Jerseys & Sportswear
@@ -1309,7 +1315,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </h3>
 </div>
 <div class="card" onclick="showSection('gear')">
-<img src="gear.jpg" alt="Gear">
+<img class="img-light" src="gear.jpg" alt="Gear">
+<img class="img-dark" src="gear dark.jpg" alt="Gear">
   <h3 class="card-title">
   Gear 
 <span class="arrow">
@@ -1320,7 +1327,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </h3>
 </div>
 <div class="card" onclick="showSection('equipment')">
-<img src="equipment.jpg" alt="Equipment">
+<img class="img-light" src="equipment.jpg" alt="Equipment">
+<img class="img-dark" src="equipment dark.jpg" alt="Equipment">
 <h3 class="card-title">
   Other Equipment 
   <span class="arrow">
