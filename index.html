@@ -1305,6 +1305,81 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
   <div class="hero-track" id="heroTrack">
 
+     <div class="hero-slide">
+      <img src="newmercurials.jpg" alt="">
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <h1>BREAK THE SPEEDLIMIT</h1>
+        <p>VAPOR 17, SUPERFLY 11</p>
+
+        <button class="shop-btn">
+          SHOP NOW
+          <span>→</span>
+        </button>
+      </div>
+     </div>
+
+     <div class="hero-slide">
+      <img src="adidasworldcup.jpg" alt="">
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <h1>THREE STRIPES TO THE WORLD</h1>
+        <p>ADIDAS WORLD CUP PACK</p>
+
+        <button class="shop-btn">
+          SHOP NOW
+          <span>→</span>
+        </button>
+      </div>
+     </div>
+
+     <div class="hero-slide">
+      <img src="arsenaleplkit.jpg" alt="">
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <h1>ENGLISH CHAMPIONS</h1>
+        <p>ARSENAL HOME KITE</p>
+
+        <button class="shop-btn">
+          SHOP NOW
+          <span>→</span>
+        </button>
+      </div>
+     </div>
+
+     <div class="hero-slide">
+      <img src="nikeworldcup.jpg" alt="">
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <h1>WORLD CLASS SPEED, COMFORT, CONTROL</h1>
+        <p>NIKE WORLD CUP PACK</p>
+
+        <button class="shop-btn">
+          SHOP NOW
+          <span>→</span>
+        </button>
+      </div>
+     </div>
+
+     <div class="hero-slide">
+      <img src="psguclkit.jpg" alt="">
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <h1>CHAMPIONS OF EUROPE</h1>
+        <p>PSG UCL KIT</p>
+
+        <button class="shop-btn">
+          SHOP NOW
+          <span>→</span>
+        </button>
+      </div>
+     </div>
+
     <!-- SLIDE 1 -->
     <div class="hero-slide">
       <img src="bootmodel.jpg" alt="">
@@ -1357,9 +1432,6 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
   <!-- INDICATORS -->
   <div class="hero-dots" id="heroDots">
-    <span class="hero-dot active"></span>
-    <span class="hero-dot"></span>
-    <span class="hero-dot"></span>
   </div>
 
 </div>
@@ -2371,23 +2443,46 @@ function addToCart() {
   }
 };
 
-    /* HERO SLIDER */
+const heroTrack = document.getElementById("heroTrack");
+const heroSlides = document.querySelectorAll(".hero-slide");
+const heroDotsContainer = document.getElementById("heroDots");
 
 let heroIndex = 0;
+const totalSlides = heroSlides.length;
 
-const heroTrack = document.getElementById("heroTrack");
-const heroDots = document.querySelectorAll(".hero-dot");
+/* CREATE DOTS AUTOMATICALLY */
+heroDotsContainer.innerHTML = "";
 
-function updateHeroSlider() {
+for(let i = 0; i < totalSlides; i++){
+
+  const dot = document.createElement("span");
+
+  dot.classList.add("hero-dot");
+
+  if(i === 0){
+    dot.classList.add("active");
+  }
+
+  dot.addEventListener("click", () => {
+    heroIndex = i;
+    updateHeroSlider();
+  });
+
+  heroDotsContainer.appendChild(dot);
+}
+
+function updateHeroSlider(){
 
   heroTrack.style.transform =
     `translateX(-${heroIndex * 100}%)`;
 
-  heroDots.forEach(dot =>
-    dot.classList.remove("active")
-  );
+  document
+    .querySelectorAll(".hero-dot")
+    .forEach(dot => dot.classList.remove("active"));
 
-  heroDots[heroIndex].classList.add("active");
+  document
+    .querySelectorAll(".hero-dot")[heroIndex]
+    .classList.add("active");
 }
 
 /* AUTO SLIDE */
@@ -2395,7 +2490,7 @@ setInterval(() => {
 
   heroIndex++;
 
-  if(heroIndex > 2){
+  if(heroIndex >= totalSlides){
     heroIndex = 0;
   }
 
@@ -2403,7 +2498,7 @@ setInterval(() => {
 
 }, 15000);
 
-/* TOUCH SWIPE */
+/* SWIPE */
 let startX = 0;
 
 heroTrack.addEventListener("touchstart", e => {
@@ -2412,13 +2507,13 @@ heroTrack.addEventListener("touchstart", e => {
 
 heroTrack.addEventListener("touchend", e => {
 
-  let endX = e.changedTouches[0].clientX;
+  const endX = e.changedTouches[0].clientX;
 
   if(startX - endX > 50){
 
     heroIndex++;
 
-    if(heroIndex > 2){
+    if(heroIndex >= totalSlides){
       heroIndex = 0;
     }
 
@@ -2429,7 +2524,7 @@ heroTrack.addEventListener("touchend", e => {
     heroIndex--;
 
     if(heroIndex < 0){
-      heroIndex = 2;
+      heroIndex = totalSlides - 1;
     }
 
   }
@@ -2437,7 +2532,7 @@ heroTrack.addEventListener("touchend", e => {
   updateHeroSlider();
 
 });
-
+    
     function joinMember(){
 
   const email = prompt(
