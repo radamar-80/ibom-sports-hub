@@ -670,6 +670,7 @@ body.dark .review-detail-text { color: #ccc; }
   flex-direction: column;
   gap: 25px;
   align-items: center;
+  padding: 0 20px;
 }
 
   .card h3 {
@@ -683,7 +684,8 @@ body.dark .review-detail-text { color: #ccc; }
   width: 100%;
   position: relative;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 16px
+  margin-bottom: 24px
 }
 @media (min-width: 600px) {
   .grid { flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; }
@@ -1464,8 +1466,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 <h2 style="text-align:center; font-size:26px; font-weight:800; letter-spacing:2px;">COLLECTIONS<span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px auto 0;"></span></h2>
 <div class="grid">
 <div class="card" onclick="showSection('boots')">
-<img class="img-light" src="boot.jpg" alt="Boots">
-<img class="img-dark" src="boot dark.jpg" alt="Boots">
+<img class="img-light" src="boot.jpg" alt="Boots" loading="lazy">
+<img class="img-dark" src="boot dark.jpg" alt="Boots" loading="lazy">
   <h3 class="card-title">
     Boots 
     <span class="arrow">
@@ -1476,8 +1478,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </h3>
 </div>
 <div class="card" onclick="showSection('jersey')">
-<img class="img-light" src="jersey.jpg" alt="Jerseys">
-<img class="img-dark" src="jersey dark.jpg" alt="Jerseys">
+<img class="img-light" src="jersey.jpg" alt="Jerseys" loading="lazy">
+<img class="img-dark" src="jersey dark.jpg" alt="Jerseys" loading="lazy">
 <h3>
   <h3 class="card-title">
  Jerseys & Sportswear
@@ -1489,8 +1491,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </h3>
 </div>
 <div class="card" onclick="showSection('gear')">
-<img class="img-light" src="gear.jpg" alt="Gear">
-<img class="img-dark" src="gear dark.jpg" alt="Gear">
+<img class="img-light" src="gear.jpg" alt="Gear" loading="lazy">
+<img class="img-dark" src="gear dark.jpg" alt="Gear" loading="lazy">
   <h3 class="card-title">
   Gear 
 <span class="arrow">
@@ -1501,8 +1503,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </h3>
 </div>
 <div class="card" onclick="showSection('equipment')">
-<img class="img-light" src="equipment.jpg" alt="Equipment">
-<img class="img-dark" src="equipment dark.jpg" alt="Equipment">
+<img class="img-light" src="equipment.jpg" alt="Equipment" loading="lazy">
+<img class="img-dark" src="equipment dark.jpg" alt="Equipment" loading="lazy">
 <h3 class="card-title">
   Other Equipment 
   <span class="arrow">
@@ -1526,7 +1528,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 <div id="bootwall">
 <h2 style="text-align:center; font-size:22px; font-weight:800; letter-spacing:1px; margin:0 0 20px;">THE BOOT WALL<span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px auto 0;"></span></h2>
 <div class="bootwall-wrap">
-  <img src="bootwall.jpg">
+  <img src="bootwall.jpg"
+  loading="lazy">
   <div class="bootwall-overlay"></div>
 </div>
 <div style="text-align:center; margin-top:20px;">
@@ -1545,32 +1548,33 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 <h3 class="sub-title">Shop by Model</h3>
 <div class="two-grid">
     <div class="mini-card" onclick="filterProducts('model','vapor')">
-  <img src="vapor.jpg">
+  <img src="vapor.jpg"
+      loading="lazy">
   <p>Vapor →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('model','superfly')">
-  <img src="superfly.jpg">
+  <img src="superfly.jpg" loading="lazy">
   <p>Superfly →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('model','phantom')">
-  <img src="phantom.jpg">
+  <img src="phantom.jpg" loading="lazy">
   <p>Phantom →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('model','tiempo')">
-  <img src="tiempo.jpg">
+  <img src="tiempo.jpg" loading="lazy">
   <p>Tiempo →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('model','f50')">
-  <img src="f50.jpg">
+  <img src="f50.jpg" loading="lazy">
   <p>F50 →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('model','predator')">
-  <img src="predator.jpg">
+  <img src="predator.jpg" loading="lazy">
   <p>Predator →</p>
 </div>
 
@@ -1582,32 +1586,32 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <div class="slider" id="surfaceSlider">
 
     <div class="slide" onclick="filterProducts('soleplates','fg')">
-  <img src="fg.jpg">
+  <img src="fg.jpg" loading="lazy">
   <p>Firm Ground (FG) →</p>
 </div>
 
 <div class="slide" onclick="filterProducts('soleplates','ag')">
-  <img src="ag.jpg">
+  <img src="ag.jpg" loading="lazy">
   <p>Artificial Grass (AG) →</p>
 </div>
 
 <div class="slide" onclick="filterProducts('soleplates','sg')">
-  <img src="sg.jpg">
+  <img src="sg.jpg" loading="lazy">
   <p>Soft Ground (SG) →</p>
 </div>
 
 <div class="slide" onclick="filterProducts('soleplates','tf')">
-  <img src="tf.jpg">
+  <img src="tf.jpg" loading="lazy">
   <p>Turf (TF) →</p>
 </div>
 
 <div class="slide" onclick="filterProducts('soleplates','ic')">
-  <img src="ic.jpg">
+  <img src="ic.jpg" loading="lazy">
   <p>Court (IC) →</p>
 </div>
 
 <div class="slide" onclick="filterProducts('soleplates','mg')">
-  <img src="mg.jpg">
+  <img src="mg.jpg" loading="lazy">
   <p>Multiground (MG) →</p>
 </div>
 
@@ -1626,52 +1630,52 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <div class="two-grid">
 
     <div class="mini-card" onclick="filterProducts('brand','nike')">
-  <img src="nike.jpg">
+  <img src="nike.jpg" loading="lazy">
   <p>Nike →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('brand','adidas')">
-  <img src="adidas.jpg">
+  <img src="adidas.jpg" loading="lazy">
   <p>Adidas →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('brand','puma')">
-  <img src="puma.jpg">
+  <img src="puma.jpg" loading="lazy">
   <p>Puma →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('brand','mizuno')">
-  <img src="mizuno.jpg">
+  <img src="mizuno.jpg" loading="lazy">
   <p>Mizuno →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('brand','skechers')">
-  <img src="skechers.jpg">
+  <img src="skechers.jpg" loading="lazy">
   <p>Skechers →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('brand','nasuno')">
-  <img src="nasuno.jpg">
+  <img src="nasuno.jpg" loading="lazy">
   <p>Nasuno →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('brand','umbro')">
-  <img src="umbro.jpg">
+  <img src="umbro.jpg" loading="lazy">
   <p>Umbro →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('brand','ua')">
-  <img src="ua.jpg">
+  <img src="ua.jpg" loading="lazy">
   <p>Under Armour →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('brand','joma')">
-  <img src="joma.jpg">
+  <img src="joma.jpg" loading="lazy">
   <p>Joma →</p>
 </div>
 
 <div class="mini-card" onclick="filterProducts('brand','nb')">
-  <img src="nb.jpg">
+  <img src="nb.jpg" loading="lazy">
   <p>New Balance →</p>
 </div>
 
