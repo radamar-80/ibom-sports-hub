@@ -684,8 +684,8 @@ body.dark .review-detail-text { color: #ccc; }
   width: 100%;
   position: relative;
   overflow: hidden;
-  border-radius: 16px
-  margin-bottom: 24px
+  border-radius: 16px;
+  margin-bottom: 24px;
 }
 @media (min-width: 600px) {
   .grid { flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; }
@@ -697,9 +697,21 @@ body.dark .review-detail-text { color: #ccc; }
   .card img { height: 240px; }
 }
 
-.img-dark { display: none; }
-body.dark .img-dark { display: block; }
-body.dark .img-light { display: none; }
+  .img-light {
+    display: block;
+  }
+
+  .img-dark {
+    display: none;
+  }
+
+  body.dark .img-light {
+    display: none;
+  }
+
+  body.dark .img-dark {
+    display: block;
+  }
 
 .card img {
   display: block;
@@ -1498,6 +1510,18 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
     </span>
   </h3>
 </div>
+  <div class="card" onclick="showSection('sneaker')">
+<img class="img-light" src="gridsneaker.jpg" alt="Sneakers" loading="lazy">
+<img class="img-dark" src="gridsneaker dark.jpg" alt="Sneakers" loading="lazy">
+<h3 class="card-title">
+  Sneakers 
+  <span class="arrow">
+  <svg width="18" height="18" viewBox="0 0 24 24">
+    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+  </svg>
+  </span>
+</h3>
+  </div>
 <div class="card" onclick="showSection('gear')">
 <img class="img-light" src="gear.jpg" alt="Gear" loading="lazy">
 <img class="img-dark" src="gear dark.jpg" alt="Gear" loading="lazy">
@@ -1510,6 +1534,20 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </span>
   </h3>
 </div>
+
+  <div class="card" onclick="showSection('boardgame')">
+<img class="img-light" src="boardgame.jpg" alt="Board Games" loading="lazy">
+<img class="img-dark" src="boardgame dark.jpg" alt="Board Games" loading="lazy">
+<h3 class="card-title">
+  Board games 
+  <span class="arrow">
+  <svg width="18" height="18" viewBox="0 0 24 24">
+    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+  </svg>
+  </span>
+</h3>
+  </div>
+  
 <div class="card" onclick="showSection('equipment')">
 <img class="img-light" src="equipment.jpg" alt="Equipment" loading="lazy">
 <img class="img-dark" src="equipment dark.jpg" alt="Equipment" loading="lazy">
