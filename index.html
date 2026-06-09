@@ -713,8 +713,7 @@ body.dark .review-detail-text { color: #ccc; }
     display: block;
   }
 
-.card img {
-  display: block;
+.card img {//</
   width: 100%;
   height: 220px;      /* 👈 key: rectangular, not square */
   object-fit: cover;
@@ -1571,6 +1570,53 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </div>
   <div id="reviewListContainer"></div>
 </div>
+
+  <div class="social-section">
+
+  <p class="social-small">FOLLOW US HERE</p>
+
+  <div class="social-row"
+       onclick="window.open('https://www.tiktok.com','_blank')">
+    <span>TIKTOK</span>
+    <div class="social-arrow">↗</div>
+  </div>
+
+  <div class="social-row"
+       onclick="window.open('https://www.youtube.com','_blank')">
+    <span>YOUTUBE</span>
+    <div class="social-arrow">↗</div>
+  </div>
+
+  <div class="social-row"
+       onclick="window.open('https://www.facebook.com','_blank')">
+    <span>FACEBOOK</span>
+    <div class="social-arrow">↗</div>
+  </div>
+
+  <div class="social-row"
+       onclick="window.open('https://www.instagram.com/ibomsportshub1','_blank')">
+    <span>INSTAGRAM</span>
+    <div class="social-arrow">↗</div>
+  </div>
+
+</div>
+
+    <div class="member-section">
+
+  <h2>BECOME A MEMBER TODAY</h2>
+
+  <ul>
+    <li>✓ Get notified when new products arrive</li>
+    <li>✓ Access exclusive promotions</li>
+    <li>✓ Participate in giveaways</li>
+  </ul>
+
+  <button class="join-btn" onclick="joinMember()">
+    Join For Free
+  </button>
+
+    </div>
+    
 <div id="bootwall">
 <h2 style="text-align:center; font-size:22px; font-weight:800; letter-spacing:1px; margin:0 0 20px;">THE BOOT WALL<span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px auto 0;"></span></h2>
 <div class="bootwall-wrap">
@@ -1779,52 +1825,6 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <div id="resultView" style="display:none; padding:20px;"></div>
 
 </div><!-- closes #pageContainer -->
-
-<div class="social-section">
-
-  <p class="social-small">FOLLOW US HERE</p>
-
-  <div class="social-row"
-       onclick="window.open('https://www.tiktok.com','_blank')">
-    <span>TIKTOK</span>
-    <div class="social-arrow">↗</div>
-  </div>
-
-  <div class="social-row"
-       onclick="window.open('https://www.youtube.com','_blank')">
-    <span>YOUTUBE</span>
-    <div class="social-arrow">↗</div>
-  </div>
-
-  <div class="social-row"
-       onclick="window.open('https://www.facebook.com','_blank')">
-    <span>FACEBOOK</span>
-    <div class="social-arrow">↗</div>
-  </div>
-
-  <div class="social-row"
-       onclick="window.open('https://www.instagram.com/ibomsportshub1','_blank')">
-    <span>INSTAGRAM</span>
-    <div class="social-arrow">↗</div>
-  </div>
-
-</div>
-
-    <div class="member-section">
-
-  <h2>BECOME A MEMBER TODAY</h2>
-
-  <ul>
-    <li>✓ Get notified when new products arrive</li>
-    <li>✓ Access exclusive promotions</li>
-    <li>✓ Participate in giveaways</li>
-  </ul>
-
-  <button class="join-btn" onclick="joinMember()">
-    Join For Free
-  </button>
-
-    </div>
     
   <script>
   let allProducts = [];
