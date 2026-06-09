@@ -982,6 +982,105 @@ body.dark #floatingReviewBtn {
   box-shadow: 0 4px 20px rgba(40,181,112,0.35), 0 2px 8px rgba(0,0,0,0.4);
 }
 
+  /* NEW ARRIVALS */
+.new-arrivals {
+  margin-top: 30px;
+  padding: 0;
+}
+
+.new-arrivals-title {
+  padding: 0 20px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+
+.na-track-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.na-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  gap: 12px;
+  padding: 0 20px 0 20px;
+  box-sizing: border-box;
+}
+
+.na-track::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.na-slide {
+  flex-shrink: 0;
+  width: 82vw;
+  max-width: 380px;
+  scroll-snap-align: start;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.na-slide img {
+  width: 100%;
+  aspect-ratio: 1080 / 1350;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+  background: #e8e8e8;
+}
+
+body.dark .na-slide img {
+  background: #2a2a2a;
+}
+
+/* SCRUBBER */
+.na-bar-track {
+  margin: 14px 20px 0;
+  height: 4px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+body.dark .na-bar-track {
+  background: #333;
+}
+
+.na-bar-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: #aaa;
+  border-radius: 10px;
+  transition: left 0.15s ease, width 0.3s ease;
+}
+
+  .na-more-inline {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px 0 8px;
+    cursor: pointer;
+    color: #111;
+  }
+
+  body.dark .na-more-inline {
+    color: #f5f5f5;
+  }
+
+  .na-more-inline svg {
+    width: 48px;
+    height: 48px;
+  }
+
 /* ══════════════════════════════════════════
    FULLY RESPONSIVE — all breakpoints
    ══════════════════════════════════════════ */
@@ -1482,6 +1581,72 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
 <div id="pageContainer">
   <div id="home" class="collections">
+
+    <div class="new-arrivals">
+  <h2 class="new-arrivals-title">NEW ARRIVALS
+    <span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px 0 0;"></span>
+  </h2>
+
+  <div class="na-track-wrapper">
+    <div class="na-track" id="naTrack">
+      <div class="na-slide">
+        <img src="arrival1.jpg" alt="New Arrival 1">
+      </div>
+      <div class="na-slide">
+        <img src="arrival2.jpg" alt="New Arrival 2">
+      </div>
+      <div class="na-slide">
+        <img src="arrival3.jpg" alt="New Arrival 3">
+      </div>
+      <div class="na-slide">
+        <img src="arrival4.jpg" alt="New Arrival 4">
+      </div>
+      <div class="na-slide">
+        <img src="arrival5.jpg" alt="New Arrival 5">
+      </div>
+     <!-- MORE BUTTON — inline after last slide -->
+      <div class="na-more-inline" onclick="showSection('newarrivals')">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
+  </div>
+    </div>
+
+  <!-- SCRUBBER BAR -->
+  <div class="na-bar-track">
+    <div class="na-bar-thumb" id="naBarThumb"></div>
+  </div>
+    </div>
+
+    <!-- SPECIAL PACKS -->
+<div class="new-arrivals">
+  <h2 class="new-arrivals-title">SPECIAL PACKS
+    <span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px 0 0;"></span>
+  </h2>
+  <div class="na-track-wrapper">
+    <div class="na-track" id="spTrack">
+      <div class="na-slide"><img src="pack1.jpg" alt="Special Pack 1"></div>
+      <div class="na-slide"><img src="pack2.jpg" alt="Special Pack 2"></div>
+      <div class="na-slide"><img src="pack3.jpg" alt="Special Pack 3"></div>
+      <div class="na-slide"><img src="pack4.jpg" alt="Special Pack 4"></div>
+      <div class="na-slide"><img src="pack5.jpg" alt="Special Pack 5"></div>
+        <!-- MORE BUTTON — inline after last slide -->
+  <div class="na-more-inline" onclick="showSection('newarrivals')">
+    <svg viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5"/>
+      <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+    </div>
+  </div>
+
+  <div class="na-bar-track">
+    <div class="na-bar-thumb" id="spBarThumb"></div>
+  </div>
+</div>
+    
 <h2 style="text-align:center; font-size:26px; font-weight:800; letter-spacing:2px;">COLLECTIONS<span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px auto 0;"></span></h2>
 <div class="grid">
 <div class="card" onclick="showSection('boots')">
@@ -1558,6 +1723,17 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </span>
 </h3>
 </div>
+
+  <div id="newarrivals" class="section">
+  <h2>New Arrivals</h2>
+  <!-- your new arrivals products go here -->
+</div>
+
+<div id="specialpacks" class="section">
+  <h2>Special Packs</h2>
+  <!-- your special packs products go here -->
+</div>
+  
 <div class="review-section">
   <h2 style="text-align:center; font-size:22px; font-weight:800; letter-spacing:1px; margin:0 0 16px;">What Our Customers Say<span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px auto 0;"></span></h2>
   <div class="avg-rating-panel" id="avgRatingPanel">
@@ -1944,6 +2120,51 @@ async function loadProducts() {
 
   renderBootWall(products); // initial view
 }
+
+    (function () {
+  const track = document.getElementById('naTrack');
+  const thumb = document.getElementById('naBarThumb');
+
+  function updateBar() {
+    const scrollLeft = track.scrollLeft;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const slideCount = track.querySelectorAll('.na-slide').length;
+
+    // thumb width = proportion of visible area
+    const thumbWidth = (1 / slideCount) * 100;
+    // thumb position = how far scrolled
+    const thumbLeft = maxScroll > 0
+      ? (scrollLeft / maxScroll) * (100 - thumbWidth)
+      : 0;
+
+    thumb.style.width = thumbWidth + '%';
+    thumb.style.left  = thumbLeft + '%';
+  }
+
+  track.addEventListener('scroll', updateBar, { passive: true });
+  // run once on load to set initial size
+  updateBar();
+})();
+
+    (function () {
+  const track = document.getElementById('spTrack');
+  const thumb = document.getElementById('spBarThumb');
+
+  function updateBar() {
+    const scrollLeft = track.scrollLeft;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const slideCount = track.querySelectorAll('.na-slide').length;
+    const thumbWidth = (1 / slideCount) * 100;
+    const thumbLeft = maxScroll > 0
+      ? (scrollLeft / maxScroll) * (100 - thumbWidth)
+      : 0;
+    thumb.style.width = thumbWidth + '%';
+    thumb.style.left  = thumbLeft + '%';
+  }
+
+  track.addEventListener('scroll', updateBar, { passive: true });
+  updateBar();
+})();
 
   function renderBootWall(products) {
   const bootWall = document.getElementById("bootItems");
