@@ -685,7 +685,6 @@ body.dark .review-detail-text { color: #ccc; }
   position: relative;
   overflow: hidden;
   border-radius: 16px;
-  margin-bottom: 24px;
 }
 @media (min-width: 600px) {
   .grid { flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; }
@@ -715,7 +714,8 @@ body.dark .review-detail-text { color: #ccc; }
 
 .card img {//</
   width: 100%;
-  height: 220px;      /* 👈 key: rectangular, not square */
+  height: 220px;
+  aspect-ratio: 1130 / 725;
   object-fit: cover;
   border-radius: 16px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
@@ -1499,7 +1499,6 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 <div class="card" onclick="showSection('jersey')">
 <img class="img-light" src="jersey.jpg" alt="Jerseys" loading="lazy">
 <img class="img-dark" src="jersey dark.jpg" alt="Jerseys" loading="lazy">
-<h3>
   <h3 class="card-title">
  Jerseys & Sportswear
     <span class="arrow">
@@ -1569,6 +1568,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
     </div>
   </div>
   <div id="reviewListContainer"></div>
+</div>
 </div>
 
   <div class="social-section">
