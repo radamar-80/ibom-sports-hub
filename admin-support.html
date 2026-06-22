@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Customer Support — Admin</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+body.loaded { opacity: 1; }
+
+.header {
+  background: green;
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header .back-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+.header h1 { font-size: 16px; font-weight: bold; }
+
+.tabs {
+  display: flex;
+  gap: 0;
+  background: white;
+  border-bottom: 2px solid #eee;
+  padding: 0 20px;
+}
+.tab {
+  padding: 14px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  color: #888;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: 0.2s;
+}
+.tab.active { color: green; border-bottom-color: green; }
+
+.badge {
+  display: inline-block;
+  background: #e74c3c;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 1px 7px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.container { padding: 16px; }
+
+.ticket-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  border-left: 4px solid green;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.ticket-card.closed { border-left-color: #aaa; }
+.ticket-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+.ticket-name { font-weight: bold; font-size: 15px; }
+.ticket-time { font-size: 11px; color: #aaa; }
+.ticket-issue { font-size: 13px; color: #555; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ticket-meta { display: flex; justify-content: space-between; align-items: center; }
+.ticket-msgs { font-size: 12px; color: #888; }
+.status-badge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+.status-badge.open { background: #e8f5e9; color: green; }
+.status-badge.closed { background: #f5f5f5; color: #888; }
+
+.empty { text-align: center; padding: 50px 20px; color: #aaa; }
+.empty-icon { font-size: 40px; margin-bottom: 10px; }
+
+/* Chat view */
+#chatView { display: none; }
+.chat-header {
+  background: white;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.chat-back { background: none; border: none; font-size: 20px; cursor: pointer; color: #333; }
+.chat-header-info { flex: 1; }
+.chat-header-name { font-weight: bold; font-size: 15px; }
+.chat-header-issue { font-size: 12px; color: #888; }
+.close-ticket-btn {
+  background: none;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.close-ticket-btn:hover { background: #e74c3c; color: white; }
+.closed-ticket-btn {
+  background: #eee;
+  border: none;
+  color: #aaa;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.messages-area {
+  padding: 16px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 100px;
+}
+.msg-bubble {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.msg-customer {
+  background: #f0f0f0;
+  color: #222;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+.msg-admin {
+  background: green;
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+.msg-system {
+  align-self: center;
+  background: none;
+  font-size: 12px;
+  color: #aaa;
+  font-style: italic;
+}
+.msg-time {
+  font-size: 10px;
+  margin-top: 4px;
+  opacity: 0.6;
+}
+
+.reply-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #eee;
+  padding: 10px 12px;
+  display: flex;
+  gap: 8px;
+}
+.reply-bar textarea {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  font-family: Arial;
+  max-height: 100px;
+}
+.reply-bar textarea:focus { border-color: green; }
+.send-btn {
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.send-btn:disabled { background: #ccc; cursor: default; }
+
+.closed-notice {
+  text-align: center;
+  padding: 14px;
+  font-size: 13px;
+  color: #888;
+  background: #fafafa;
+  border-top: 1px solid #eee;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+</style>
+</head>
+<body>
+
+<div id="listView">
+  <div class="header">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <h1>CUSTOMER SUPPORT</h1>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('open')" id="tabOpen">Open <span class="badge" id="openBadge" style="display:none"></span></div>
+    <div class="tab" onclick="switchTab('closed')" id="tabClosed">Closed</div>
+  </div>
+
+  <div class="container" id="ticketList"></div>
+</div>
+
+<div id="chatView">
+  <div class="chat-header">
+    <button class="chat-back" onclick="backToList()">←</button>
+    <div class="chat-header-info">
+      <div class="chat-header-name" id="chatName"></div>
+      <div class="chat-header-issue" id="chatIssue"></div>
+    </div>
+    <button id="closeChatBtn" class="close-ticket-btn" onclick="closeTicket()">Close</button>
+  </div>
+
+  <div class="messages-area" id="messagesArea"></div>
+
+  <div id="replyBar" class="reply-bar">
+    <textarea id="replyInput" placeholder="Type your reply…" rows="1"></textarea>
+    <button class="send-btn" onclick="sendAdminReply()">Send</button>
+  </div>
+  <div id="closedNotice" class="closed-notice" style="display:none">This ticket is closed</div>
+</div>
+
+<script>
+if (localStorage.getItem("adminLoggedIn") !== "true") {
+  window.location.href = "admin-login.html";
+}
+
+window.onload = () => {
+  document.body.classList.add("loaded");
+  loadTickets();
+};
+
+let allTickets = [];
+let currentTab = 'open';
+let currentTicket = null;
+let pollTimer = null;
+
+async function loadTickets() {
+  const token = localStorage.getItem("token");
+  try {
+    const res = await fetch("/tickets", { headers: { Authorization: "Bearer " + token } });
+    allTickets = await res.json();
+    renderList();
+  } catch(e) {
+    document.getElementById("ticketList").innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div>Could not load tickets</div>';
+  }
+}
+
+function renderList() {
+  const filtered = allTickets.filter(t => t.status === currentTab);
+  const openCount = allTickets.filter(t => t.status === 'open').length;
+
+  const badge = document.getElementById("openBadge");
+  if (openCount > 0) { badge.textContent = openCount; badge.style.display = ''; }
+  else { badge.style.display = 'none'; }
+
+  const container = document.getElementById("ticketList");
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="empty"><div class="empty-icon">${currentTab === 'open' ? '✅' : '📁'}</div>${currentTab === 'open' ? 'No open tickets' : 'No closed tickets'}</div>`;
+    return;
+  }
+  container.innerHTML = filtered.map(t => {
+    const lastMsg = t.messages.length ? t.messages[t.messages.length - 1] : null;
+    const timeStr = new Date(t.createdAt).toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+    return `
+    <div class="ticket-card ${t.status}" onclick="openTicket('${t.id}')">
+      <div class="ticket-header">
+        <span class="ticket-name">${t.name}</span>
+        <span class="ticket-time">${timeStr}</span>
+      </div>
+      <div class="ticket-issue">${t.issue}</div>
+      <div class="ticket-meta">
+        <span class="ticket-msgs">💬 ${t.messages.length} message${t.messages.length !== 1 ? 's' : ''}</span>
+        <span class="status-badge ${t.status}">${t.status}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById("tabOpen").classList.toggle('active', tab === 'open');
+  document.getElementById("tabClosed").classList.toggle('active', tab === 'closed');
+  renderList();
+}
+
+function openTicket(id) {
+  currentTicket = allTickets.find(t => t.id === id);
+  if (!currentTicket) return;
+
+  document.getElementById("listView").style.display = "none";
+  document.getElementById("chatView").style.display = "block";
+  document.getElementById("chatName").textContent = currentTicket.name;
+  document.getElementById("chatIssue").textContent = currentTicket.issue;
+
+  const isOpen = currentTicket.status === 'open';
+  document.getElementById("closeChatBtn").style.display = isOpen ? '' : 'none';
+  document.getElementById("replyBar").style.display = isOpen ? '' : 'none';
+  document.getElementById("closedNotice").style.display = isOpen ? 'none' : '';
+
+  renderMessages(currentTicket.messages);
+  scrollToBottom();
+
+  if (isOpen) {
+    pollTimer = setInterval(pollMessages, 4000);
+  }
+}
+
+function backToList() {
+  clearInterval(pollTimer);
+  currentTicket = null;
+  document.getElementById("listView").style.display = "";
+  document.getElementById("chatView").style.display = "none";
+  loadTickets();
+}
+
+function renderMessages(messages) {
+  const area = document.getElementById("messagesArea");
+  area.innerHTML = `
+    <div class="msg-bubble msg-system">Ticket opened · ${new Date(currentTicket.createdAt).toLocaleString('en-GB', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</div>
+    ${messages.map(m => `
+    <div style="display:flex; flex-direction:column; align-items:${m.from==='admin'?'flex-end':'flex-start'}">
+      <div class="msg-bubble msg-${m.from}">${m.text}</div>
+      <div class="msg-time" style="text-align:${m.from==='admin'?'right':'left'}">${m.from==='admin'?'You':'Customer'} · ${new Date(m.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</div>
+    </div>`).join('')}
+  `;
+}
+
+function scrollToBottom() {
+  const area = document.getElementById("messagesArea");
+  area.scrollTop = area.scrollHeight;
+}
+
+async function pollMessages() {
+  if (!currentTicket) return;
+  const token = localStorage.getItem("token");
+  try {
+    const res = await fetch(`/tickets/${currentTicket.id}`, { headers: { Authorization: "Bearer " + token } });
+    const updated = await res.json();
+    const wasAtBottom = (document.getElementById("messagesArea").scrollHeight - document.getElementById("messagesArea").scrollTop) < document.getElementById("messagesArea").clientHeight + 60;
+    if (updated.messages.length !== currentTicket.messages.length) {
+      currentTicket = updated;
+      renderMessages(currentTicket.messages);
+      if (wasAtBottom) scrollToBottom();
+    }
+  } catch(e) {}
+}
+
+async function sendAdminReply() {
+  const input = document.getElementById("replyInput");
+  const text = input.value.trim();
+  if (!text || !currentTicket) return;
+
+  const token = localStorage.getItem("token");
+  input.value = "";
+  input.disabled = true;
+
+  try {
+    await fetch(`/tickets/${currentTicket.id}/messages`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+      body: JSON.stringify({ from: "admin", text })
+    });
+    await pollMessages();
+    scrollToBottom();
+  } catch(e) {}
+  input.disabled = false;
+  input.focus();
+}
+
+async function closeTicket() {
+  if (!currentTicket) return;
+  if (!confirm("Close this ticket?")) return;
+
+  const token = localStorage.getItem("token");
+  try {
+    await fetch(`/tickets/${currentTicket.id}/status`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+      body: JSON.stringify({ status: "closed" })
+    });
+    backToList();
+  } catch(e) { alert("Failed to close ticket"); }
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey && document.activeElement === document.getElementById("replyInput")) {
+    e.preventDefault();
+    sendAdminReply();
+  }
+});
+</script>
+</body>
+</html>

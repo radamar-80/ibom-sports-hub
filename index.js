@@ -10,6 +10,7 @@ const SECRET = process.env.JWT_SECRET || "your_secret_key";
 const ADMIN_DB = "admins.json";
 const DB_FILE = "products.json";
 const REVIEWS_FILE = "reviews.json";
+const TICKETS_FILE = "tickets.json";
 const UPLOAD_DIR = "uploads";
 
 function readReviews() {
@@ -18,6 +19,14 @@ function readReviews() {
 }
 function writeReviews(data) {
   fs.writeFileSync(REVIEWS_FILE, JSON.stringify(data, null, 2));
+}
+
+function readTickets() {
+  if (!fs.existsSync(TICKETS_FILE)) return [];
+  try { return JSON.parse(fs.readFileSync(TICKETS_FILE)); } catch(e) { return []; }
+}
+function writeTickets(data) {
+  fs.writeFileSync(TICKETS_FILE, JSON.stringify(data, null, 2));
 }
 
 if (!fs.existsSync(UPLOAD_DIR)) {
@@ -125,6 +134,62 @@ app.post("/submit-review", express.json({ limit: "10mb" }), (req, res) => {
   });
   writeReviews(reviews);
   res.json({ message: "Review submitted!" });
+});
+
+// ── TICKETS ──
+
+// Create ticket (customer, no auth)
+app.post("/tickets", (req, res) => {
+  const { name, issue } = req.body;
+  if (!name || !issue) return res.status(400).json({ message: "Name and issue required" });
+  const ticket = {
+    id: Date.now().toString(),
+    name: name.trim(),
+    issue: issue.trim(),
+    status: "open",
+    createdAt: new Date().toISOString(),
+    messages: []
+  };
+  const tickets = readTickets();
+  tickets.push(ticket);
+  writeTickets(tickets);
+  res.json(ticket);
+});
+
+// Get all tickets (admin)
+app.get("/tickets", verifyToken, (req, res) => {
+  res.json(readTickets());
+});
+
+// Get single ticket (by ID, no auth — customer uses their ID)
+app.get("/tickets/:id", (req, res) => {
+  const ticket = readTickets().find(t => t.id === req.params.id);
+  if (!ticket) return res.status(404).json({ message: "Ticket not found" });
+  res.json(ticket);
+});
+
+// Send message on a ticket (customer or admin)
+app.post("/tickets/:id/messages", (req, res) => {
+  const { from, text } = req.body;
+  if (!text || !from) return res.status(400).json({ message: "Missing fields" });
+  const tickets = readTickets();
+  const ticket = tickets.find(t => t.id === req.params.id);
+  if (!ticket) return res.status(404).json({ message: "Ticket not found" });
+  if (ticket.status === "closed") return res.status(400).json({ message: "Ticket is closed" });
+  ticket.messages.push({ from, text: text.trim(), timestamp: new Date().toISOString() });
+  writeTickets(tickets);
+  res.json(ticket);
+});
+
+// Update ticket status (admin)
+app.put("/tickets/:id/status", verifyToken, (req, res) => {
+  const { status } = req.body;
+  const tickets = readTickets();
+  const ticket = tickets.find(t => t.id === req.params.id);
+  if (!ticket) return res.status(404).json({ message: "Ticket not found" });
+  ticket.status = status;
+  writeTickets(tickets);
+  res.json(ticket);
 });
 
 // CREATE ADMIN
