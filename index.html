@@ -2420,34 +2420,10 @@ async function loadProducts() {
   renderBootWall(products); // initial view
 }
 
-    (function () {
-  const track = document.getElementById('naTrack');
-  const thumb = document.getElementById('naBarThumb');
-
-  function updateBar() {
-    const scrollLeft = track.scrollLeft;
-    const maxScroll = track.scrollWidth - track.clientWidth;
-    const slideCount = track.querySelectorAll('.na-slide').length;
-
-    // thumb width = proportion of visible area
-    const thumbWidth = (1 / slideCount) * 100;
-    // thumb position = how far scrolled
-    const thumbLeft = maxScroll > 0
-      ? (scrollLeft / maxScroll) * (100 - thumbWidth)
-      : 0;
-
-    thumb.style.width = thumbWidth + '%';
-    thumb.style.left  = thumbLeft + '%';
-  }
-
-  track.addEventListener('scroll', updateBar, { passive: true });
-  // run once on load to set initial size
-  updateBar();
-})();
-
-    (function () {
-  const track = document.getElementById('spTrack');
-  const thumb = document.getElementById('spBarThumb');
+function makeAutoSlider(trackId, thumbId, intervalMs) {
+  const track = document.getElementById(trackId);
+  const thumb = document.getElementById(thumbId);
+  if (!track || !thumb) return;
 
   function updateBar() {
     const scrollLeft = track.scrollLeft;
@@ -2463,7 +2439,59 @@ async function loadProducts() {
 
   track.addEventListener('scroll', updateBar, { passive: true });
   updateBar();
-})();
+
+  let timer;
+  let userScrolling = false;
+  let userScrollTimer;
+
+  function slideWidth() {
+    const slide = track.querySelector('.na-slide');
+    return slide ? slide.offsetWidth + 12 : track.clientWidth;
+  }
+
+  function advance() {
+    if (userScrolling) return;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const next = track.scrollLeft + slideWidth();
+    if (next >= maxScroll - 4) {
+      track.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      track.scrollBy({ left: slideWidth(), behavior: 'smooth' });
+    }
+  }
+
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(advance, intervalMs);
+  }
+
+  track.addEventListener('touchstart', () => {
+    userScrolling = true;
+    clearInterval(timer);
+  }, { passive: true });
+
+  track.addEventListener('touchend', () => {
+    clearTimeout(userScrollTimer);
+    userScrollTimer = setTimeout(() => {
+      userScrolling = false;
+      startTimer();
+    }, 2500);
+  }, { passive: true });
+
+  track.addEventListener('mouseenter', () => {
+    userScrolling = true;
+    clearInterval(timer);
+  });
+  track.addEventListener('mouseleave', () => {
+    userScrolling = false;
+    startTimer();
+  });
+
+  startTimer();
+}
+
+makeAutoSlider('naTrack', 'naBarThumb', 3000);
+makeAutoSlider('spTrack', 'spBarThumb', 3500);
 
   function renderBootWall(products) {
   const bootWall = document.getElementById("bootItems");
