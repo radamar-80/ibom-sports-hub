@@ -2420,78 +2420,66 @@ async function loadProducts() {
   renderBootWall(products); // initial view
 }
 
-function makeAutoSlider(trackId, thumbId, intervalMs) {
-  const track = document.getElementById(trackId);
-  const thumb = document.getElementById(thumbId);
-  if (!track || !thumb) return;
+// Shared tick — both sliders advance at exactly the same moment
+(function () {
+  const INTERVAL = 3000;
+  const sliders = [
+    { trackId: 'naTrack', thumbId: 'naBarThumb' },
+    { trackId: 'spTrack', thumbId: 'spBarThumb' },
+  ].map(({ trackId, thumbId }) => {
+    const track = document.getElementById(trackId);
+    const thumb = document.getElementById(thumbId);
+    let userScrolling = false;
+    let resumeTimer;
 
-  function updateBar() {
-    const scrollLeft = track.scrollLeft;
-    const maxScroll = track.scrollWidth - track.clientWidth;
-    const slideCount = track.querySelectorAll('.na-slide').length;
-    const thumbWidth = (1 / slideCount) * 100;
-    const thumbLeft = maxScroll > 0
-      ? (scrollLeft / maxScroll) * (100 - thumbWidth)
-      : 0;
-    thumb.style.width = thumbWidth + '%';
-    thumb.style.left  = thumbLeft + '%';
-  }
-
-  track.addEventListener('scroll', updateBar, { passive: true });
-  updateBar();
-
-  let timer;
-  let userScrolling = false;
-  let userScrollTimer;
-
-  function slideWidth() {
-    const slide = track.querySelector('.na-slide');
-    return slide ? slide.offsetWidth + 12 : track.clientWidth;
-  }
-
-  function advance() {
-    if (userScrolling) return;
-    const maxScroll = track.scrollWidth - track.clientWidth;
-    const next = track.scrollLeft + slideWidth();
-    if (next >= maxScroll - 4) {
-      track.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      track.scrollBy({ left: slideWidth(), behavior: 'smooth' });
+    function slideWidth() {
+      const s = track.querySelector('.na-slide');
+      return s ? s.offsetWidth + 12 : track.clientWidth;
     }
-  }
 
-  function startTimer() {
-    clearInterval(timer);
-    timer = setInterval(advance, intervalMs);
-  }
+    function updateBar() {
+      const scrollLeft = track.scrollLeft;
+      const maxScroll  = track.scrollWidth - track.clientWidth;
+      const count      = track.querySelectorAll('.na-slide').length;
+      const tw = (1 / count) * 100;
+      const tl = maxScroll > 0 ? (scrollLeft / maxScroll) * (100 - tw) : 0;
+      thumb.style.width = tw + '%';
+      thumb.style.left  = tl + '%';
+    }
 
-  track.addEventListener('touchstart', () => {
-    userScrolling = true;
-    clearInterval(timer);
-  }, { passive: true });
+    track.addEventListener('scroll', updateBar, { passive: true });
+    updateBar();
 
-  track.addEventListener('touchend', () => {
-    clearTimeout(userScrollTimer);
-    userScrollTimer = setTimeout(() => {
-      userScrolling = false;
-      startTimer();
-    }, 2500);
-  }, { passive: true });
+    function pause() {
+      userScrolling = true;
+      clearTimeout(resumeTimer);
+    }
+    function resume() {
+      clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(() => { userScrolling = false; }, 2500);
+    }
 
-  track.addEventListener('mouseenter', () => {
-    userScrolling = true;
-    clearInterval(timer);
+    track.addEventListener('touchstart', pause,  { passive: true });
+    track.addEventListener('touchend',   resume, { passive: true });
+    track.addEventListener('mouseenter', () => { userScrolling = true; });
+    track.addEventListener('mouseleave', () => { userScrolling = false; });
+
+    return {
+      advance() {
+        if (userScrolling) return;
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        const next = track.scrollLeft + slideWidth();
+        if (next >= maxScroll - 4) {
+          track.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          track.scrollBy({ left: slideWidth(), behavior: 'smooth' });
+        }
+      }
+    };
   });
-  track.addEventListener('mouseleave', () => {
-    userScrolling = false;
-    startTimer();
-  });
 
-  startTimer();
-}
-
-makeAutoSlider('naTrack', 'naBarThumb', 3000);
-makeAutoSlider('spTrack', 'spBarThumb', 3500);
+  setInterval(() => sliders.forEach(s => s.advance()), INTERVAL);
+})();
 
   function renderBootWall(products) {
   const bootWall = document.getElementById("bootItems");
