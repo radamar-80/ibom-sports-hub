@@ -69,11 +69,41 @@ body.dark .icon {
   background: white;
   z-index: 1000;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
-  padding: 15px 0;
+  padding: 0;
   margin-top: 12px;
-  display: flex;
-  justify-content: center;
 }
+
+.header-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 8px 14px;
+}
+
+.header-icons {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  justify-self: end;
+}
+
+.hdr-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.2s;
+  color: inherit;
+  padding: 0;
+}
+.hdr-icon:hover { background: rgba(0,0,0,0.06); }
+body.dark .hdr-icon:hover { background: rgba(255,255,255,0.08); }
+.hdr-icon svg { width: 22px; height: 22px; }
 
 /* shadow when scrolling */
 header.scrolled {
@@ -88,12 +118,13 @@ header.hide {
   .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  justify-self: center;
 }
 
 .logo img {
-  width: 55px;
-  height: 55px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #ddd;
@@ -108,9 +139,9 @@ header.hide {
 /* BRAND NAME */
 .logo-text h2 {
   margin: 0;
-  font-size: 20px;
-  letter-spacing: 1px;
-  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  font-weight: 800;
 }
 
 /* ADDRESS (PREMIUM LOOK) */
@@ -1119,10 +1150,111 @@ header { padding: 10px 0; }
 
 /* ── LOGO: very small phones ── */
 @media (max-width: 360px) {
-  .logo img { width: 40px; height: 40px; }
-  .logo-text h2 { font-size: 15px; letter-spacing: 0; }
-  .address { font-size: 11px; }
+  .logo img { width: 30px; height: 30px; }
+  .logo-text h2 { font-size: 12px; letter-spacing: 0; }
+  .address { font-size: 10px; }
+  .hdr-icon { width: 30px; height: 30px; }
+  .hdr-icon svg { width: 18px; height: 18px; }
 }
+
+/* ── ACCOUNT / WISHLIST / SEARCH PAGES ── */
+#accountPage, #wishlistPage, #searchPage { display: none; padding: 0; }
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+body.dark .page-header { border-bottom-color: rgba(255,255,255,0.07); }
+.page-header h2 { font-size: 17px; font-weight: 800; letter-spacing: 1px; margin: 0; }
+
+.account-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #28b570, #1a8a52);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  margin: 30px auto 14px;
+  font-weight: 700;
+  color: white;
+}
+.account-name { text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.account-sub { text-align: center; font-size: 13px; color: #888; margin-bottom: 26px; }
+.account-actions { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
+.account-action-btn {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(0,0,0,0.08);
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.2s;
+  text-align: left;
+  color: inherit;
+  width: 100%;
+}
+body.dark .account-action-btn { background: #1e1e1e; border-color: rgba(255,255,255,0.08); }
+.account-action-btn:hover { background: #f5f5f5; }
+body.dark .account-action-btn:hover { background: #2a2a2a; }
+.account-action-btn svg { width: 20px; height: 20px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.account-logout { color: #e53935; border-color: rgba(229,57,53,0.2) !important; }
+
+.wishlist-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 70px 20px; color: #aaa; font-size: 14px; gap: 10px; text-align: center;
+}
+.wishlist-empty svg { width: 54px; height: 54px; opacity: 0.25; margin-bottom: 6px; }
+.wishlist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 16px 16px 80px; }
+
+.search-bar-wrap { padding: 14px 16px 0; }
+.search-bar-input {
+  width: 100%; box-sizing: border-box;
+  padding: 13px 16px;
+  border: 1.5px solid #ddd;
+  border-radius: 14px;
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  outline: none; background: transparent; color: inherit;
+  transition: border-color 0.2s;
+}
+body.dark .search-bar-input { border-color: #333; }
+.search-bar-input:focus { border-color: #28b570; }
+.search-results { padding: 12px 16px 80px; display: flex; flex-direction: column; gap: 10px; }
+.search-result-item {
+  display: flex; gap: 14px; align-items: center;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: white;
+  border: 1.5px solid rgba(0,0,0,0.06);
+}
+body.dark .search-result-item { background: #1e1e1e; border-color: rgba(255,255,255,0.07); }
+.search-result-img { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #eee; }
+body.dark .search-result-img { background: #333; }
+.search-result-info h4 { margin: 0 0 3px; font-size: 14px; font-weight: 700; }
+.search-result-info p { margin: 0; font-size: 13px; color: #28b570; font-weight: 600; }
+.search-hint { text-align: center; color: #ccc; font-size: 14px; padding: 60px 20px 0; }
+.search-hint svg { display: block; margin: 0 auto 12px; opacity: .25; }
+
+.product-wishlist-btn {
+  position: absolute; top: 8px; right: 8px;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.92);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px); z-index: 2; padding: 0;
+  transition: transform 0.2s;
+}
+body.dark .product-wishlist-btn { background: rgba(30,30,30,0.9); }
+.product-wishlist-btn:hover { transform: scale(1.18); }
+.product-wishlist-btn svg { width: 15px; height: 15px; stroke: #888; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: all 0.2s; }
+.product-wishlist-btn.active svg { fill: #e53935; stroke: #e53935; }
+.hdr-wishlist-filled svg path { fill: #e53935; stroke: #e53935; }
 
 /* ── REVIEW FORM: cap width on large screens ── */
 @media (min-width: 768px) {
@@ -1591,22 +1723,40 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>
 
   <header>
-<div class="logo">
-  <img src="logo.png" alt="logo">
-
-  <div class="logo-text">
-    <h2>IBOM SPORTS HUB</h2>
-
-    <a href="https://maps.app.goo.gl/Ji9Lyw7jcfE83vxk6" target="_blank" class="address">
-  <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="black">
-    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 
-    9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 
-    1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
-  </svg>
-  227, Ikot Ekpene Road, Uyo
-    </a>
+  <div class="header-inner">
+    <div></div>
+    <div class="logo">
+      <img src="logo.png" alt="logo">
+      <div class="logo-text">
+        <h2>IBOM SPORTS HUB</h2>
+        <a href="https://maps.app.goo.gl/Ji9Lyw7jcfE83vxk6" target="_blank" class="address">
+          <svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="black">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+          </svg>
+          227, Ikot Ekpene Road, Uyo
+        </a>
+      </div>
+    </div>
+    <div class="header-icons">
+      <button class="hdr-icon" onclick="navigate({page:'account'})" title="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </button>
+      <button class="hdr-icon" onclick="navigate({page:'wishlist'})" title="Wishlist" id="hdrWishlistBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </button>
+      <button class="hdr-icon" onclick="navigate({page:'searchPage'})" title="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+    </div>
   </div>
-</div>
   </header>
 
   <div id="topHomeArea">
@@ -2217,6 +2367,69 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
   <div id="resultView" style="display:none; padding:20px;"></div>
 
+  <!-- ACCOUNT PAGE -->
+  <div id="accountPage">
+    <div class="page-header">
+      <button class="support-back" onclick="history.back()">←</button>
+      <h2>MY ACCOUNT</h2>
+    </div>
+    <div id="accountLoggedIn" style="display:none">
+      <div class="account-avatar" id="accountAvatar">👤</div>
+      <div class="account-name" id="accountDisplayName"></div>
+      <div class="account-sub">Ibom Sports Hub Member</div>
+      <div class="account-actions">
+        <button class="account-action-btn" onclick="navigate({page:'wishlist'})">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          My Wishlist
+        </button>
+        <button class="account-action-btn" onclick="navigate({page:'support'})">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Customer Support
+        </button>
+        <button class="account-action-btn account-logout" onclick="logoutCustomer()">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </button>
+      </div>
+    </div>
+    <div id="accountGuest" style="display:none; padding:30px 20px;">
+      <div class="account-avatar">👤</div>
+      <div class="account-name">Welcome!</div>
+      <div class="account-sub">Create a profile to save your wishlist</div>
+      <div class="ticket-field" style="margin-top:20px">
+        <label>Your Name</label>
+        <input type="text" id="customerNameInput" placeholder="Enter your name">
+      </div>
+      <button class="submit-ticket-btn" onclick="saveCustomerAccount()" style="margin-top:8px">Create Profile</button>
+    </div>
+  </div>
+
+  <!-- WISHLIST PAGE -->
+  <div id="wishlistPage">
+    <div class="page-header">
+      <button class="support-back" onclick="history.back()">←</button>
+      <h2>MY WISHLIST</h2>
+    </div>
+    <div id="wishlistContent"></div>
+  </div>
+
+  <!-- SEARCH PAGE -->
+  <div id="searchPage">
+    <div class="page-header">
+      <button class="support-back" onclick="history.back()">←</button>
+      <h2>SEARCH</h2>
+    </div>
+    <div class="search-bar-wrap">
+      <input type="text" class="search-bar-input" id="searchPageInput" placeholder="Search boots, jerseys, gear…" oninput="runPageSearch(this.value)">
+    </div>
+    <div class="search-results" id="searchPageResults">
+      <div class="search-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Start typing to search
+      </div>
+    </div>
+  </div>
+
   <!-- SUPPORT PAGE -->
   <div id="supportPage">
     <div class="support-header">
@@ -2294,31 +2507,29 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   let allReviews = [];
 
 function getCurrentEl() {
+  const pages = ['payment','reviewPage','reviewDetail','supportPage','ticketPage',
+                 'accountPage','wishlistPage','searchPage'];
+  for (const id of pages) {
+    const el = document.getElementById(id);
+    if (el && el.style.display === 'block') return el;
+  }
   if (document.getElementById('home').style.display !== 'none') return document.getElementById('home');
-  if (document.getElementById('payment').style.display === 'block') return document.getElementById('payment');
-  if (document.getElementById('reviewPage').style.display === 'block') return document.getElementById('reviewPage');
-  if (document.getElementById('reviewDetail').style.display === 'block') return document.getElementById('reviewDetail');
-  if (document.getElementById('supportPage').style.display === 'block') return document.getElementById('supportPage');
-  if (document.getElementById('ticketPage').style.display === 'block') return document.getElementById('ticketPage');
   if (document.getElementById('resultView').style.display !== 'none') return document.getElementById('resultView');
   return document.querySelector('.section.active') || null;
 }
 
 function hideAll() {
-  document.getElementById('home').style.display = 'none';
-  document.getElementById('payment').style.display = 'none';
-  document.getElementById('reviewPage').style.display = 'none';
-  document.getElementById('reviewDetail').style.display = 'none';
-  document.getElementById('resultView').style.display = 'none';
-  document.getElementById('supportPage').style.display = 'none';
-  document.getElementById('ticketPage').style.display = 'none';
+  ['home','payment','reviewPage','reviewDetail','resultView',
+   'supportPage','ticketPage','accountPage','wishlistPage','searchPage']
+    .forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
 }
 
 function showTarget(state, inClass) {
   const page = state ? state.page : 'home';
   const isReview = (page === 'review' || page === 'reviewDetail');
-  const isSupport = (page === 'support' || page === 'ticket');
+  const isSupport = (page === 'support' || page === 'ticket' ||
+                     page === 'account' || page === 'wishlist' || page === 'searchPage');
 
   document.getElementById("topHomeArea").style.display = "block";
   document.querySelector('.hero-slider').style.display = (page === 'home') ? '' : 'none';
@@ -2356,6 +2567,18 @@ function showTarget(state, inClass) {
     el = document.getElementById('ticketPage');
     el.style.display = 'block';
     initTicketPage();
+  } else if (page === 'account') {
+    el = document.getElementById('accountPage');
+    el.style.display = 'block';
+    initAccountPage();
+  } else if (page === 'wishlist') {
+    el = document.getElementById('wishlistPage');
+    el.style.display = 'block';
+    initWishlistPage();
+  } else if (page === 'searchPage') {
+    el = document.getElementById('searchPage');
+    el.style.display = 'block';
+    initSearchPage();
   }
 
   // ✅ apply animation
@@ -2418,6 +2641,7 @@ async function loadProducts() {
   allProducts = products; // ✅ store globally
 
   renderBootWall(products); // initial view
+  updateWishlistHeart();
 }
 
 // Shared tick — both sliders advance at exactly the same moment
@@ -2487,15 +2711,21 @@ async function loadProducts() {
 
   products.forEach(p => {
     const div = document.createElement("div");
-
+    const wishlisted = isWishlisted(p.name);
+    const imgSrc = `data:image/jpeg;base64,${p.image}`;
     div.innerHTML = `
-      <div class="product">
-        <img src="data:image/jpeg;base64,${p.image}">
+      <div class="product" style="position:relative">
+        <img src="${imgSrc}">
+        <button class="product-wishlist-btn${wishlisted?' active':''}" data-name="${p.name}"
+          onclick="toggleWishlist('${p.name.replace(/'/g,"\\'")}','${p.price}','${imgSrc.substring(0,30)}...')">
+          <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
         <h3>${p.name}</h3>
         <p>N${p.price}</p>
       </div>
     `;
-
     bootWall.appendChild(div);
   });
       }
@@ -2956,6 +3186,133 @@ function openCategories() {
 
 function openSupport() {
   navigate({ page: 'support' });
+}
+
+// ── CUSTOMER ACCOUNT ──
+function initAccountPage() {
+  const name = localStorage.getItem('ibomCustomerName');
+  if (name) {
+    document.getElementById('accountLoggedIn').style.display = 'block';
+    document.getElementById('accountGuest').style.display = 'none';
+    document.getElementById('accountDisplayName').textContent = name;
+    document.getElementById('accountAvatar').textContent = name[0].toUpperCase();
+  } else {
+    document.getElementById('accountLoggedIn').style.display = 'none';
+    document.getElementById('accountGuest').style.display = 'block';
+  }
+}
+
+function saveCustomerAccount() {
+  const name = document.getElementById('customerNameInput').value.trim();
+  if (!name) return;
+  localStorage.setItem('ibomCustomerName', name);
+  initAccountPage();
+}
+
+function logoutCustomer() {
+  localStorage.removeItem('ibomCustomerName');
+  initAccountPage();
+}
+
+// ── WISHLIST ──
+function getWishlist() {
+  try { return JSON.parse(localStorage.getItem('ibomWishlist') || '[]'); } catch { return []; }
+}
+function saveWishlist(list) {
+  localStorage.setItem('ibomWishlist', JSON.stringify(list));
+}
+function isWishlisted(name) {
+  return getWishlist().some(i => i.name === name);
+}
+function toggleWishlist(name, price, imgSrc) {
+  let list = getWishlist();
+  const idx = list.findIndex(i => i.name === name);
+  if (idx > -1) {
+    list.splice(idx, 1);
+  } else {
+    list.push({ name, price, img: imgSrc });
+  }
+  saveWishlist(list);
+  refreshWishlistButtons();
+  updateWishlistHeart();
+}
+function refreshWishlistButtons() {
+  document.querySelectorAll('.product-wishlist-btn').forEach(btn => {
+    btn.classList.toggle('active', isWishlisted(btn.dataset.name));
+  });
+}
+function updateWishlistHeart() {
+  const count = getWishlist().length;
+  const btn = document.getElementById('hdrWishlistBtn');
+  if (!btn) return;
+  const path = btn.querySelector('svg path');
+  if (path) {
+    path.style.fill   = count > 0 ? '#e53935' : 'none';
+    path.style.stroke = count > 0 ? '#e53935' : 'currentColor';
+  }
+}
+function initWishlistPage() {
+  const list = getWishlist();
+  const el = document.getElementById('wishlistContent');
+  if (!list.length) {
+    el.innerHTML = `<div class="wishlist-empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+      <p style="font-weight:700;color:#555">Your wishlist is empty</p>
+      <p style="font-size:12px">Tap ♡ on any product to save it here</p>
+    </div>`;
+    return;
+  }
+  el.innerHTML = `<div class="wishlist-grid">${list.map(item => `
+    <div class="product" style="position:relative">
+      <button class="product-wishlist-btn active" data-name="${item.name}"
+        onclick="toggleWishlist('${item.name.replace(/'/g,"\\'")}','${item.price}','');initWishlistPage()">
+        <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </button>
+      <h3 style="font-size:13px;margin:6px 0 2px">${item.name}</h3>
+      <p style="font-size:13px;color:#28b570;font-weight:700">N${item.price}</p>
+    </div>`).join('')}</div>`;
+}
+
+// ── SEARCH PAGE ──
+function initSearchPage() {
+  const input = document.getElementById('searchPageInput');
+  input.value = '';
+  document.getElementById('searchPageResults').innerHTML = `<div class="search-hint">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    Start typing to search
+  </div>`;
+  setTimeout(() => input.focus(), 300);
+}
+function runPageSearch(q) {
+  const results = document.getElementById('searchPageResults');
+  if (!q.trim()) {
+    results.innerHTML = `<div class="search-hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Start typing to search
+    </div>`;
+    return;
+  }
+  const lower = q.toLowerCase();
+  const matches = allProducts.filter(p =>
+    p.name.toLowerCase().includes(lower) ||
+    (p.category && p.category.toLowerCase().includes(lower))
+  );
+  if (!matches.length) {
+    results.innerHTML = `<div class="search-hint">No results for "<strong>${q}</strong>"</div>`;
+    return;
+  }
+  results.innerHTML = matches.map(p => `
+    <div class="search-result-item">
+      <img class="search-result-img" src="data:image/jpeg;base64,${p.image}">
+      <div class="search-result-info">
+        <h4>${p.name}</h4>
+        <p>N${p.price}</p>
+      </div>
+    </div>`).join('');
 }
 
 function openTicketPage() {
