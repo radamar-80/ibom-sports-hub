@@ -1098,13 +1098,134 @@ header { padding: 10px 0; }
 /* ── MINI CARD IMAGES ── */
 .mini-card img { height: auto; }
 
-/* ── TOOLBAR: tiny phones ── */
-@media (max-width: 380px) {
-  #toolbar { padding: 8px 10px; gap: 6px; }
-  #searchForm { max-width: none; }
-  #darkToggleBtn, #whatsappBtn { height: 34px; width: 34px; min-width: 34px; font-size: 16px; }
-  #whatsappBtn svg { width: 22px; height: 22px; }
+/* ── NAV DRAWER ── */
+#navDrawer {
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  background: #fff;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
+#navDrawer.open { transform: translateX(0); }
+body.dark #navDrawer { background: #121212; color: #f0f0f0; }
+
+.drawer-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  font-size: 18px;
+  font-weight: 700;
+  color: inherit;
+  text-decoration: none;
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.drawer-item:active { background: #f5f5f5; }
+body.dark .drawer-item { border-color: #222; }
+body.dark .drawer-item:active { background: #1c1c1c; }
+.drawer-item-chevron { color: #bbb; flex-shrink: 0; }
+
+.drawer-settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid #f0f0f0;
+  font-family: 'Poppins', sans-serif;
+}
+.drawer-settings-label { font-size: 16px; font-weight: 700; }
+body.dark .drawer-settings-row { border-color: #222; }
+
+.toggle-switch { position: relative; width: 52px; height: 28px; flex-shrink: 0; cursor: pointer; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-track {
+  position: absolute; inset: 0;
+  background: #ddd; border-radius: 14px;
+  transition: background 0.25s;
+}
+.toggle-track::after {
+  content: '';
+  position: absolute;
+  width: 22px; height: 22px;
+  left: 3px; top: 3px;
+  background: white; border-radius: 50%;
+  transition: transform 0.25s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+}
+.toggle-switch input:checked + .toggle-track { background: #28b570; }
+.toggle-switch input:checked + .toggle-track::after { transform: translateX(24px); }
+
+.drawer-section-divider { height: 6px; background: #f5f5f5; }
+body.dark .drawer-section-divider { background: #1a1a1a; }
+
+.drawer-member {
+  margin: 20px 16px 32px;
+  padding: 20px;
+  background: #f7f7f7;
+  border-radius: 14px;
+}
+body.dark .drawer-member { background: #1c1c1c; }
+.drawer-member-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.drawer-member-logo { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd; flex-shrink: 0; }
+.drawer-member-title { font-size: 19px; font-weight: 900; line-height: 1.2; letter-spacing: -0.2px; font-family: 'Poppins', sans-serif; }
+.drawer-member-perks { list-style: none; padding: 0; margin: 0 0 18px; }
+.drawer-member-perks li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: #555; padding: 5px 0;
+  font-family: 'Poppins', sans-serif;
+}
+body.dark .drawer-member-perks li { color: #aaa; }
+.drawer-member-perks li::before { content: '✓'; color: #28b570; font-weight: 800; font-size: 15px; flex-shrink: 0; }
+.drawer-member-btns { display: flex; gap: 10px; }
+.drawer-btn-join {
+  flex: 1; padding: 13px;
+  background: #28b570; color: white;
+  border: none; border-radius: 8px;
+  font-weight: 700; font-size: 14px;
+  cursor: pointer; font-family: 'Poppins', sans-serif;
+}
+.drawer-btn-login {
+  flex: 1; padding: 13px;
+  background: none; color: inherit;
+  border: 2px solid #ddd; border-radius: 8px;
+  font-weight: 700; font-size: 14px;
+  cursor: pointer; font-family: 'Poppins', sans-serif;
+}
+body.dark .drawer-btn-login { border-color: #444; }
+
+/* Header menu-open icons */
+#headerIconsMenu { display: none; align-items: center; gap: 8px; justify-self: end; }
+.header-wa-pill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  background: #25D366; border-radius: 100px;
+  text-decoration: none; color: white;
+  font-size: 12px; font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(37,211,102,0.3);
+}
+.header-wa-pill svg { width: 14px; height: 14px; display: block; }
+.header-close-btn {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border: none; background: none; cursor: pointer;
+  border-radius: 50%; color: inherit;
+  transition: background 0.2s;
+}
+.header-close-btn:hover { background: rgba(0,0,0,0.06); }
+body.dark .header-close-btn:hover { background: rgba(255,255,255,0.08); }
+.header-close-btn svg { width: 22px; height: 22px; }
 
 /* ── LOGO: very small phones ── */
 @media (max-width: 360px) {
@@ -1695,7 +1816,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
         </a>
       </div>
     </div>
-    <div class="header-icons">
+    <div class="header-icons" id="headerIconsDefault">
       <button class="hdr-icon" onclick="navigate({page:'account'})" title="Account">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -1713,9 +1834,78 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
       </button>
+      <button class="hdr-icon" onclick="openMenu()" title="Menu" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div id="headerIconsMenu">
+      <a class="header-wa-pill" href="https://wa.me/2341234567890" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        WhatsApp
+      </a>
+      <button class="header-close-btn" onclick="closeMenu()" aria-label="Close menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
     </div>
   </div>
   </header>
+
+  <nav id="navDrawer" aria-hidden="true">
+    <button class="drawer-item" onclick="drawerNav('boots')">
+      Football Boots
+      <svg class="drawer-item-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <button class="drawer-item" onclick="drawerNav(null)">
+      Jerseys
+      <svg class="drawer-item-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <button class="drawer-item" onclick="drawerNav(null)">
+      Training Equipment
+      <svg class="drawer-item-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <button class="drawer-item" onclick="drawerNav(null)">
+      Goalkeeper Gear
+      <svg class="drawer-item-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <button class="drawer-item" onclick="drawerNav(null)">
+      Fan Shop
+      <svg class="drawer-item-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <button class="drawer-item" onclick="drawerNav(null)">
+      Offers &amp; Sale
+      <svg class="drawer-item-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <div class="drawer-section-divider"></div>
+    <div class="drawer-settings-row">
+      <span class="drawer-settings-label">Dark Mode</span>
+      <label class="toggle-switch" aria-label="Toggle dark mode">
+        <input type="checkbox" id="darkModeToggle" onchange="toggleDark()">
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+    <div class="drawer-section-divider"></div>
+    <div class="drawer-member">
+      <div class="drawer-member-header">
+        <img src="logo.png" alt="Ibom Sports Hub" class="drawer-member-logo">
+        <div class="drawer-member-title">BECOME A MEMBER TODAY</div>
+      </div>
+      <ul class="drawer-member-perks">
+        <li>Access member exclusive products</li>
+        <li>Participate in exclusive events &amp; giveaways</li>
+        <li>Get notified on new arrivals first</li>
+      </ul>
+      <div class="drawer-member-btns">
+        <button class="drawer-btn-join" onclick="drawerNav('account')">Join for Free</button>
+        <button class="drawer-btn-login" onclick="drawerNav('account')">Login</button>
+      </div>
+    </div>
+  </nav>
 
   <div id="topHomeArea">
 
@@ -1863,20 +2053,6 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
 </div>
 
-<div id="toolbar" class="container">
-  <button id="darkToggleBtn" onclick="toggleDark()" aria-label="Toggle dark mode">
-    <svg id="darkBtnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-    <span id="darkBtnLabel">Dark</span>
-  </button>
-  <a id="whatsappBtn" href="https://wa.me/2341234567890" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
-    </svg>
-    WhatsApp
-  </a>
-</div>
 
 <div id="pageContainer">
   <div id="home" class="collections">
@@ -3108,23 +3284,40 @@ const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 const savedTheme = localStorage.getItem("theme");
 if (savedTheme === "dark" || (!savedTheme && systemDark)) {
   document.body.classList.add("dark");
-  document.getElementById("darkBtnIcon").innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
-  document.getElementById("darkBtnLabel").textContent = "Light";
+  const cb = document.getElementById("darkModeToggle");
+  if (cb) cb.checked = true;
 }
 
 function toggleDark() {
   const isDark = document.body.classList.toggle("dark");
-  const icon = document.getElementById("darkBtnIcon");
-  const label = document.getElementById("darkBtnLabel");
-  if (isDark) {
-    localStorage.setItem("theme", "dark");
-    icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
-    label.textContent = "Light";
-  } else {
-    localStorage.setItem("theme", "light");
-    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-    label.textContent = "Dark";
-  }
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+  const cb = document.getElementById("darkModeToggle");
+  if (cb) cb.checked = isDark;
+}
+
+function openMenu() {
+  const hdr = document.querySelector('header');
+  const drawer = document.getElementById('navDrawer');
+  drawer.style.paddingTop = hdr.getBoundingClientRect().bottom + 'px';
+  drawer.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
+  document.getElementById('headerIconsDefault').style.display = 'none';
+  document.getElementById('headerIconsMenu').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+  const drawer = document.getElementById('navDrawer');
+  drawer.classList.remove('open');
+  drawer.setAttribute('aria-hidden', 'true');
+  document.getElementById('headerIconsDefault').style.display = '';
+  document.getElementById('headerIconsMenu').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function drawerNav(page) {
+  closeMenu();
+  if (page) navigate({ page });
 }
 
 // Search
