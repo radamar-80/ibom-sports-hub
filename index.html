@@ -1101,7 +1101,7 @@ header { padding: 10px 0; }
 /* ── NAV DRAWER ── */
 #navDrawer {
   position: fixed;
-  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
   z-index: 998;
   background: #fff;
   overflow-y: auto;
@@ -3454,8 +3454,11 @@ function toggleDark() {
 
 function openMenu() {
   const hdr = document.querySelector('header');
+  const banner = document.querySelector('.top-banner');
   const drawer = document.getElementById('navDrawer');
-  drawer.style.paddingTop = hdr.getBoundingClientRect().bottom + 'px';
+  const bannerBottom = banner ? Math.max(0, banner.getBoundingClientRect().bottom) : 0;
+  drawer.style.top = bannerBottom + 'px';
+  drawer.style.paddingTop = (hdr.getBoundingClientRect().bottom - bannerBottom) + 'px';
   drawer.classList.add('open');
   drawer.setAttribute('aria-hidden', 'false');
   document.getElementById('headerIconsDefault').style.display = 'none';
@@ -3467,6 +3470,7 @@ function closeMenu() {
   const drawer = document.getElementById('navDrawer');
   drawer.classList.remove('open');
   drawer.setAttribute('aria-hidden', 'true');
+  drawer.style.top = '';
   document.getElementById('headerIconsDefault').style.display = '';
   document.getElementById('headerIconsMenu').style.display = 'none';
   document.body.style.overflow = '';
