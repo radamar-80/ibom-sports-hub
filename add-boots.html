@@ -33,22 +33,32 @@ body { font-family: Arial; padding:20px; }
   color: green;
 }
 
-input {
+input, select {
   width: 100%;
   padding: 12px 14px;
   margin-top: 5px;
 
   border: 1px solid #ccc;
-  border-radius: 12px;   /* 👈 rounded edges */
+  border-radius: 12px;
   outline: none;
 
   font-size: 14px;
   transition: 0.2s ease;
   background: #fff;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
-/* when user clicks inside */
-input:focus {
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+input:focus, select:focus {
   border-color: green;
   box-shadow: 0 0 0 3px rgba(0, 128, 0, 0.15);
 }
@@ -210,6 +220,26 @@ input::placeholder {
 
 <input type="file" id="image" hidden>
 
+<!-- CATEGORY / SUBCATEGORY / SECTION -->
+<div class="row">
+  <div style="flex:1">
+    <div class="label">(category)</div>
+    <select id="categoryId" onchange="onCatChange()"></select>
+  </div>
+</div>
+<div class="row">
+  <div style="flex:1">
+    <div class="label">(subcategory)</div>
+    <select id="subcategoryId" onchange="onSubcatChange()"></select>
+  </div>
+</div>
+<div class="row">
+  <div style="flex:1">
+    <div class="label">(section)</div>
+    <select id="sectionId"></select>
+  </div>
+</div>
+
 <!-- 2 BRAND + MODEL -->
 <div class="row">
   <div style="flex:1">
@@ -285,6 +315,47 @@ input::placeholder {
 if (localStorage.getItem("adminLoggedIn") !== "true") {
   window.location.href = "admin-login.html";
 }
+
+let _catData = [];
+
+async function loadAdminCategories() {
+  try {
+    const res = await fetch('/categories');
+    _catData = await res.json();
+  } catch(e) { _catData = []; }
+  populateCategorySelect();
+}
+
+function populateCategorySelect() {
+  const sel = document.getElementById('categoryId');
+  sel.innerHTML = _catData.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+  onCatChange();
+}
+
+function onCatChange() {
+  const catId = document.getElementById('categoryId').value;
+  const cat = _catData.find(c => c.id === catId);
+  const subs = cat ? (cat.subcategories || []) : [];
+  const sel = document.getElementById('subcategoryId');
+  sel.innerHTML = subs.length
+    ? subs.map(s => `<option value="${s.id}">${s.name}</option>`).join('')
+    : '<option value="">— none —</option>';
+  onSubcatChange();
+}
+
+function onSubcatChange() {
+  const catId = document.getElementById('categoryId').value;
+  const subId = document.getElementById('subcategoryId').value;
+  const cat = _catData.find(c => c.id === catId);
+  const sub = cat && (cat.subcategories || []).find(s => s.id === subId);
+  const sections = sub ? (sub.sections || []) : [];
+  const sel = document.getElementById('sectionId');
+  sel.innerHTML = sections.length
+    ? sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('')
+    : '<option value="">— none —</option>';
+}
+
+loadAdminCategories();
 
 const imageInput = document.getElementById("image");
 const preview = document.getElementById("preview");
@@ -381,12 +452,15 @@ const soleplates = selected
   : "";
 
   formData.append("colorways", JSON.stringify(colors));
-  formData.append("soleplates", soleplates.toLowerCase().trim());
+  formData.append("soleplates", JSON.stringify([soleplates.toLowerCase().trim()].filter(Boolean)));
+  formData.append("categoryId", document.getElementById("categoryId").value);
+  formData.append("subcategoryId", document.getElementById("subcategoryId").value);
+  formData.append("sectionId", document.getElementById("sectionId").value);
 
   try {
     const token = localStorage.getItem("token");
 
-const res = await fetch("https://ibom-sports-hub.radamar-80.repl.co/add-product", {
+const res = await fetch("/add-product", {
   method: "POST",
   headers: {
     "Authorization": "Bearer " + token

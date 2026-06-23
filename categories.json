@@ -1,0 +1,151 @@
+[
+  {
+    "id": "boots",
+    "name": "Boots",
+    "subcategories": [
+      {
+        "id": "speed-boots",
+        "name": "Speed Boots",
+        "sections": [
+          { "id": "nike-mercurial", "name": "Nike Mercurial" },
+          { "id": "adidas-f50", "name": "Adidas F50" },
+          { "id": "puma-ultra", "name": "Puma Ultra" },
+          { "id": "mizuno-speed", "name": "Mizuno Speed" },
+          { "id": "nb-speed", "name": "New Balance Speed" },
+          { "id": "other-speed", "name": "Other" }
+        ]
+      },
+      {
+        "id": "control-boots",
+        "name": "Control Boots",
+        "sections": [
+          { "id": "nike-tiempo", "name": "Nike Tiempo" },
+          { "id": "adidas-mundial", "name": "Adidas Mundial" },
+          { "id": "copa-sense", "name": "Copa Sense" },
+          { "id": "other-control", "name": "Other" }
+        ]
+      },
+      {
+        "id": "power-boots",
+        "name": "Power Boots",
+        "sections": [
+          { "id": "adidas-predator", "name": "Adidas Predator" },
+          { "id": "nike-hypervenom", "name": "Nike Hypervenom" },
+          { "id": "puma-king", "name": "Puma King" },
+          { "id": "other-power", "name": "Other" }
+        ]
+      },
+      {
+        "id": "leather-boots",
+        "name": "Leather Boots",
+        "sections": [
+          { "id": "classic-leather", "name": "Classic Leather" },
+          { "id": "kangaroo-leather", "name": "Kangaroo" },
+          { "id": "other-leather", "name": "Other" }
+        ]
+      },
+      {
+        "id": "turf-boots",
+        "name": "Turf & AG",
+        "sections": [
+          { "id": "turf-nike", "name": "Nike TF" },
+          { "id": "turf-adidas", "name": "Adidas TF" },
+          { "id": "ag-boots", "name": "AG Boots" },
+          { "id": "other-turf", "name": "Other" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "balls",
+    "name": "Balls",
+    "subcategories": [
+      {
+        "id": "football-balls",
+        "name": "Football",
+        "sections": [
+          { "id": "match-balls", "name": "Match Balls" },
+          { "id": "training-balls", "name": "Training" },
+          { "id": "futsal-balls", "name": "Futsal" },
+          { "id": "mini-balls", "name": "Mini Balls" }
+        ]
+      },
+      {
+        "id": "other-balls",
+        "name": "Other Sports",
+        "sections": [
+          { "id": "basketball-ball", "name": "Basketball" },
+          { "id": "tennis-ball", "name": "Tennis" },
+          { "id": "other-balls", "name": "Other" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sportswear",
+    "name": "Sportswear",
+    "subcategories": [
+      {
+        "id": "jerseys",
+        "name": "Jerseys",
+        "sections": [
+          { "id": "club-jerseys", "name": "Club Kits" },
+          { "id": "national-jerseys", "name": "National" },
+          { "id": "retro-jerseys", "name": "Retro" },
+          { "id": "training-jerseys", "name": "Training" }
+        ]
+      },
+      {
+        "id": "training-wear",
+        "name": "Training Wear",
+        "sections": [
+          { "id": "training-tops", "name": "Tops" },
+          { "id": "training-bottoms", "name": "Bottoms" },
+          { "id": "full-kits", "name": "Full Kits" },
+          { "id": "compression", "name": "Compression" }
+        ]
+      },
+      {
+        "id": "goalkeeper-kits",
+        "name": "Goalkeeper",
+        "sections": [
+          { "id": "gk-jersey", "name": "GK Jerseys" },
+          { "id": "gk-shorts", "name": "GK Shorts" },
+          { "id": "gk-pants", "name": "GK Pants" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sneakers",
+    "name": "Sneakers",
+    "subcategories": [
+      {
+        "id": "lifestyle-sneakers",
+        "name": "Lifestyle",
+        "sections": [
+          { "id": "nike-lifestyle", "name": "Nike" },
+          { "id": "adidas-lifestyle", "name": "Adidas" },
+          { "id": "puma-lifestyle", "name": "Puma" },
+          { "id": "other-lifestyle", "name": "Other" }
+        ]
+      },
+      {
+        "id": "running-sneakers",
+        "name": "Running",
+        "sections": [
+          { "id": "nike-running", "name": "Nike" },
+          { "id": "adidas-running", "name": "Adidas" },
+          { "id": "nb-running", "name": "New Balance" },
+          { "id": "other-running", "name": "Other" }
+        ]
+      }
+    ]
+  },
+  { "id": "football", "name": "Football", "subcategories": [] },
+  { "id": "tennis", "name": "Tennis", "subcategories": [] },
+  { "id": "basketball", "name": "Basketball", "subcategories": [] },
+  { "id": "track", "name": "Track", "subcategories": [] },
+  { "id": "bodybuilding", "name": "Bodybuilding", "subcategories": [] },
+  { "id": "snooker", "name": "Snooker", "subcategories": [] }
+]

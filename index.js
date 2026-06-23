@@ -11,7 +11,16 @@ const ADMIN_DB = "admins.json";
 const DB_FILE = "products.json";
 const REVIEWS_FILE = "reviews.json";
 const TICKETS_FILE = "tickets.json";
+const CATEGORIES_FILE = "categories.json";
 const UPLOAD_DIR = "uploads";
+
+function readCategories() {
+  if (!fs.existsSync(CATEGORIES_FILE)) return [];
+  try { return JSON.parse(fs.readFileSync(CATEGORIES_FILE)); } catch(e) { return []; }
+}
+function writeCategories(data) {
+  fs.writeFileSync(CATEGORIES_FILE, JSON.stringify(data, null, 2));
+}
 
 function readReviews() {
   if (!fs.existsSync(REVIEWS_FILE)) return [];
@@ -98,9 +107,12 @@ app.post("/add-product", verifyToken, upload.single("image"), (req, res) => {
     brand: data.brand,
     model: data.model,
     name: data.name,
-    colorways: JSON.parse(data.colorways),
-    soleplates: JSON.parse(data.soleplates),
+    colorways: data.colorways ? JSON.parse(data.colorways) : [],
+    soleplates: data.soleplates ? JSON.parse(data.soleplates) : [],
     price: data.price,
+    categoryId: data.categoryId || "",
+    subcategoryId: data.subcategoryId || "",
+    sectionId: data.sectionId || "",
   };
 
   const products = readDB();
@@ -113,6 +125,17 @@ app.post("/add-product", verifyToken, upload.single("image"), (req, res) => {
 // GET PRODUCTS
 app.get("/products", (req, res) => {
   res.json(readDB());
+});
+
+// GET CATEGORIES (public)
+app.get("/categories", (req, res) => {
+  res.json(readCategories());
+});
+
+// UPDATE CATEGORIES (admin only)
+app.put("/categories", verifyToken, (req, res) => {
+  writeCategories(req.body);
+  res.json({ message: "Categories updated" });
 });
 
 // GET REVIEWS
