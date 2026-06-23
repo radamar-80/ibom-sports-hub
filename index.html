@@ -2662,7 +2662,7 @@ function showTarget(state, inClass) {
 
   document.getElementById("topHomeArea").style.display = "block";
   document.querySelector('.hero-slider').style.display = (page === 'home') ? '' : 'none';
-  document.getElementById('toolbar').style.display = (isReview || isSupport) ? 'none' : '';
+  closeMenu();
   const frb = document.getElementById('floatingReviewBtn');
   if (frb) frb.classList.toggle('hidden', isReview || isSupport);
 
