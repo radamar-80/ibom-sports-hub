@@ -69,6 +69,95 @@ body.loaded {
   color: white;
 }
 
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal {
+  background: white;
+  border-radius: 14px;
+  padding: 28px 24px;
+  width: 90%;
+  max-width: 380px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.modal h2 {
+  margin: 0 0 20px;
+  font-size: 18px;
+  color: #111;
+}
+
+.modal input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  outline: none;
+  font-family: Arial;
+}
+
+.modal input:focus {
+  border-color: green;
+}
+
+.modal-msg {
+  font-size: 13px;
+  margin-bottom: 12px;
+  min-height: 18px;
+  font-weight: 600;
+}
+
+.modal-msg.success { color: green; }
+.modal-msg.error   { color: #c0392b; }
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.btn-save {
+  flex: 1;
+  padding: 11px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-save:hover { opacity: 0.88; }
+.btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-cancel {
+  flex: 1;
+  padding: 11px;
+  background: #f0f0f0;
+  color: #444;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-cancel:hover { background: #e0e0e0; }
 </style>
 
 </head>
@@ -104,6 +193,25 @@ body.loaded {
     CUSTOMER SUPPORT — LIVE TICKETS <span class="arrow">→</span>
   </div>
 
+  <div class="section" onclick="openChangePassword()">
+    CHANGE PASSWORD <span class="arrow">🔑</span>
+  </div>
+
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div class="modal-overlay" id="pwModal">
+  <div class="modal">
+    <h2>Change Password</h2>
+    <input type="password" id="currentPw" placeholder="Current password" autocomplete="current-password">
+    <input type="password" id="newPw" placeholder="New password" autocomplete="new-password">
+    <input type="password" id="confirmPw" placeholder="Confirm new password" autocomplete="new-password">
+    <div class="modal-msg" id="pwMsg"></div>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeChangePassword()">Cancel</button>
+      <button class="btn-save" id="pwSaveBtn" onclick="submitChangePassword()">Save</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -111,7 +219,6 @@ body.loaded {
 if (localStorage.getItem("adminLoggedIn") !== "true") {
   window.location.href = "admin-login.html";
 }
-
 
 window.onload = () => {
   document.body.classList.add("loaded");
@@ -123,8 +230,93 @@ function openPage(page) {
 
 function logout() {
   localStorage.removeItem("adminLoggedIn");
+  localStorage.removeItem("adminToken");
   window.location.href = "admin-login.html";
 }
+
+function openChangePassword() {
+  document.getElementById("currentPw").value = "";
+  document.getElementById("newPw").value = "";
+  document.getElementById("confirmPw").value = "";
+  document.getElementById("pwMsg").textContent = "";
+  document.getElementById("pwMsg").className = "modal-msg";
+  document.getElementById("pwSaveBtn").disabled = false;
+  document.getElementById("pwModal").classList.add("open");
+}
+
+function closeChangePassword() {
+  document.getElementById("pwModal").classList.remove("open");
+}
+
+async function submitChangePassword() {
+  const currentPassword = document.getElementById("currentPw").value.trim();
+  const newPassword     = document.getElementById("newPw").value.trim();
+  const confirmPassword = document.getElementById("confirmPw").value.trim();
+  const msg = document.getElementById("pwMsg");
+  const btn = document.getElementById("pwSaveBtn");
+
+  msg.className = "modal-msg";
+  msg.textContent = "";
+
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    msg.className = "modal-msg error";
+    msg.textContent = "Please fill in all fields.";
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    msg.className = "modal-msg error";
+    msg.textContent = "New passwords do not match.";
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    msg.className = "modal-msg error";
+    msg.textContent = "New password must be at least 6 characters.";
+    return;
+  }
+
+  const token = localStorage.getItem("adminToken");
+  if (!token) {
+    msg.className = "modal-msg error";
+    msg.textContent = "Session expired. Please log in again.";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Saving…";
+
+  try {
+    const res = await fetch("/change-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({ currentPassword, newPassword })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      msg.className = "modal-msg success";
+      msg.textContent = "Password updated successfully!";
+      setTimeout(closeChangePassword, 1500);
+    } else {
+      msg.className = "modal-msg error";
+      msg.textContent = data.message || "Something went wrong.";
+    }
+  } catch(e) {
+    msg.className = "modal-msg error";
+    msg.textContent = "Network error. Please try again.";
+  }
+
+  btn.disabled = false;
+  btn.textContent = "Save";
+}
+
+// Close modal if clicking outside
+document.getElementById("pwModal").addEventListener("click", function(e) {
+  if (e.target === this) closeChangePassword();
+});
 
 </script>
 

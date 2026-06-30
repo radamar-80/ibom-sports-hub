@@ -232,6 +232,20 @@ app.post("/create-admin", verifyToken, async (req, res) => {
   res.json({ message: "Admin created" });
 });
 
+// CHANGE PASSWORD (requires existing admin token)
+app.post("/change-password", verifyToken, async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  if (!currentPassword || !newPassword) return res.status(400).json({ message: "Missing fields" });
+  const admins = readAdmins();
+  const admin = admins.find(a => a.id === req.user.id);
+  if (!admin) return res.status(404).json({ message: "Admin not found" });
+  const match = await bcrypt.compare(currentPassword, admin.password);
+  if (!match) return res.status(401).json({ message: "Current password is incorrect" });
+  admin.password = await bcrypt.hash(newPassword, 10);
+  writeAdmins(admins);
+  res.json({ message: "Password updated successfully" });
+});
+
 // LOGIN
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;

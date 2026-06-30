@@ -69,7 +69,8 @@ async function login() {
   const data = await res.json();
 
   if (res.ok) {
-    localStorage.setItem("token", data.token);
+    localStorage.setItem("adminToken", data.token);
+    localStorage.setItem("adminLoggedIn", "true");
     window.location.href = "admin-dashboard.html";
   } else {
     alert(data.message);
