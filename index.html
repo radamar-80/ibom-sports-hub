@@ -2800,7 +2800,6 @@ function showTarget(state, inClass) {
   const navMap = { home:'navHome', support:'navSupport', ticket:'navSupport', categoriesPage:'navCategories' };
   setActiveNav(navMap[page] || 'navHome');
 
-  document.getElementById("topHomeArea").style.display = (page === 'home') ? "block" : "none";
   document.querySelector('.hero-slider').style.display = (page === 'home') ? '' : 'none';
   closeMenu();
   const frb = document.getElementById('floatingReviewBtn');
