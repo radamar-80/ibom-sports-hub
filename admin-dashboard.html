@@ -158,6 +158,35 @@ body.loaded {
 }
 
 .btn-cancel:hover { background: #e0e0e0; }
+
+/* ADMIN LIST ROWS */
+.admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f8f8f8;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.admin-row-name { font-weight: 600; color: #222; }
+
+.btn-delete-row {
+  padding: 6px 14px;
+  background: #c0392b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.btn-delete-row:hover { opacity: 0.85; }
+.btn-delete-row:disabled { opacity: 0.45; cursor: not-allowed; }
 </style>
 
 </head>
@@ -201,6 +230,23 @@ body.loaded {
     CREATE NEW ADMIN <span class="arrow">👤</span>
   </div>
 
+  <div class="section" onclick="openDeleteAdmin()">
+    DELETE ADMIN <span class="arrow">🗑️</span>
+  </div>
+
+</div>
+
+<!-- DELETE ADMIN MODAL -->
+<div class="modal-overlay" id="deleteAdminModal">
+  <div class="modal">
+    <h2>Delete Admin</h2>
+    <p style="margin:0 0 16px;font-size:13px;color:#666;">Your own account is not shown. Deletion is permanent.</p>
+    <div id="adminListWrap" style="margin-bottom:12px;"></div>
+    <div class="modal-msg" id="deleteAdminMsg"></div>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeDeleteAdmin()">Close</button>
+    </div>
+  </div>
 </div>
 
 <!-- CREATE ADMIN MODAL -->
@@ -419,6 +465,91 @@ async function submitCreateAdmin() {
 
 document.getElementById("createAdminModal").addEventListener("click", function(e) {
   if (e.target === this) closeCreateAdmin();
+});
+
+async function openDeleteAdmin() {
+  document.getElementById("deleteAdminMsg").textContent = "";
+  document.getElementById("deleteAdminMsg").className = "modal-msg";
+  document.getElementById("adminListWrap").innerHTML = "<div style='color:#888;font-size:13px;'>Loading…</div>";
+  document.getElementById("deleteAdminModal").classList.add("open");
+
+  const token = localStorage.getItem("adminToken");
+  try {
+    const res = await fetch("/admins", { headers: { "Authorization": "Bearer " + token } });
+    const admins = await res.json();
+    renderAdminList(admins);
+  } catch(e) {
+    document.getElementById("adminListWrap").innerHTML = "<div style='color:#c0392b;font-size:13px;'>Failed to load admins.</div>";
+  }
+}
+
+function renderAdminList(admins) {
+  const wrap = document.getElementById("adminListWrap");
+  if (!admins.length) {
+    wrap.innerHTML = "<div style='color:#888;font-size:13px;text-align:center;padding:10px 0;'>No other admins to show.</div>";
+    return;
+  }
+  wrap.innerHTML = admins.map(a =>
+    `<div class="admin-row" id="admin-row-${a.id}">
+      <span class="admin-row-name">${a.username}</span>
+      <button class="btn-delete-row" onclick="confirmDeleteAdmin(${a.id},'${a.username}')">Delete</button>
+    </div>`
+  ).join("");
+}
+
+function confirmDeleteAdmin(id, username) {
+  const msg = document.getElementById("deleteAdminMsg");
+  msg.className = "modal-msg";
+  msg.innerHTML = `Are you sure you want to delete <strong>${username}</strong>?
+    <br><br>
+    <button class="btn-delete-row" onclick="doDeleteAdmin(${id},'${username}')">Yes, delete</button>
+    &nbsp;
+    <button class="btn-cancel" style="padding:6px 14px;font-size:12px;" onclick="clearDeleteMsg()">Cancel</button>`;
+}
+
+function clearDeleteMsg() {
+  const msg = document.getElementById("deleteAdminMsg");
+  msg.textContent = "";
+  msg.className = "modal-msg";
+}
+
+async function doDeleteAdmin(id, username) {
+  const msg = document.getElementById("deleteAdminMsg");
+  const token = localStorage.getItem("adminToken");
+  const btn = document.querySelector(`#admin-row-${id} .btn-delete-row`);
+  if (btn) btn.disabled = true;
+  clearDeleteMsg();
+
+  try {
+    const res = await fetch("/admins/" + id, {
+      method: "DELETE",
+      headers: { "Authorization": "Bearer " + token }
+    });
+    const data = await res.json();
+    if (res.ok) {
+      const row = document.getElementById("admin-row-" + id);
+      if (row) row.remove();
+      msg.className = "modal-msg success";
+      msg.textContent = "\"" + username + "\" has been deleted.";
+      setTimeout(clearDeleteMsg, 2000);
+    } else {
+      msg.className = "modal-msg error";
+      msg.textContent = data.message || "Failed to delete admin.";
+      if (btn) btn.disabled = false;
+    }
+  } catch(e) {
+    msg.className = "modal-msg error";
+    msg.textContent = "Network error. Please try again.";
+    if (btn) btn.disabled = false;
+  }
+}
+
+function closeDeleteAdmin() {
+  document.getElementById("deleteAdminModal").classList.remove("open");
+}
+
+document.getElementById("deleteAdminModal").addEventListener("click", function(e) {
+  if (e.target === this) closeDeleteAdmin();
 });
 
 </script>

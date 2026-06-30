@@ -216,6 +216,24 @@ app.put("/tickets/:id/status", verifyToken, (req, res) => {
   res.json(ticket);
 });
 
+// LIST ADMINS (requires token, passwords excluded)
+app.get("/admins", verifyToken, (req, res) => {
+  const admins = readAdmins().map(({ password, ...rest }) => rest);
+  res.json(admins);
+});
+
+// DELETE ADMIN (requires token, cannot delete yourself)
+app.delete("/admins/:id", verifyToken, (req, res) => {
+  const targetId = parseInt(req.params.id);
+  if (targetId === req.user.id) return res.status(400).json({ message: "You cannot delete your own account" });
+  const admins = readAdmins();
+  const index = admins.findIndex(a => a.id === targetId);
+  if (index === -1) return res.status(404).json({ message: "Admin not found" });
+  admins.splice(index, 1);
+  writeAdmins(admins);
+  res.json({ message: "Admin deleted" });
+});
+
 // CREATE ADMIN (requires existing admin token)
 app.post("/create-admin", verifyToken, async (req, res) => {
   const { username, password } = req.body;
