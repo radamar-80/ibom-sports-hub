@@ -216,8 +216,8 @@ app.put("/tickets/:id/status", verifyToken, (req, res) => {
   res.json(ticket);
 });
 
-// CREATE ADMIN
-app.post("/create-admin", async (req, res) => {
+// CREATE ADMIN (requires existing admin token)
+app.post("/create-admin", verifyToken, async (req, res) => {
   const { username, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   const admins = readAdmins();
