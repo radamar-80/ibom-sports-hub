@@ -197,6 +197,25 @@ body.loaded {
     CHANGE PASSWORD <span class="arrow">🔑</span>
   </div>
 
+  <div class="section" onclick="openCreateAdmin()">
+    CREATE NEW ADMIN <span class="arrow">👤</span>
+  </div>
+
+</div>
+
+<!-- CREATE ADMIN MODAL -->
+<div class="modal-overlay" id="createAdminModal">
+  <div class="modal">
+    <h2>Create New Admin</h2>
+    <input type="text" id="newAdminUsername" placeholder="Username" autocomplete="off">
+    <input type="password" id="newAdminPassword" placeholder="Password" autocomplete="new-password">
+    <input type="password" id="newAdminConfirm" placeholder="Confirm password" autocomplete="new-password">
+    <div class="modal-msg" id="createAdminMsg"></div>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeCreateAdmin()">Cancel</button>
+      <button class="btn-save" id="createAdminBtn" onclick="submitCreateAdmin()">Create</button>
+    </div>
+  </div>
 </div>
 
 <!-- CHANGE PASSWORD MODAL -->
@@ -316,6 +335,90 @@ async function submitChangePassword() {
 // Close modal if clicking outside
 document.getElementById("pwModal").addEventListener("click", function(e) {
   if (e.target === this) closeChangePassword();
+});
+
+function openCreateAdmin() {
+  document.getElementById("newAdminUsername").value = "";
+  document.getElementById("newAdminPassword").value = "";
+  document.getElementById("newAdminConfirm").value = "";
+  document.getElementById("createAdminMsg").textContent = "";
+  document.getElementById("createAdminMsg").className = "modal-msg";
+  document.getElementById("createAdminBtn").disabled = false;
+  document.getElementById("createAdminBtn").textContent = "Create";
+  document.getElementById("createAdminModal").classList.add("open");
+}
+
+function closeCreateAdmin() {
+  document.getElementById("createAdminModal").classList.remove("open");
+}
+
+async function submitCreateAdmin() {
+  const username = document.getElementById("newAdminUsername").value.trim();
+  const password = document.getElementById("newAdminPassword").value.trim();
+  const confirm  = document.getElementById("newAdminConfirm").value.trim();
+  const msg = document.getElementById("createAdminMsg");
+  const btn = document.getElementById("createAdminBtn");
+
+  msg.className = "modal-msg";
+  msg.textContent = "";
+
+  if (!username || !password || !confirm) {
+    msg.className = "modal-msg error";
+    msg.textContent = "Please fill in all fields.";
+    return;
+  }
+
+  if (password !== confirm) {
+    msg.className = "modal-msg error";
+    msg.textContent = "Passwords do not match.";
+    return;
+  }
+
+  if (password.length < 6) {
+    msg.className = "modal-msg error";
+    msg.textContent = "Password must be at least 6 characters.";
+    return;
+  }
+
+  const token = localStorage.getItem("adminToken");
+  if (!token) {
+    msg.className = "modal-msg error";
+    msg.textContent = "Session expired. Please log in again.";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Creating…";
+
+  try {
+    const res = await fetch("/create-admin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      msg.className = "modal-msg success";
+      msg.textContent = "Admin \"" + username + "\" created successfully!";
+      setTimeout(closeCreateAdmin, 1800);
+    } else {
+      msg.className = "modal-msg error";
+      msg.textContent = data.message || "Something went wrong.";
+    }
+  } catch(e) {
+    msg.className = "modal-msg error";
+    msg.textContent = "Network error. Please try again.";
+  }
+
+  btn.disabled = false;
+  btn.textContent = "Create";
+}
+
+document.getElementById("createAdminModal").addEventListener("click", function(e) {
+  if (e.target === this) closeCreateAdmin();
 });
 
 </script>
