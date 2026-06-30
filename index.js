@@ -1,4 +1,5 @@
 const express = require("express");
+const { diskStorage, MulterError } = require("multer");
 const multer = require("multer");
 const cors = require("cors");
 const fs = require("fs");
@@ -74,7 +75,7 @@ app.use("/uploads", express.static(UPLOAD_DIR));
 app.use(express.static(__dirname, { extensions: ["html"] }));
 
 // storage for images
-const storage = multer.diskStorage({
+const storage = diskStorage({
   destination: (req, file, cb) => {
     cb(null, UPLOAD_DIR + "/");
   },
