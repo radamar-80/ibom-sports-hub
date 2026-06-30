@@ -4,51 +4,107 @@
 <title>Admin Login</title>
 
 <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   background: #f5f5f5;
+  min-height: 100vh;
   display: flex;
-  height: 100vh;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 30px 20px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.brand img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.brand-name {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #111;
+  text-align: center;
 }
 
 .box {
   background: white;
-  padding: 30px;
-  border-radius: 12px;
-  width: 300px;
+  padding: 36px 32px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.box h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 22px;
+  color: #111;
 }
 
 input {
   width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  padding: 14px 16px;
+  margin-top: 12px;
+  border-radius: 10px;
+  border: 1.5px solid #ddd;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  border-color: green;
 }
 
 button {
   width: 100%;
-  margin-top: 20px;
-  padding: 12px;
+  margin-top: 24px;
+  padding: 15px;
   background: green;
   color: white;
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: opacity 0.2s;
 }
+
+button:hover { opacity: 0.88; }
+button:active { opacity: 0.75; }
 </style>
 
 </head>
 
 <body>
 
+<div class="brand">
+  <img src="logo.png" alt="Ibom Sports Hub Logo">
+  <span class="brand-name">IBOM SPORTS HUB</span>
+</div>
+
 <div class="box">
   <h3>Admin Login</h3>
 
-  <input id="username" placeholder="Username">
-  <input id="password" type="password" placeholder="Password">
+  <input id="username" placeholder="Username" autocomplete="username">
+  <input id="password" type="password" placeholder="Password" autocomplete="current-password">
 
   <button onclick="login()">LOGIN</button>
 </div>
@@ -60,9 +116,7 @@ async function login() {
 
   const res = await fetch("/login", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password })
   });
 
