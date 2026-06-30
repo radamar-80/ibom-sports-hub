@@ -458,7 +458,7 @@ const soleplates = selected
   formData.append("sectionId", document.getElementById("sectionId").value);
 
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("adminToken");
 
 const res = await fetch("/add-product", {
   method: "POST",

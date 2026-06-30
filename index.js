@@ -128,6 +128,50 @@ app.get("/products", (req, res) => {
   res.json(readDB());
 });
 
+// DELETE PRODUCT
+app.delete("/products/:id", verifyToken, (req, res) => {
+  const id = parseInt(req.params.id);
+  const products = readDB();
+  const index = products.findIndex(p => p.id === id);
+  if (index === -1) return res.status(404).json({ message: "Product not found" });
+  const [removed] = products.splice(index, 1);
+  // remove old image file if it exists
+  if (removed.image) {
+    const imgPath = path.join(UPLOAD_DIR, removed.image);
+    if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
+  }
+  writeDB(products);
+  res.json({ message: "Product deleted" });
+});
+
+// EDIT PRODUCT (text fields; image optional)
+app.put("/products/:id", verifyToken, upload.single("image"), (req, res) => {
+  const id = parseInt(req.params.id);
+  const products = readDB();
+  const product = products.find(p => p.id === id);
+  if (!product) return res.status(404).json({ message: "Product not found" });
+  const d = req.body;
+  product.brand        = d.brand        ?? product.brand;
+  product.model        = d.model        ?? product.model;
+  product.name         = d.name         ?? product.name;
+  product.price        = d.price        ?? product.price;
+  product.categoryId   = d.categoryId   ?? product.categoryId;
+  product.subcategoryId= d.subcategoryId?? product.subcategoryId;
+  product.sectionId    = d.sectionId    ?? product.sectionId;
+  product.colorways    = d.colorways    ? JSON.parse(d.colorways)   : product.colorways;
+  product.soleplates   = d.soleplates   ? JSON.parse(d.soleplates)  : product.soleplates;
+  if (req.file) {
+    // remove old image
+    if (product.image) {
+      const old = path.join(UPLOAD_DIR, product.image);
+      if (fs.existsSync(old)) fs.unlinkSync(old);
+    }
+    product.image = req.file.filename;
+  }
+  writeDB(products);
+  res.json({ message: "Product updated", product });
+});
+
 // GET CATEGORIES (public)
 app.get("/categories", (req, res) => {
   res.json(readCategories());
