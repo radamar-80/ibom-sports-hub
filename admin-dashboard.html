@@ -53,6 +53,122 @@ body.loaded {
   color: green;
 }
 
+/* LOW STOCK ALERT */
+.alert-box {
+  margin: 0 20px 16px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1.5px solid #f59f00;
+  background: #fffbea;
+  display: none;
+}
+
+.alert-box.has-out {
+  border-color: #e53935;
+  background: #fff5f5;
+}
+
+.alert-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.alert-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #b45309;
+}
+
+.alert-box.has-out .alert-title { color: #c62828; }
+
+.alert-icon {
+  font-size: 18px;
+}
+
+.alert-badge {
+  background: #f59f00;
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  border-radius: 20px;
+  padding: 2px 8px;
+}
+
+.alert-box.has-out .alert-badge { background: #e53935; }
+
+.alert-toggle {
+  font-size: 18px;
+  color: #b45309;
+  transition: transform 0.2s;
+}
+
+.alert-box.has-out .alert-toggle { color: #c62828; }
+.alert-box.collapsed .alert-toggle { transform: rotate(-90deg); }
+
+.alert-body {
+  border-top: 1px solid #f59f00;
+  overflow: hidden;
+  max-height: 400px;
+  transition: max-height 0.3s ease;
+}
+
+.alert-box.has-out .alert-body { border-top-color: #e53935; }
+.alert-box.collapsed .alert-body { max-height: 0; border-top: none; }
+
+.alert-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  font-size: 13px;
+}
+
+.alert-row:last-child { border-bottom: none; }
+
+.alert-row-name {
+  font-weight: 600;
+  color: #222;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 12px;
+}
+
+.alert-row-stock {
+  font-weight: 800;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.stock-low  { background: #fff3cd; color: #856404; }
+.stock-out  { background: #fdecea; color: #c62828; }
+
+.alert-cta {
+  display: block;
+  text-align: center;
+  padding: 11px;
+  background: #f59f00;
+  color: white;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+}
+
+.alert-box.has-out .alert-cta { background: #e53935; }
+
 .logout-btn {
   margin: 10px 20px;
   padding: 10px 15px;
@@ -199,6 +315,21 @@ body.loaded {
 </div>
 
 <button class="logout-btn" onclick="logout()">Logout</button>
+
+<div id="lowStockAlert" class="alert-box">
+  <div class="alert-header" onclick="toggleAlert()">
+    <div class="alert-title">
+      <span class="alert-icon">⚠️</span>
+      <span id="alertTitle">LOW STOCK ALERT</span>
+      <span class="alert-badge" id="alertBadge">0</span>
+    </div>
+    <span class="alert-toggle" id="alertToggle">▾</span>
+  </div>
+  <div class="alert-body">
+    <div id="alertRows"></div>
+    <button class="alert-cta" onclick="openPage('edit-products.html')">Update Stock Levels →</button>
+  </div>
+</div>
 
 <div class="container">
 
