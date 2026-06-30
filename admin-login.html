@@ -57,6 +57,7 @@ body {
 }
 
 input {
+  display: block;
   width: 100%;
   padding: 14px 16px;
   margin-top: 12px;
@@ -72,9 +73,23 @@ input:focus {
   border-color: green;
 }
 
+.error-msg {
+  margin-top: 14px;
+  padding: 11px 14px;
+  background: #fdecea;
+  color: #c0392b;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  display: none;
+}
+
+.error-msg.show { display: block; }
+
 button {
+  display: block;
   width: 100%;
-  margin-top: 24px;
+  margin-top: 20px;
   padding: 15px;
   background: green;
   color: white;
@@ -87,8 +102,9 @@ button {
   transition: opacity 0.2s;
 }
 
-button:hover { opacity: 0.88; }
+button:hover  { opacity: 0.88; }
 button:active { opacity: 0.75; }
+button:disabled { opacity: 0.55; cursor: not-allowed; }
 </style>
 
 </head>
@@ -103,31 +119,67 @@ button:active { opacity: 0.75; }
 <div class="box">
   <h3>Admin Login</h3>
 
-  <input id="username" placeholder="Username" autocomplete="username">
+  <input id="username" type="text" placeholder="Username" autocomplete="username" autocorrect="off" autocapitalize="off" spellcheck="false">
   <input id="password" type="password" placeholder="Password" autocomplete="current-password">
 
-  <button onclick="login()">LOGIN</button>
+  <div class="error-msg" id="errorMsg"></div>
+
+  <button id="loginBtn" onclick="login()">LOGIN</button>
 </div>
 
 <script>
+function showError(msg) {
+  const el = document.getElementById("errorMsg");
+  el.textContent = msg;
+  el.classList.add("show");
+}
+
+function clearError() {
+  document.getElementById("errorMsg").classList.remove("show");
+}
+
+// Allow pressing Enter to submit
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Enter") login();
+});
+
 async function login() {
-  const username = document.getElementById("username").value;
+  const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value;
+  const btn = document.getElementById("loginBtn");
 
-  const res = await fetch("/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-  });
+  clearError();
 
-  const data = await res.json();
+  if (!username || !password) {
+    showError("Please enter your username and password.");
+    return;
+  }
 
-  if (res.ok) {
-    localStorage.setItem("adminToken", data.token);
-    localStorage.setItem("adminLoggedIn", "true");
-    window.location.href = "admin-dashboard.html";
-  } else {
-    alert(data.message);
+  btn.disabled = true;
+  btn.textContent = "Logging in…";
+
+  try {
+    const res = await fetch("/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      localStorage.setItem("adminToken", data.token);
+      localStorage.setItem("adminLoggedIn", "true");
+      window.location.href = "admin-dashboard.html";
+    } else {
+      showError(data.message || "Login failed. Please try again.");
+      btn.disabled = false;
+      btn.textContent = "LOGIN";
+    }
+  } catch(e) {
+    showError("Network error. Please check your connection and try again.");
+    btn.disabled = false;
+    btn.textContent = "LOGIN";
   }
 }
 </script>
