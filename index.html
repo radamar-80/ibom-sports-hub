@@ -2988,6 +2988,7 @@ async function loadProducts() {
     div.innerHTML = `
       <div class="product" style="position:relative">
         <img src="${imgSrc}">
+        ${p.stock === 0 ? '<div style="position:absolute;top:8px;left:8px;background:#e53935;color:white;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:0.5px;">OUT OF STOCK</div>' : ''}
         <button class="product-wishlist-btn${wishlisted?' active':''}" data-name="${p.name}"
           onclick="toggleWishlist('${p.name.replace(/'/g,"\\'")}','${p.price}','${imgSrc.substring(0,30)}...')">
           <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">

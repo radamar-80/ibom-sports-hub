@@ -111,6 +111,7 @@ app.post("/add-product", verifyToken, upload.single("image"), (req, res) => {
     colorways: data.colorways ? JSON.parse(data.colorways) : [],
     soleplates: data.soleplates ? JSON.parse(data.soleplates) : [],
     price: data.price,
+    stock: data.stock !== undefined ? parseInt(data.stock) : null,
     categoryId: data.categoryId || "",
     subcategoryId: data.subcategoryId || "",
     sectionId: data.sectionId || "",
@@ -160,6 +161,7 @@ app.put("/products/:id", verifyToken, upload.single("image"), (req, res) => {
   product.sectionId    = d.sectionId    ?? product.sectionId;
   product.colorways    = d.colorways    ? JSON.parse(d.colorways)   : product.colorways;
   product.soleplates   = d.soleplates   ? JSON.parse(d.soleplates)  : product.soleplates;
+  if (d.stock !== undefined) product.stock = parseInt(d.stock);
   if (req.file) {
     // remove old image
     if (product.image) {

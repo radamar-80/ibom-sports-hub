@@ -104,6 +104,15 @@ body {
   margin-top: 4px;
 }
 
+.pstock {
+  font-size: 11px;
+  font-weight: 600;
+  color: #555;
+  margin-top: 2px;
+}
+
+.pstock.out { color: #e53935; }
+
 .actions {
   display: flex;
   flex-direction: column;
@@ -351,8 +360,16 @@ body {
     <div class="field-label">Name</div>
     <input id="editName" placeholder="Product name">
 
-    <div class="field-label">Price (₦)</div>
-    <input id="editPrice" placeholder="e.g. 45000" type="number" min="0">
+    <div class="row2">
+      <div>
+        <div class="field-label">Price (₦)</div>
+        <input id="editPrice" placeholder="e.g. 45000" type="number" min="0">
+      </div>
+      <div>
+        <div class="field-label">Stock (units)</div>
+        <input id="editStock" placeholder="e.g. 10" type="number" min="0">
+      </div>
+    </div>
 
     <div class="field-label">Category</div>
     <select id="editCategoryId" onchange="onEditCatChange()"></select>
@@ -437,6 +454,9 @@ function renderList() {
         <div class="pname">${p.name || '—'}</div>
         <div class="pmeta">${[p.brand, p.model].filter(Boolean).join(' · ')}</div>
         <div class="pprice">₦${Number(p.price || 0).toLocaleString()}</div>
+        <div class="pstock ${p.stock === 0 ? 'out' : ''}">
+          ${p.stock === null || p.stock === undefined ? 'Stock: —' : p.stock === 0 ? 'Out of Stock' : 'In Stock: ' + p.stock}
+        </div>
       </div>
       <div class="actions">
         <button class="btn-edit" onclick="openEdit(${p.id})">Edit</button>
@@ -504,6 +524,7 @@ function openEdit(id) {
   document.getElementById("editModel").value = p.model || "";
   document.getElementById("editName").value  = p.name  || "";
   document.getElementById("editPrice").value = p.price || "";
+  document.getElementById("editStock").value = p.stock !== null && p.stock !== undefined ? p.stock : "";
   document.getElementById("editColorways").value = (p.colorways || []).join(", ");
 
   // categories
@@ -559,6 +580,7 @@ async function saveProduct() {
   formData.append("model", document.getElementById("editModel").value.trim());
   formData.append("name",  document.getElementById("editName").value.trim());
   formData.append("price", document.getElementById("editPrice").value.trim());
+  formData.append("stock", document.getElementById("editStock").value !== "" ? document.getElementById("editStock").value : "");
   formData.append("categoryId",    document.getElementById("editCategoryId").value);
   formData.append("subcategoryId", document.getElementById("editSubcategoryId").value);
   formData.append("sectionId",     document.getElementById("editSectionId").value);

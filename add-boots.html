@@ -290,6 +290,12 @@ input::placeholder {
     <input id="price" placeholder="Enter price">
   </div>
 
+  <!-- STOCK -->
+  <div style="flex:1">
+    <div class="label">(stock qty)</div>
+    <input id="stock" type="number" min="0" placeholder="e.g. 10">
+  </div>
+
   <!-- SIZES -->
   <div style="flex:1">
     <div class="label">(product sizes)</div>
@@ -435,6 +441,7 @@ if (!image) {
 formData.append("model", model.value.toLowerCase().trim());
 formData.append("name", name.value.trim());
 formData.append("price", price.value);
+formData.append("stock", document.getElementById("stock").value || "0");
 
   const sizes = [...document.querySelectorAll(".size-box.active")]
     .map(s => s.innerText);
