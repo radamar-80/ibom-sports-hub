@@ -683,6 +683,47 @@ document.getElementById("deleteAdminModal").addEventListener("click", function(e
   if (e.target === this) closeDeleteAdmin();
 });
 
+/* ── LOW STOCK ALERT ── */
+async function loadLowStock() {
+  try {
+    const res = await fetch("/products");
+    const products = await res.json();
+
+    const LOW_THRESHOLD = 5;
+    const flagged = products.filter(p =>
+      p.stock !== null && p.stock !== undefined && p.stock < LOW_THRESHOLD
+    ).sort((a, b) => a.stock - b.stock);
+
+    if (flagged.length === 0) return;
+
+    const hasOut = flagged.some(p => p.stock === 0);
+    const box    = document.getElementById("lowStockAlert");
+    box.style.display = "block";
+    if (hasOut) box.classList.add("has-out");
+
+    document.getElementById("alertBadge").textContent = flagged.length;
+    document.getElementById("alertTitle").textContent =
+      hasOut ? "OUT OF STOCK / LOW STOCK" : "LOW STOCK ALERT";
+
+    document.getElementById("alertRows").innerHTML = flagged.map(p => `
+      <div class="alert-row">
+        <span class="alert-row-name">${p.name || p.brand || "Unnamed product"}</span>
+        <span class="alert-row-stock ${p.stock === 0 ? "stock-out" : "stock-low"}">
+          ${p.stock === 0 ? "OUT OF STOCK" : p.stock + " left"}
+        </span>
+      </div>
+    `).join("");
+  } catch(e) {
+    // silently ignore if products can't be fetched
+  }
+}
+
+function toggleAlert() {
+  document.getElementById("lowStockAlert").classList.toggle("collapsed");
+}
+
+loadLowStock();
+
 </script>
 
 </body>
