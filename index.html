@@ -3007,14 +3007,26 @@ async function loadProducts() {
 // Shared tick — both sliders advance at exactly the same moment
 (function () {
   const INTERVAL = 3000;
+
+  // ONE shared pause flag — touching either slider pauses both
+  let userScrolling = false;
+  let resumeTimer;
+
+  function globalPause() {
+    userScrolling = true;
+    clearTimeout(resumeTimer);
+  }
+  function globalResume() {
+    clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(() => { userScrolling = false; }, 2500);
+  }
+
   const sliders = [
     { trackId: 'naTrack', thumbId: 'naBarThumb' },
     { trackId: 'spTrack', thumbId: 'spBarThumb' },
   ].map(({ trackId, thumbId }) => {
     const track = document.getElementById(trackId);
     const thumb = document.getElementById(thumbId);
-    let userScrolling = false;
-    let resumeTimer;
 
     function slideWidth() {
       const s = track.querySelector('.na-slide');
@@ -3034,19 +3046,11 @@ async function loadProducts() {
     track.addEventListener('scroll', updateBar, { passive: true });
     updateBar();
 
-    function pause() {
-      userScrolling = true;
-      clearTimeout(resumeTimer);
-    }
-    function resume() {
-      clearTimeout(resumeTimer);
-      resumeTimer = setTimeout(() => { userScrolling = false; }, 2500);
-    }
-
-    track.addEventListener('touchstart', pause,  { passive: true });
-    track.addEventListener('touchend',   resume, { passive: true });
-    track.addEventListener('mouseenter', () => { userScrolling = true; });
-    track.addEventListener('mouseleave', () => { userScrolling = false; });
+    // Both tracks share the same pause/resume so they always stay in lockstep
+    track.addEventListener('touchstart', globalPause,  { passive: true });
+    track.addEventListener('touchend',   globalResume, { passive: true });
+    track.addEventListener('mouseenter', globalPause);
+    track.addEventListener('mouseleave', globalResume);
 
     return {
       advance() {
