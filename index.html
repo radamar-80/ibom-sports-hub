@@ -1599,11 +1599,14 @@ body.dark #toggleBtn {
 .support-back {
   background: none;
   border: none;
-  font-size: 22px;
   cursor: pointer;
   color: inherit;
   padding: 0;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .support-options {
@@ -2700,7 +2703,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 </div>
  
   <div id="reviewDetail" style="display:none; padding:24px 20px;">
-    <button onclick="history.back()" style="background:none;border:none;font-size:15px;cursor:pointer;padding:0 0 16px 0;color:inherit;">&#8592; Back</button>
+    <button class="support-back" onclick="history.back()" style="margin-bottom:16px;"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg></button>
     <div id="reviewDetailContent"></div>
   </div>
 
@@ -2709,7 +2712,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <!-- ACCOUNT PAGE -->
   <div id="accountPage">
     <div class="page-header">
-      <button class="support-back" onclick="history.back()">←</button>
+      <button class="support-back" onclick="history.back()"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg></button>
       <h2>MY ACCOUNT</h2>
     </div>
     <div id="accountLoggedIn" style="display:none">
@@ -2746,7 +2749,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <!-- WISHLIST PAGE -->
   <div id="wishlistPage">
     <div class="page-header">
-      <button class="support-back" onclick="history.back()">←</button>
+      <button class="support-back" onclick="history.back()"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg></button>
       <h2>MY WISHLIST</h2>
     </div>
     <div id="wishlistContent"></div>
@@ -2755,7 +2758,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <!-- SEARCH PAGE -->
   <div id="searchPage">
     <div class="page-header">
-      <button class="support-back" onclick="history.back()">←</button>
+      <button class="support-back" onclick="history.back()"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg></button>
       <h2>SEARCH</h2>
     </div>
     <div class="search-bar-wrap">
@@ -2772,7 +2775,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <!-- SUPPORT PAGE -->
   <div id="supportPage">
     <div class="support-header">
-      <button class="support-back" onclick="history.back()">←</button>
+      <button class="support-back" onclick="history.back()"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg></button>
       <h2>CUSTOMER SUPPORT</h2>
     </div>
     <div class="support-options">
@@ -2806,7 +2809,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <!-- TICKET PAGE -->
   <div id="ticketPage">
     <div class="ticket-chat-header">
-      <button class="support-back" onclick="history.back()">←</button>
+      <button class="support-back" onclick="history.back()"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg></button>
       <div>
         <h3>Direct Ticket</h3>
         <p id="ticketStatusLabel">New ticket</p>
@@ -3444,7 +3447,7 @@ function showFilterResults(type, value, label) {
   function renderResults(products, title) {
   const resultView = document.getElementById("resultView");
 
-  resultView.innerHTML = `<button onclick="backHome()">← Back</button>
+  resultView.innerHTML = `<button onclick="backHome()" style="background:none;border:none;cursor:pointer;color:inherit;padding:0;display:flex;align-items:center;margin-bottom:12px;"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg></button>
 <h2 style="text-align:center; font-size:22px; font-weight:800; letter-spacing:1px; margin:0 0 20px;">${title.toUpperCase()}<span style="display:block; width:48px; height:3px; background:#28b570; border-radius:2px; margin:8px auto 0;"></span></h2>`;
 
   if (products.length === 0) {
