@@ -114,6 +114,12 @@ body.dark .icon {
 body.dark .hdr-icon:hover { background: rgba(255,255,255,0.08); }
 .hdr-icon svg { width: 22px; height: 22px; }
 
+.hdr-icon.active { color: #28b570; }
+.hdr-icon.active svg {
+  stroke: #28b570;
+  filter: drop-shadow(0 0 5px rgba(40,181,112,0.55));
+}
+
 /* shadow when scrolling */
 header.scrolled {
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
@@ -1964,24 +1970,24 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
       </div>
     </div>
     <div class="header-icons" id="headerIconsDefault">
-      <button class="hdr-icon" onclick="navigate({page:'account'})" title="Account">
+      <button class="hdr-icon" id="hdrBtnAccount" onclick="navigate({page:'account'})" title="Account">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
           <circle cx="12" cy="7" r="4"/>
         </svg>
       </button>
-      <button class="hdr-icon" onclick="navigate({page:'wishlist'})" title="Wishlist" id="hdrWishlistBtn">
+      <button class="hdr-icon" id="hdrBtnWishlist" onclick="navigate({page:'wishlist'})" title="Wishlist">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
       </button>
-      <button class="hdr-icon" onclick="navigate({page:'searchPage'})" title="Search">
+      <button class="hdr-icon" id="hdrBtnSearch" onclick="navigate({page:'searchPage'})" title="Search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
       </button>
-      <button class="hdr-icon" onclick="openMenu()" title="Menu" aria-label="Open menu">
+      <button class="hdr-icon" id="hdrBtnMenu" onclick="openMenu()" title="Menu" aria-label="Open menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <line x1="3" y1="6" x2="21" y2="6"/>
           <line x1="3" y1="12" x2="21" y2="12"/>
@@ -2885,8 +2891,13 @@ function showTarget(state, inClass) {
                      page === 'account' || page === 'wishlist' || page === 'searchPage' ||
                      page === 'categoriesPage');
 
+  const hdrMap = { account:'hdrBtnAccount', wishlist:'hdrBtnWishlist', searchPage:'hdrBtnSearch' };
   const navMap = { home:'navHome', support:'navSupport', ticket:'navSupport', categoriesPage:'navCategories' };
-  setActiveNav(navMap[page] || 'navHome');
+  if (hdrMap[page]) {
+    setActiveHdrIcon(hdrMap[page]);
+  } else {
+    setActiveNav(navMap[page] || 'navHome');
+  }
 
   document.querySelector('.hero-slider').style.display = (page === 'home') ? '' : 'none';
   closeMenu();
@@ -3547,6 +3558,7 @@ function openMenu() {
   document.getElementById('headerIconsDefault').style.display = 'none';
   document.getElementById('headerIconsMenu').style.display = 'flex';
   document.body.style.overflow = 'hidden';
+  setActiveHdrIcon('hdrBtnMenu');
 }
 
 function closeMenu() {
@@ -3557,6 +3569,9 @@ function closeMenu() {
   document.getElementById('headerIconsDefault').style.display = '';
   document.getElementById('headerIconsMenu').style.display = 'none';
   document.body.style.overflow = '';
+  // only clear menu icon glow — don't override whatever page is active
+  const menuBtn = document.getElementById('hdrBtnMenu');
+  if (menuBtn) menuBtn.classList.remove('active');
 }
 
 function drawerNav(page) {
@@ -3694,11 +3709,17 @@ function catSearch(query) {
   if (cat) renderCatPanel(cat, q || undefined);
 }
 
+const HDR_BTNS = ['hdrBtnAccount','hdrBtnWishlist','hdrBtnSearch','hdrBtnMenu'];
+const NAV_ITEMS = ['navHome','navCategories','navSupport','navCart'];
+
 function setActiveNav(id) {
-  ['navHome','navCategories','navSupport','navCart'].forEach(n => {
-    const el = document.getElementById(n);
-    if (el) el.classList.toggle('active', n === id);
-  });
+  HDR_BTNS.forEach(n => { const el = document.getElementById(n); if (el) el.classList.remove('active'); });
+  NAV_ITEMS.forEach(n => { const el = document.getElementById(n); if (el) el.classList.toggle('active', n === id); });
+}
+
+function setActiveHdrIcon(id) {
+  NAV_ITEMS.forEach(n => { const el = document.getElementById(n); if (el) el.classList.remove('active'); });
+  HDR_BTNS.forEach(n => { const el = document.getElementById(n); if (el) el.classList.toggle('active', n === id); });
 }
 
 function openSupport() {
