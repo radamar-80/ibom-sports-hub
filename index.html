@@ -1002,6 +1002,34 @@ body.dark #floatingReviewBtn {
   scroll-snap-align: start;
   border-radius: 16px;
   overflow: hidden;
+  position: relative;
+}
+
+.na-go-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(45, 45, 45, 0.82);
+  border: 2.5px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease;
+  z-index: 10;
+}
+
+.na-go-btn:hover  { background: rgba(30,30,30,0.92); transform: scale(1.08); }
+.na-go-btn:active { transform: scale(0.94); }
+
+.na-go-btn svg {
+  width: 22px;
+  height: 22px;
 }
 
 .na-slide img {
@@ -2185,18 +2213,43 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
     <div class="na-track" id="naTrack">
       <div class="na-slide">
         <img src="arrival1.jpg" alt="New Arrival 1">
+        <div class="na-go-btn" onclick="showSection('newarrivals')">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </div>
       <div class="na-slide">
         <img src="arrival2.jpg" alt="New Arrival 2">
+        <div class="na-go-btn" onclick="showSection('newarrivals')">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </div>
       <div class="na-slide">
         <img src="arrival3.jpg" alt="New Arrival 3">
+        <div class="na-go-btn" onclick="showSection('newarrivals')">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </div>
       <div class="na-slide">
         <img src="arrival4.jpg" alt="New Arrival 4">
+        <div class="na-go-btn" onclick="showSection('newarrivals')">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </div>
       <div class="na-slide">
         <img src="arrival5.jpg" alt="New Arrival 5">
+        <div class="na-go-btn" onclick="showSection('newarrivals')">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </div>
      <!-- MORE BUTTON — inline after last slide -->
       <div class="na-more-inline" onclick="showSection('newarrivals')">
@@ -2221,13 +2274,48 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </h2>
   <div class="na-track-wrapper">
     <div class="na-track" id="spTrack">
-      <div class="na-slide"><img src="pack1.jpg" alt="Special Pack 1"></div>
-      <div class="na-slide"><img src="pack2.jpg" alt="Special Pack 2"></div>
-      <div class="na-slide"><img src="pack3.jpg" alt="Special Pack 3"></div>
-      <div class="na-slide"><img src="pack4.jpg" alt="Special Pack 4"></div>
-      <div class="na-slide"><img src="pack5.jpg" alt="Special Pack 5"></div>
+      <div class="na-slide">
+        <img src="pack1.jpg" alt="Special Pack 1">
+        <div class="na-go-btn" onclick="showSection('specialpacks')">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="na-slide">
+        <img src="pack2.jpg" alt="Special Pack 2">
+        <div class="na-go-btn" onclick="showSection('specialpacks')">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="na-slide">
+        <img src="pack3.jpg" alt="Special Pack 3">
+        <div class="na-go-btn" onclick="showSection('specialpacks')">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="na-slide">
+        <img src="pack4.jpg" alt="Special Pack 4">
+        <div class="na-go-btn" onclick="showSection('specialpacks')">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="na-slide">
+        <img src="pack5.jpg" alt="Special Pack 5">
+        <div class="na-go-btn" onclick="showSection('specialpacks')">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
         <!-- MORE BUTTON — inline after last slide -->
-  <div class="na-more-inline" onclick="showSection('newarrivals')">
+  <div class="na-more-inline" onclick="showSection('specialpacks')">
     <svg viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5"/>
       <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
