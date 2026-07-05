@@ -1757,6 +1757,36 @@ body.dark .ai-retry-btn:hover { background: rgba(124,58,237,0.15); }
 }
 .place-call-btn:active { transform: scale(0.97); }
 
+.call-fallback-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 90px;
+  transform: translateX(-50%);
+  background: #222;
+  color: #fff;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 13px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  z-index: 999;
+  width: min(320px, 88vw);
+}
+.call-fallback-number { font-size: 16px; font-weight: 800; margin: 6px 0; letter-spacing: 0.5px; }
+.call-fallback-actions { display: flex; gap: 8px; margin-top: 8px; }
+.call-fallback-actions button {
+  flex: 1;
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.call-fallback-actions button:last-child { background: rgba(255,255,255,0.15); }
+
 /* Ticket page */
 .ticket-chat-header {
   display: flex;
@@ -4194,7 +4224,44 @@ async function placeCall() {
     } catch (e) {}
   }
   if (!number) { alert('Could not load the phone number. Please try again.'); return; }
+
+  let dialHandled = false;
+  const markHandled = () => { dialHandled = true; };
+  document.addEventListener('visibilitychange', markHandled, { once: true });
+  window.addEventListener('blur', markHandled, { once: true });
+
   window.location.href = 'tel:' + number;
+
+  setTimeout(() => {
+    document.removeEventListener('visibilitychange', markHandled);
+    window.removeEventListener('blur', markHandled);
+    if (!dialHandled) showCallFallbackToast(number);
+  }, 900);
+}
+
+function showCallFallbackToast(number) {
+  const existing = document.getElementById('callFallbackToast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'callFallbackToast';
+  toast.className = 'call-fallback-toast';
+  toast.innerHTML = `
+    <div>Couldn't open your dialer automatically.</div>
+    <div class="call-fallback-number">${number}</div>
+    <div class="call-fallback-actions">
+      <button onclick="copyCallNumber('${number}')">Copy Number</button>
+      <button onclick="document.getElementById('callFallbackToast').remove()">Dismiss</button>
+    </div>`;
+  document.body.appendChild(toast);
+  setTimeout(() => { const t = document.getElementById('callFallbackToast'); if (t) t.remove(); }, 8000);
+}
+
+function copyCallNumber(number) {
+  navigator.clipboard.writeText(number).then(() => {
+    const toast = document.getElementById('callFallbackToast');
+    if (toast) toast.querySelector('div').textContent = 'Number copied to clipboard!';
+  }).catch(() => {});
 }
 
 // ── AI ASSISTANT CHAT ──
