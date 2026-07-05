@@ -426,6 +426,26 @@ ${relevantText}`;
     res.json({ session, reply: aiMsg });
   } catch (e) {
     console.error("AI chat error:", e.message);
+
+    // Graceful in-chat fallback instead of a raw error: surface a friendly
+    // assistant bubble pointing the customer to Direct Ticket support.
+    try {
+      const chats = readAiChats();
+      const session = chats.find(s => s.id === req.params.id);
+      if (session) {
+        const isQuota = e.status === 429 || /quota|rate limit/i.test(e.message || "");
+        const fallbackText = isQuota
+          ? "AI Assistant is busy right now. Please try again shortly, or open a Direct Ticket for help."
+          : "AI Assistant is temporarily unavailable. Please try again or open a Direct Ticket.";
+        const fallbackMsg = { from: "assistant", text: fallbackText, timestamp: new Date().toISOString(), fallback: true };
+        session.messages.push(fallbackMsg);
+        writeAiChats(chats);
+        return res.json({ session, reply: fallbackMsg });
+      }
+    } catch (innerErr) {
+      console.error("AI chat fallback error:", innerErr.message);
+    }
+
     res.status(500).json({ message: "AI Assistant is temporarily unavailable. Please try again or open a Direct Ticket." });
   }
 });

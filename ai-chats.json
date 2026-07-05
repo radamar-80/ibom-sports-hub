@@ -8,5 +8,17 @@
     "id": "1783280074852",
     "createdAt": "2026-07-05T19:34:34.852Z",
     "messages": []
+  },
+  {
+    "id": "1783280267958",
+    "createdAt": "2026-07-05T19:37:47.958Z",
+    "messages": [
+      {
+        "from": "assistant",
+        "text": "AI Assistant is busy right now. Please try again shortly, or open a Direct Ticket for help.",
+        "timestamp": "2026-07-05T19:37:50.294Z",
+        "fallback": true
+      }
+    ]
   }
 ]
