@@ -1698,6 +1698,18 @@ body.dark .ai-attach-btn { border-color: #333; }
 .ai-attach-preview img { width: 28px; height: 28px; object-fit: cover; border-radius: 6px; }
 .ai-attach-preview button { background: none; border: none; color: #c0392b; cursor: pointer; font-size: 12px; }
 .ai-char-count { text-align: right; font-size: 11px; color: #aaa; padding: 2px 20px 0; }
+.ai-retry-btn {
+  margin-top: 4px;
+  background: none;
+  border: 1px solid #7c3aed;
+  color: #7c3aed;
+  border-radius: 12px;
+  font-size: 12px;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+.ai-retry-btn:hover { background: #f3e8ff; }
+body.dark .ai-retry-btn:hover { background: rgba(124,58,237,0.15); }
 
 /* Ticket page */
 .ticket-chat-header {
@@ -4118,14 +4130,25 @@ async function initAIChatPage() {
 
 function renderAIMessages(messages) {
   const area = document.getElementById('aiChatMessages');
-  area.innerHTML = (messages || []).map(m => `
+  area.innerHTML = (messages || []).map((m, i) => `
     <div class="amsg-wrap from-${m.from === 'assistant' ? 'assistant' : 'user'}">
       <div class="amsg ${m.from === 'assistant' ? 'assistant-msg' : 'user-msg'}">
         ${escapeHtml(m.text || '')}
         ${m.attachment ? `<img class="amsg-attachment" src="/uploads/${m.attachment}">` : ''}
       </div>
+      ${m.fallback ? `<button class="ai-retry-btn" onclick="retryLastAIMessage()">↻ Retry</button>` : ''}
     </div>`).join('');
   area.scrollTop = area.scrollHeight;
+}
+
+let lastAIUserText = '';
+
+function retryLastAIMessage() {
+  if (!lastAIUserText) return;
+  const input = document.getElementById('aiChatInput');
+  input.value = lastAIUserText;
+  updateAICharCount();
+  sendAIMessage();
 }
 
 function escapeHtml(str) {
@@ -4186,6 +4209,8 @@ async function sendAIMessage() {
   const text = input.value.trim();
   const sessionId = localStorage.getItem('ibomAiSessionId');
   if ((!text && !aiPendingAttachment) || !sessionId) return;
+
+  if (text) lastAIUserText = text;
 
   const sendBtn = document.getElementById('aiSendBtn');
   sendBtn.disabled = true;
