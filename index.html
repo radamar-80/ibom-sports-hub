@@ -1735,19 +1735,6 @@ body.dark .ai-retry-btn:hover { background: rgba(124,58,237,0.15); }
 }
 .phone-page-body h2 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
 .phone-page-body p { font-size: 13.5px; color: #888; margin: 0 0 4px; max-width: 300px; }
-.phone-page-hours {
-  margin-top: 18px;
-  background: #f7f7f9;
-  border-radius: 14px;
-  padding: 14px 18px;
-  width: 100%;
-  max-width: 320px;
-  text-align: left;
-  font-size: 13px;
-}
-body.dark .phone-page-hours { background: #1c1c1c; }
-.phone-page-hours div { display: flex; justify-content: space-between; padding: 5px 0; }
-.phone-page-hours .active-slot { color: #f57c00; font-weight: 700; }
 .place-call-btn {
   margin-top: 30px;
   width: 100%;
@@ -3017,11 +3004,6 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
       <h2>Need to talk to someone?</h2>
       <p>Tap the button below and we'll load the right number straight into your phone's dialer.</p>
 
-      <div class="phone-page-hours">
-        <div id="phoneHoursDay"><span>8:00am – 8:00pm</span><span>Company Line</span></div>
-        <div id="phoneHoursNight"><span>8:01pm – 7:59am</span><span>On-call Line</span></div>
-      </div>
-
       <button class="place-call-btn" onclick="placeCall()" id="placeCallBtn">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24 11.36 11.36 0 003.57.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.36 11.36 0 00.57 3.57 1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>
         PLACE A CALL
@@ -4197,17 +4179,12 @@ function openPhonePage() {
 
 async function initPhonePage() {
   const numberEl = document.getElementById('placeCallNumber');
-  const dayEl = document.getElementById('phoneHoursDay');
-  const nightEl = document.getElementById('phoneHoursNight');
-  dayEl.classList.remove('active-slot');
-  nightEl.classList.remove('active-slot');
   numberEl.textContent = 'Loading number…';
   try {
     const res = await fetch('/call-number');
     const data = await res.json();
     window.ibomActiveCallNumber = data.number;
     numberEl.textContent = 'You will be connected to ' + data.number;
-    (data.period === 'day' ? dayEl : nightEl).classList.add('active-slot');
   } catch (e) {
     numberEl.textContent = 'Could not load number. Please try again.';
   }
