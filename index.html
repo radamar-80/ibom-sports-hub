@@ -1651,6 +1651,7 @@ body.dark .support-option {
 .so-ai     .support-option-icon { background: #f3e8ff; }
 .so-ticket .support-option-icon { background: #e8f5e9; }
 .so-email  .support-option-icon { background: #e3f2fd; }
+.so-phone  .support-option-icon { background: #fff3e0; }
 .so-wa     .support-option-icon { background: #e8f5e9; }
 .support-option-text h3 { font-size: 15px; font-weight: 700; margin: 0 0 3px; }
 .support-option-text p { font-size: 12px; color: #888; margin: 0; }
@@ -1710,6 +1711,65 @@ body.dark .ai-attach-btn { border-color: #333; }
 }
 .ai-retry-btn:hover { background: #f3e8ff; }
 body.dark .ai-retry-btn:hover { background: rgba(124,58,237,0.15); }
+
+/* Phone Call page */
+#phonePage { display: none; }
+.phone-page-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 50px 24px 30px;
+}
+.phone-page-icon {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#ff9800,#f57c00);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44px;
+  margin-bottom: 22px;
+  box-shadow: 0 10px 30px rgba(245,124,0,0.35);
+}
+.phone-page-body h2 { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+.phone-page-body p { font-size: 13.5px; color: #888; margin: 0 0 4px; max-width: 300px; }
+.phone-page-hours {
+  margin-top: 18px;
+  background: #f7f7f9;
+  border-radius: 14px;
+  padding: 14px 18px;
+  width: 100%;
+  max-width: 320px;
+  text-align: left;
+  font-size: 13px;
+}
+body.dark .phone-page-hours { background: #1c1c1c; }
+.phone-page-hours div { display: flex; justify-content: space-between; padding: 5px 0; }
+.phone-page-hours .active-slot { color: #f57c00; font-weight: 700; }
+.place-call-btn {
+  margin-top: 30px;
+  width: 100%;
+  max-width: 320px;
+  background: linear-gradient(135deg,#ff9800,#f57c00);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 18px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(245,124,0,0.35);
+  transition: transform 0.15s ease;
+}
+.place-call-btn:active { transform: scale(0.97); }
+.place-call-number { margin-top: 12px; font-size: 13px; color: #aaa; }
 
 /* Ticket page */
 .ticket-chat-header {
@@ -2863,6 +2923,14 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
         </div>
         <span class="support-option-arrow">›</span>
       </a>
+      <div class="support-option so-phone" onclick="openPhonePage()">
+        <div class="support-option-icon">📞</div>
+        <div class="support-option-text">
+          <h3>Phone Call</h3>
+          <p>Call us directly, day or night</p>
+        </div>
+        <span class="support-option-arrow">›</span>
+      </div>
       <a class="support-option so-wa" href="https://wa.me/2341234567890" target="_blank">
         <div class="support-option-icon">💬</div>
         <div class="support-option-text">
@@ -2934,6 +3002,34 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
     </div>
   </div>
 
+  <!-- PHONE CALL PAGE -->
+  <div id="phonePage">
+    <div class="ticket-chat-header">
+      <button class="support-back" onclick="history.back()"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg></button>
+      <div>
+        <h3>Phone Call</h3>
+        <p>Speak with us directly</p>
+      </div>
+    </div>
+
+    <div class="phone-page-body">
+      <div class="phone-page-icon">📞</div>
+      <h2>Need to talk to someone?</h2>
+      <p>Tap the button below and we'll load the right number straight into your phone's dialer.</p>
+
+      <div class="phone-page-hours">
+        <div id="phoneHoursDay"><span>8:00am – 8:00pm</span><span>Company Line</span></div>
+        <div id="phoneHoursNight"><span>8:01pm – 7:59am</span><span>On-call Line</span></div>
+      </div>
+
+      <button class="place-call-btn" onclick="placeCall()" id="placeCallBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24 11.36 11.36 0 003.57.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.36 11.36 0 00.57 3.57 1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>
+        PLACE A CALL
+      </button>
+      <div class="place-call-number" id="placeCallNumber">Loading number…</div>
+    </div>
+  </div>
+
   <!-- CATEGORIES PAGE -->
   <div id="categoriesPage">
     <div class="cat-search-wrap">
@@ -2959,7 +3055,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   let allReviews = [];
 
 function getCurrentEl() {
-  const pages = ['payment','reviewPage','reviewDetail','supportPage','ticketPage','aiChatPage',
+  const pages = ['payment','reviewPage','reviewDetail','supportPage','ticketPage','aiChatPage','phonePage',
                  'accountPage','wishlistPage','searchPage','categoriesPage'];
   for (const id of pages) {
     const el = document.getElementById(id);
@@ -2974,7 +3070,7 @@ function getCurrentEl() {
 
 function hideAll() {
   ['home','payment','reviewPage','reviewDetail','resultView',
-   'supportPage','ticketPage','aiChatPage','accountPage','wishlistPage','searchPage','categoriesPage']
+   'supportPage','ticketPage','aiChatPage','phonePage','accountPage','wishlistPage','searchPage','categoriesPage']
     .forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
 }
@@ -2982,12 +3078,12 @@ function hideAll() {
 function showTarget(state, inClass) {
   const page = state ? state.page : 'home';
   const isReview = (page === 'review' || page === 'reviewDetail');
-  const isSupport = (page === 'support' || page === 'ticket' || page === 'aichat' ||
+  const isSupport = (page === 'support' || page === 'ticket' || page === 'aichat' || page === 'phone' ||
                      page === 'account' || page === 'wishlist' || page === 'searchPage' ||
                      page === 'categoriesPage');
 
   const hdrMap = { account:'hdrBtnAccount', wishlist:'hdrBtnWishlist', searchPage:'hdrBtnSearch' };
-  const navMap = { home:'navHome', support:'navSupport', ticket:'navSupport', aichat:'navSupport', categoriesPage:'navCategories' };
+  const navMap = { home:'navHome', support:'navSupport', ticket:'navSupport', aichat:'navSupport', phone:'navSupport', categoriesPage:'navCategories' };
   if (hdrMap[page]) {
     setActiveHdrIcon(hdrMap[page]);
   } else {
@@ -3033,6 +3129,10 @@ function showTarget(state, inClass) {
     el = document.getElementById('aiChatPage');
     el.style.display = 'block';
     initAIChatPage();
+  } else if (page === 'phone') {
+    el = document.getElementById('phonePage');
+    el.style.display = 'block';
+    initPhonePage();
   } else if (page === 'account') {
     el = document.getElementById('accountPage');
     el.style.display = 'block';
@@ -4089,6 +4189,35 @@ document.addEventListener('keydown', e => {
     sendCustomerMessage();
   }
 });
+
+// ── PHONE CALL ──
+function openPhonePage() {
+  navigate({ page: 'phone' });
+}
+
+async function initPhonePage() {
+  const numberEl = document.getElementById('placeCallNumber');
+  const dayEl = document.getElementById('phoneHoursDay');
+  const nightEl = document.getElementById('phoneHoursNight');
+  dayEl.classList.remove('active-slot');
+  nightEl.classList.remove('active-slot');
+  numberEl.textContent = 'Loading number…';
+  try {
+    const res = await fetch('/call-number');
+    const data = await res.json();
+    window.ibomActiveCallNumber = data.number;
+    numberEl.textContent = 'You will be connected to ' + data.number;
+    (data.period === 'day' ? dayEl : nightEl).classList.add('active-slot');
+  } catch (e) {
+    numberEl.textContent = 'Could not load number. Please try again.';
+  }
+}
+
+function placeCall() {
+  const number = window.ibomActiveCallNumber;
+  if (!number) { initPhonePage(); return; }
+  window.location.href = 'tel:' + number;
+}
 
 // ── AI ASSISTANT CHAT ──
 function openAIChatPage() {

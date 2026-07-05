@@ -21,6 +21,21 @@ const openai = process.env.OPENAI_API_KEY
   ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
   : null;
 
+// Two-number call routing: company line during business hours, a worker's
+// personal line overnight. Numbers are placeholders until real ones are
+// supplied — update via COMPANY_PHONE_DAY / COMPANY_PHONE_NIGHT env vars.
+const COMPANY_PHONE_DAY = process.env.COMPANY_PHONE_DAY || "+2348001234567";
+const COMPANY_PHONE_NIGHT = process.env.COMPANY_PHONE_NIGHT || "+2348007654321";
+
+function getActiveCallNumber() {
+  const lagosHour = parseInt(
+    new Intl.DateTimeFormat("en-US", { hour: "2-digit", hour12: false, timeZone: "Africa/Lagos" }).format(new Date()),
+    10
+  );
+  const isDay = lagosHour >= 8 && lagosHour < 20; // 8:00am - 7:59pm
+  return { number: isDay ? COMPANY_PHONE_DAY : COMPANY_PHONE_NIGHT, period: isDay ? "day" : "night" };
+}
+
 function readCategories() {
   if (!fs.existsSync(CATEGORIES_FILE)) return [];
   try { return JSON.parse(fs.readFileSync(CATEGORIES_FILE)); } catch(e) { return []; }
@@ -187,6 +202,11 @@ app.post("/add-product", verifyToken, upload.single("image"), (req, res) => {
 // GET PRODUCTS
 app.get("/products", (req, res) => {
   res.json(readDB());
+});
+
+// GET ACTIVE CALL NUMBER (company line 8am-8pm, worker's line overnight)
+app.get("/call-number", (req, res) => {
+  res.json(getActiveCallNumber());
 });
 
 // DELETE PRODUCT
