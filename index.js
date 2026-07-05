@@ -6,6 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const OpenAI = require("openai");
 
 const SECRET = process.env.JWT_SECRET || "your_secret_key";
 const ADMIN_DB = "admins.json";
@@ -13,7 +14,12 @@ const DB_FILE = "products.json";
 const REVIEWS_FILE = "reviews.json";
 const TICKETS_FILE = "tickets.json";
 const CATEGORIES_FILE = "categories.json";
+const AI_CHATS_FILE = "ai-chats.json";
 const UPLOAD_DIR = "uploads";
+
+const openai = process.env.OPENAI_API_KEY
+  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  : null;
 
 function readCategories() {
   if (!fs.existsSync(CATEGORIES_FILE)) return [];
@@ -37,6 +43,60 @@ function readTickets() {
 }
 function writeTickets(data) {
   fs.writeFileSync(TICKETS_FILE, JSON.stringify(data, null, 2));
+}
+
+function readAiChats() {
+  if (!fs.existsSync(AI_CHATS_FILE)) return [];
+  try { return JSON.parse(fs.readFileSync(AI_CHATS_FILE)); } catch (e) { return []; }
+}
+function writeAiChats(data) {
+  fs.writeFileSync(AI_CHATS_FILE, JSON.stringify(data, null, 2));
+}
+
+const STOPWORDS = new Set(["the","a","an","is","are","was","were","how","what","when","where","why",
+  "do","does","did","i","you","my","your","to","of","for","in","on","and","or","with","can","it","this",
+  "that","have","has","please","hi","hello","help","need","about","me","us"]);
+
+function tokenize(text) {
+  return (text || "").toLowerCase().match(/[a-z0-9]+/g) || [];
+}
+
+function keywordSet(text) {
+  return new Set(tokenize(text).filter(w => w.length > 2 && !STOPWORDS.has(w)));
+}
+
+// Builds a Q&A "answer pool" by analysing closed/answered tickets: the customer's
+// original issue paired with the first admin reply. Used to surface relevant past
+// support answers to the AI Assistant chatbot for similar future questions.
+function buildTicketAnswerPool() {
+  const tickets = readTickets();
+  const pool = [];
+  for (const t of tickets) {
+    const firstAdminMsg = (t.messages || []).find(m => m.from === "admin");
+    if (t.issue && firstAdminMsg && firstAdminMsg.text) {
+      pool.push({ question: t.issue, answer: firstAdminMsg.text });
+    }
+  }
+  return pool;
+}
+
+// Finds the most relevant prior support answers for a given user message using
+// simple keyword overlap (no external NLP dependency needed for this dataset size).
+function findRelevantAnswers(message, limit) {
+  const pool = buildTicketAnswerPool();
+  if (pool.length === 0) return [];
+  const queryWords = keywordSet(message);
+  if (queryWords.size === 0) return [];
+
+  const scored = pool.map(entry => {
+    const entryWords = keywordSet(entry.question);
+    let overlap = 0;
+    for (const w of queryWords) if (entryWords.has(w)) overlap++;
+    return { ...entry, score: overlap };
+  }).filter(e => e.score > 0);
+
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, limit || 3);
 }
 
 if (!fs.existsSync(UPLOAD_DIR)) {
@@ -260,6 +320,114 @@ app.put("/tickets/:id/status", verifyToken, (req, res) => {
   ticket.status = status;
   writeTickets(tickets);
   res.json(ticket);
+});
+
+// ── AI ASSISTANT CHATBOT ──
+
+// Create a new AI chat session
+app.post("/ai-chat/sessions", (req, res) => {
+  const chats = readAiChats();
+  const session = {
+    id: Date.now().toString(),
+    createdAt: new Date().toISOString(),
+    messages: []
+  };
+  chats.push(session);
+  writeAiChats(chats);
+  res.json(session);
+});
+
+// Get an existing AI chat session
+app.get("/ai-chat/sessions/:id", (req, res) => {
+  const session = readAiChats().find(s => s.id === req.params.id);
+  if (!session) return res.status(404).json({ message: "Session not found" });
+  res.json(session);
+});
+
+// Send a message to the AI Assistant (text + optional image attachment)
+app.post("/ai-chat/sessions/:id/messages", upload.single("attachment"), async (req, res) => {
+  try {
+    if (!openai) {
+      return res.status(503).json({ message: "AI Assistant is not configured. Please contact support." });
+    }
+
+    const chats = readAiChats();
+    const session = chats.find(s => s.id === req.params.id);
+    if (!session) return res.status(404).json({ message: "Session not found" });
+
+    const text = (req.body.text || "").trim().slice(0, 500);
+    const attachment = req.file ? req.file.filename : null;
+    if (!text && !attachment) {
+      return res.status(400).json({ message: "Message or attachment required" });
+    }
+
+    const userMsg = {
+      from: "user",
+      text,
+      attachment,
+      timestamp: new Date().toISOString()
+    };
+    session.messages.push(userMsg);
+
+    // Build product catalog summary so the AI can recommend items on the site
+    const products = readDB();
+    const catalogSummary = products.slice(0, 60).map(p =>
+      `${p.brand || ""} ${p.name || p.model || ""} - ₦${p.price || "N/A"}${p.stock === 0 ? " (out of stock)" : ""}`
+    ).join("; ");
+
+    // Pull relevant past support answers (analysed from direct tickets)
+    const relevant = findRelevantAnswers(text, 3);
+    const relevantText = relevant.length
+      ? relevant.map(r => `Q: ${r.question}\nA: ${r.answer}`).join("\n\n")
+      : "None found.";
+
+    const systemPrompt = `You are "AI Assistant", the friendly support & shopping helper for Ibom Sports Hub, an online store selling football boots, jerseys, and gear.
+Your job: answer customer questions and recommend products available on this site.
+Keep every reply to about 200 characters or fewer — be brief, direct, and fast to read.
+If unsure or the request needs a human, suggest opening a Direct Ticket.
+Available products (sample): ${catalogSummary || "catalog currently empty"}.
+Relevant answers our support team has given to similar past questions:
+${relevantText}`;
+
+    const historyMessages = session.messages.slice(-10).filter(m => m.text).map(m => ({
+      role: m.from === "assistant" ? "assistant" : "user",
+      content: m.text
+    }));
+
+    const userContent = [];
+    if (text) userContent.push({ type: "text", text });
+    if (attachment) {
+      const imgPath = path.join(UPLOAD_DIR, attachment);
+      const imgBuffer = fs.readFileSync(imgPath);
+      const ext = path.extname(attachment).slice(1) || "jpeg";
+      const base64 = imgBuffer.toString("base64");
+      userContent.push({ type: "image_url", image_url: { url: `data:image/${ext};base64,${base64}` } });
+    }
+
+    const messagesForModel = [
+      { role: "system", content: systemPrompt },
+      ...historyMessages.slice(0, -1),
+      { role: "user", content: userContent.length ? userContent : text }
+    ];
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: messagesForModel,
+      max_tokens: 150
+    });
+
+    let reply = completion.choices[0]?.message?.content?.trim() || "Sorry, I couldn't come up with a response. Please try again or open a Direct Ticket.";
+    if (reply.length > 220) reply = reply.slice(0, 217) + "...";
+
+    const aiMsg = { from: "assistant", text: reply, timestamp: new Date().toISOString() };
+    session.messages.push(aiMsg);
+    writeAiChats(chats);
+
+    res.json({ session, reply: aiMsg });
+  } catch (e) {
+    console.error("AI chat error:", e.message);
+    res.status(500).json({ message: "AI Assistant is temporarily unavailable. Please try again or open a Direct Ticket." });
+  }
 });
 
 // LIST ADMINS (requires token, passwords excluded)

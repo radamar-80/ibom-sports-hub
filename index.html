@@ -1648,12 +1648,56 @@ body.dark .support-option {
   font-size: 24px;
   flex-shrink: 0;
 }
+.so-ai     .support-option-icon { background: #f3e8ff; }
 .so-ticket .support-option-icon { background: #e8f5e9; }
 .so-email  .support-option-icon { background: #e3f2fd; }
 .so-wa     .support-option-icon { background: #e8f5e9; }
 .support-option-text h3 { font-size: 15px; font-weight: 700; margin: 0 0 3px; }
 .support-option-text p { font-size: 12px; color: #888; margin: 0; }
 .support-option-arrow { margin-left: auto; color: #ccc; font-size: 18px; }
+
+/* AI Assistant chat page */
+#aiChatPage { display: none; }
+#aiChatPage .chat-messages { padding-bottom: 90px; }
+.amsg-wrap { display: flex; flex-direction: column; }
+.amsg-wrap.from-assistant { align-items: flex-start; }
+.amsg-wrap.from-user { align-items: flex-end; }
+.amsg { max-width: 78%; padding: 10px 14px; border-radius: 18px; font-size: 14px; line-height: 1.45; }
+.amsg.assistant-msg { background: #f0f0f0; color: #222; border-bottom-left-radius: 4px; }
+body.dark .amsg.assistant-msg { background: #2a2a2a; color: #eee; }
+.amsg.user-msg { background: #7c3aed; color: white; border-bottom-right-radius: 4px; }
+.amsg-attachment { max-width: 160px; border-radius: 12px; margin-top: 6px; display: block; }
+.amsg-typing { display: inline-flex; gap: 4px; padding: 12px 14px; }
+.amsg-typing span { width: 6px; height: 6px; border-radius: 50%; background: #999; animation: aiTypingBounce 1.2s infinite ease-in-out; }
+.amsg-typing span:nth-child(2) { animation-delay: 0.15s; }
+.amsg-typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes aiTypingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-4px); opacity: 1; } }
+.ai-chat-input-bar { align-items: flex-end; }
+.ai-attach-btn {
+  background: none;
+  border: 1.5px solid #ddd;
+  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: inherit;
+}
+body.dark .ai-attach-btn { border-color: #333; }
+.ai-attach-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: #7c3aed;
+}
+.ai-attach-preview img { width: 28px; height: 28px; object-fit: cover; border-radius: 6px; }
+.ai-attach-preview button { background: none; border: none; color: #c0392b; cursor: pointer; font-size: 12px; }
+.ai-char-count { text-align: right; font-size: 11px; color: #aaa; padding: 2px 20px 0; }
 
 /* Ticket page */
 .ticket-chat-header {
@@ -2783,6 +2827,14 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
       <h2>CUSTOMER SUPPORT</h2>
     </div>
     <div class="support-options">
+      <div class="support-option so-ai" onclick="openAIChatPage()">
+        <div class="support-option-icon">🤖</div>
+        <div class="support-option-text">
+          <h3>AI Assistant</h3>
+          <p>Get instant answers &amp; recommendations</p>
+        </div>
+        <span class="support-option-arrow">›</span>
+      </div>
       <div class="support-option so-ticket" onclick="openTicketPage()">
         <div class="support-option-icon">🎫</div>
         <div class="support-option-text">
@@ -2846,6 +2898,30 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
     </div>
   </div>
 
+  <!-- AI ASSISTANT CHAT PAGE -->
+  <div id="aiChatPage">
+    <div class="ticket-chat-header">
+      <button class="support-back" onclick="history.back()"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg></button>
+      <div>
+        <h3>AI Assistant</h3>
+        <p id="aiChatStatusLabel">Ask me anything about our products</p>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="aiChatMessages"></div>
+
+    <div id="aiAttachPreview"></div>
+    <div class="ai-char-count" id="aiCharCount"></div>
+    <div class="chat-input-bar ai-chat-input-bar" id="aiChatInputBar">
+      <button class="ai-attach-btn" onclick="document.getElementById('aiAttachInput').click()" title="Attach photo or file">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+      </button>
+      <input type="file" id="aiAttachInput" accept="image/*,.pdf,.doc,.docx,.txt" style="display:none" onchange="handleAIAttachment(event)">
+      <textarea id="aiChatInput" placeholder="Ask about products, orders…" rows="1" maxlength="200" oninput="updateAICharCount()"></textarea>
+      <button class="chat-send-btn" id="aiSendBtn" onclick="sendAIMessage()">Send</button>
+    </div>
+  </div>
+
   <!-- CATEGORIES PAGE -->
   <div id="categoriesPage">
     <div class="cat-search-wrap">
@@ -2871,7 +2947,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   let allReviews = [];
 
 function getCurrentEl() {
-  const pages = ['payment','reviewPage','reviewDetail','supportPage','ticketPage',
+  const pages = ['payment','reviewPage','reviewDetail','supportPage','ticketPage','aiChatPage',
                  'accountPage','wishlistPage','searchPage','categoriesPage'];
   for (const id of pages) {
     const el = document.getElementById(id);
@@ -2886,7 +2962,7 @@ function getCurrentEl() {
 
 function hideAll() {
   ['home','payment','reviewPage','reviewDetail','resultView',
-   'supportPage','ticketPage','accountPage','wishlistPage','searchPage','categoriesPage']
+   'supportPage','ticketPage','aiChatPage','accountPage','wishlistPage','searchPage','categoriesPage']
     .forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
 }
@@ -2894,12 +2970,12 @@ function hideAll() {
 function showTarget(state, inClass) {
   const page = state ? state.page : 'home';
   const isReview = (page === 'review' || page === 'reviewDetail');
-  const isSupport = (page === 'support' || page === 'ticket' ||
+  const isSupport = (page === 'support' || page === 'ticket' || page === 'aichat' ||
                      page === 'account' || page === 'wishlist' || page === 'searchPage' ||
                      page === 'categoriesPage');
 
   const hdrMap = { account:'hdrBtnAccount', wishlist:'hdrBtnWishlist', searchPage:'hdrBtnSearch' };
-  const navMap = { home:'navHome', support:'navSupport', ticket:'navSupport', categoriesPage:'navCategories' };
+  const navMap = { home:'navHome', support:'navSupport', ticket:'navSupport', aichat:'navSupport', categoriesPage:'navCategories' };
   if (hdrMap[page]) {
     setActiveHdrIcon(hdrMap[page]);
   } else {
@@ -2941,6 +3017,10 @@ function showTarget(state, inClass) {
     el = document.getElementById('ticketPage');
     el.style.display = 'block';
     initTicketPage();
+  } else if (page === 'aichat') {
+    el = document.getElementById('aiChatPage');
+    el.style.display = 'block';
+    initAIChatPage();
   } else if (page === 'account') {
     el = document.getElementById('accountPage');
     el.style.display = 'block';
@@ -3995,6 +4075,171 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey && document.activeElement === document.getElementById('chatInput')) {
     e.preventDefault();
     sendCustomerMessage();
+  }
+});
+
+// ── AI ASSISTANT CHAT ──
+function openAIChatPage() {
+  navigate({ page: 'aichat' });
+}
+
+let aiPendingAttachment = null;
+
+async function initAIChatPage() {
+  aiPendingAttachment = null;
+  renderAIAttachPreview();
+  updateAICharCount();
+  let sessionId = localStorage.getItem('ibomAiSessionId');
+  const area = document.getElementById('aiChatMessages');
+  area.innerHTML = '';
+
+  if (sessionId) {
+    try {
+      const res = await fetch('/ai-chat/sessions/' + sessionId);
+      if (res.ok) {
+        const session = await res.json();
+        renderAIMessages(session.messages);
+        return;
+      } else {
+        localStorage.removeItem('ibomAiSessionId');
+      }
+    } catch(e) {}
+  }
+
+  try {
+    const res = await fetch('/ai-chat/sessions', { method: 'POST' });
+    const session = await res.json();
+    localStorage.setItem('ibomAiSessionId', session.id);
+    renderAIMessages(session.messages);
+  } catch(e) {
+    area.innerHTML = '<div class="cmsg-system">Could not start AI Assistant. Please try again later.</div>';
+  }
+}
+
+function renderAIMessages(messages) {
+  const area = document.getElementById('aiChatMessages');
+  area.innerHTML = (messages || []).map(m => `
+    <div class="amsg-wrap from-${m.from === 'assistant' ? 'assistant' : 'user'}">
+      <div class="amsg ${m.from === 'assistant' ? 'assistant-msg' : 'user-msg'}">
+        ${escapeHtml(m.text || '')}
+        ${m.attachment ? `<img class="amsg-attachment" src="/uploads/${m.attachment}">` : ''}
+      </div>
+    </div>`).join('');
+  area.scrollTop = area.scrollHeight;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function updateAICharCount() {
+  const input = document.getElementById('aiChatInput');
+  const count = document.getElementById('aiCharCount');
+  if (input && count) count.textContent = input.value.length + ' / 200';
+}
+
+function handleAIAttachment(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  aiPendingAttachment = file;
+  renderAIAttachPreview();
+}
+
+function clearAIAttachment() {
+  aiPendingAttachment = null;
+  document.getElementById('aiAttachInput').value = '';
+  renderAIAttachPreview();
+}
+
+function renderAIAttachPreview() {
+  const el = document.getElementById('aiAttachPreview');
+  if (!aiPendingAttachment) { el.innerHTML = ''; return; }
+  const isImage = aiPendingAttachment.type.startsWith('image/');
+  const url = isImage ? URL.createObjectURL(aiPendingAttachment) : '';
+  el.innerHTML = `
+    <div class="ai-attach-preview">
+      ${isImage ? `<img src="${url}">` : '📎'}
+      <span>${escapeHtml(aiPendingAttachment.name)}</span>
+      <button onclick="clearAIAttachment()">Remove</button>
+    </div>`;
+}
+
+function appendAITypingIndicator() {
+  const area = document.getElementById('aiChatMessages');
+  const wrap = document.createElement('div');
+  wrap.className = 'amsg-wrap from-assistant';
+  wrap.id = 'aiTypingIndicator';
+  wrap.innerHTML = '<div class="amsg assistant-msg"><div class="amsg-typing"><span></span><span></span><span></span></div></div>';
+  area.appendChild(wrap);
+  area.scrollTop = area.scrollHeight;
+}
+
+function removeAITypingIndicator() {
+  const el = document.getElementById('aiTypingIndicator');
+  if (el) el.remove();
+}
+
+async function sendAIMessage() {
+  const input = document.getElementById('aiChatInput');
+  const text = input.value.trim();
+  const sessionId = localStorage.getItem('ibomAiSessionId');
+  if ((!text && !aiPendingAttachment) || !sessionId) return;
+
+  const sendBtn = document.getElementById('aiSendBtn');
+  sendBtn.disabled = true;
+  input.disabled = true;
+
+  const area = document.getElementById('aiChatMessages');
+  area.innerHTML += `
+    <div class="amsg-wrap from-user">
+      <div class="amsg user-msg">
+        ${escapeHtml(text)}
+        ${aiPendingAttachment && aiPendingAttachment.type.startsWith('image/') ? `<img class="amsg-attachment" src="${URL.createObjectURL(aiPendingAttachment)}">` : ''}
+      </div>
+    </div>`;
+  area.scrollTop = area.scrollHeight;
+  appendAITypingIndicator();
+
+  input.value = '';
+  updateAICharCount();
+  const attachment = aiPendingAttachment;
+  clearAIAttachment();
+
+  try {
+    let res;
+    if (attachment) {
+      const fd = new FormData();
+      fd.append('text', text);
+      fd.append('attachment', attachment);
+      res = await fetch('/ai-chat/sessions/' + sessionId + '/messages', { method: 'POST', body: fd });
+    } else {
+      res = await fetch('/ai-chat/sessions/' + sessionId + '/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+    }
+    const data = await res.json();
+    removeAITypingIndicator();
+    if (data.session) {
+      renderAIMessages(data.session.messages);
+    }
+  } catch(e) {
+    removeAITypingIndicator();
+    area.innerHTML += '<div class="cmsg-system">Something went wrong. Please try again.</div>';
+    area.scrollTop = area.scrollHeight;
+  }
+  sendBtn.disabled = false;
+  input.disabled = false;
+  input.focus();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey && document.activeElement === document.getElementById('aiChatInput')) {
+    e.preventDefault();
+    sendAIMessage();
   }
 });
 
