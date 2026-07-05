@@ -106,6 +106,46 @@ body.loaded { opacity: 1; }
 .empty { text-align: center; padding: 50px 20px; color: #aaa; }
 .empty-icon { font-size: 40px; margin-bottom: 10px; }
 
+.analytics-summary {
+  background: green;
+  color: white;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.analytics-total-count { font-size: 32px; font-weight: bold; }
+.analytics-total-label { font-size: 13px; opacity: 0.9; margin-top: 4px; }
+
+.analytics-card {
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+}
+.analytics-row { margin-bottom: 18px; }
+.analytics-row:last-child { margin-bottom: 0; }
+.analytics-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+.analytics-row-label { font-weight: bold; color: #333; }
+.analytics-row-count { font-weight: bold; color: #333; }
+.analytics-row-pct { font-weight: normal; color: #999; font-size: 12px; }
+.analytics-bar-track {
+  background: #eee;
+  border-radius: 6px;
+  height: 10px;
+  overflow: hidden;
+}
+.analytics-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
 /* Chat view */
 #chatView { display: none; }
 .chat-header {
@@ -244,9 +284,11 @@ body.loaded { opacity: 1; }
   <div class="tabs">
     <div class="tab active" onclick="switchTab('open')" id="tabOpen">Open <span class="badge" id="openBadge" style="display:none"></span></div>
     <div class="tab" onclick="switchTab('closed')" id="tabClosed">Closed</div>
+    <div class="tab" onclick="switchTab('analytics')" id="tabAnalytics">Analytics</div>
   </div>
 
   <div class="container" id="ticketList"></div>
+  <div class="container" id="analyticsView" style="display:none"></div>
 </div>
 
 <div id="chatView">
@@ -284,7 +326,7 @@ let currentTicket = null;
 let pollTimer = null;
 
 async function loadTickets() {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("adminToken");
   try {
     const res = await fetch("/tickets", { headers: { Authorization: "Bearer " + token } });
     allTickets = await res.json();
@@ -329,7 +371,76 @@ function switchTab(tab) {
   currentTab = tab;
   document.getElementById("tabOpen").classList.toggle('active', tab === 'open');
   document.getElementById("tabClosed").classList.toggle('active', tab === 'closed');
-  renderList();
+  document.getElementById("tabAnalytics").classList.toggle('active', tab === 'analytics');
+
+  if (tab === 'analytics') {
+    document.getElementById("ticketList").style.display = "none";
+    document.getElementById("analyticsView").style.display = "";
+    loadAnalytics();
+  } else {
+    document.getElementById("ticketList").style.display = "";
+    document.getElementById("analyticsView").style.display = "none";
+    renderList();
+  }
+}
+
+const CHANNEL_LABELS = {
+  ai: { label: "AI Assistant", icon: "🤖", color: "#8e44ad" },
+  ticket: { label: "Direct Ticket", icon: "🎫", color: "green" },
+  email: { label: "Email Us", icon: "📧", color: "#1976d2" },
+  phone: { label: "Phone Call", icon: "📞", color: "#f57c00" },
+  whatsapp: { label: "WhatsApp", icon: "💬", color: "#25d366" }
+};
+
+async function loadAnalytics() {
+  const view = document.getElementById("analyticsView");
+  view.innerHTML = '<div class="empty"><div class="empty-icon">⏳</div>Loading analytics…</div>';
+  const token = localStorage.getItem("adminToken");
+  try {
+    const res = await fetch("/support-analytics/stats", { headers: { Authorization: "Bearer " + token } });
+    if (!res.ok) throw new Error("Request failed");
+    const data = await res.json();
+    renderAnalytics(data);
+  } catch (e) {
+    view.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div>Could not load analytics</div>';
+  }
+}
+
+function renderAnalytics(data) {
+  const view = document.getElementById("analyticsView");
+  const totals = data.totals || {};
+  const totalEvents = data.totalEvents || 0;
+  const maxCount = Math.max(1, ...Object.values(totals));
+
+  if (totalEvents === 0) {
+    view.innerHTML = '<div class="empty"><div class="empty-icon">📊</div>No support channel activity yet</div>';
+    return;
+  }
+
+  const rows = Object.keys(CHANNEL_LABELS).map(key => {
+    const info = CHANNEL_LABELS[key];
+    const count = totals[key] || 0;
+    const pct = totalEvents ? Math.round((count / totalEvents) * 100) : 0;
+    const barPct = Math.round((count / maxCount) * 100);
+    return `
+    <div class="analytics-row">
+      <div class="analytics-row-top">
+        <span class="analytics-row-label">${info.icon} ${info.label}</span>
+        <span class="analytics-row-count">${count} <span class="analytics-row-pct">(${pct}%)</span></span>
+      </div>
+      <div class="analytics-bar-track">
+        <div class="analytics-bar-fill" style="width:${barPct}%;background:${info.color}"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  view.innerHTML = `
+    <div class="analytics-summary">
+      <div class="analytics-total-count">${totalEvents}</div>
+      <div class="analytics-total-label">Total support interactions</div>
+    </div>
+    <div class="analytics-card">${rows}</div>
+  `;
 }
 
 function openTicket(id) {
@@ -381,7 +492,7 @@ function scrollToBottom() {
 
 async function pollMessages() {
   if (!currentTicket) return;
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("adminToken");
   try {
     const res = await fetch(`/tickets/${currentTicket.id}`, { headers: { Authorization: "Bearer " + token } });
     const updated = await res.json();
@@ -399,7 +510,7 @@ async function sendAdminReply() {
   const text = input.value.trim();
   if (!text || !currentTicket) return;
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("adminToken");
   input.value = "";
   input.disabled = true;
 
@@ -420,7 +531,7 @@ async function closeTicket() {
   if (!currentTicket) return;
   if (!confirm("Close this ticket?")) return;
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("adminToken");
   try {
     await fetch(`/tickets/${currentTicket.id}/status`, {
       method: "PUT",

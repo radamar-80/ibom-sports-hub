@@ -2915,7 +2915,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
       <h2>CUSTOMER SUPPORT</h2>
     </div>
     <div class="support-options">
-      <div class="support-option so-ai" onclick="openAIChatPage()">
+      <div class="support-option so-ai" onclick="trackSupportChannel('ai'); openAIChatPage()">
         <div class="support-option-icon">🤖</div>
         <div class="support-option-text">
           <h3>AI Assistant</h3>
@@ -2923,7 +2923,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
         </div>
         <span class="support-option-arrow">›</span>
       </div>
-      <div class="support-option so-ticket" onclick="openTicketPage()">
+      <div class="support-option so-ticket" onclick="trackSupportChannel('ticket'); openTicketPage()">
         <div class="support-option-icon">🎫</div>
         <div class="support-option-text">
           <h3>Direct Ticket</h3>
@@ -2931,7 +2931,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
         </div>
         <span class="support-option-arrow">›</span>
       </div>
-      <a class="support-option so-email" href="mailto:ibomsportshub@gmail.com">
+      <a class="support-option so-email" href="mailto:ibomsportshub@gmail.com" onclick="trackSupportChannel('email')">
         <div class="support-option-icon">📧</div>
         <div class="support-option-text">
           <h3>Email Us</h3>
@@ -2939,7 +2939,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
         </div>
         <span class="support-option-arrow">›</span>
       </a>
-      <div class="support-option so-phone" onclick="openPhonePage()">
+      <div class="support-option so-phone" onclick="trackSupportChannel('phone'); openPhonePage()">
         <div class="support-option-icon">📞</div>
         <div class="support-option-text">
           <h3>Phone Call</h3>
@@ -2947,7 +2947,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
         </div>
         <span class="support-option-arrow">›</span>
       </div>
-      <a class="support-option so-wa" href="https://wa.me/2341234567890" target="_blank">
+      <a class="support-option so-wa" href="https://wa.me/2341234567890" target="_blank" onclick="trackSupportChannel('whatsapp')">
         <div class="support-option-icon">💬</div>
         <div class="support-option-text">
           <h3>WhatsApp</h3>
@@ -4064,6 +4064,23 @@ function runPageSearch(q) {
 
 function openTicketPage() {
   navigate({ page: 'ticket' });
+}
+
+function trackSupportChannel(channel) {
+  try {
+    const payload = JSON.stringify({ channel });
+    if (navigator.sendBeacon) {
+      const blob = new Blob([payload], { type: 'application/json' });
+      navigator.sendBeacon('/support-analytics/track', blob);
+    } else {
+      fetch('/support-analytics/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+        keepalive: true
+      }).catch(() => {});
+    }
+  } catch (e) {}
 }
 
 // ── TICKET SYSTEM ──

@@ -15,7 +15,10 @@ const REVIEWS_FILE = "reviews.json";
 const TICKETS_FILE = "tickets.json";
 const CATEGORIES_FILE = "categories.json";
 const AI_CHATS_FILE = "ai-chats.json";
+const SUPPORT_ANALYTICS_FILE = "support-analytics.json";
 const UPLOAD_DIR = "uploads";
+
+const SUPPORT_CHANNELS = new Set(["ai", "ticket", "email", "phone", "whatsapp"]);
 
 const openai = process.env.OPENAI_API_KEY
   ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
@@ -58,6 +61,14 @@ function readTickets() {
 }
 function writeTickets(data) {
   fs.writeFileSync(TICKETS_FILE, JSON.stringify(data, null, 2));
+}
+
+function readSupportAnalytics() {
+  if (!fs.existsSync(SUPPORT_ANALYTICS_FILE)) return [];
+  try { return JSON.parse(fs.readFileSync(SUPPORT_ANALYTICS_FILE)); } catch (e) { return []; }
+}
+function writeSupportAnalytics(data) {
+  fs.writeFileSync(SUPPORT_ANALYTICS_FILE, JSON.stringify(data, null, 2));
 }
 
 function readAiChats() {
@@ -207,6 +218,40 @@ app.get("/products", (req, res) => {
 // GET ACTIVE CALL NUMBER (company line 8am-8pm, worker's line overnight)
 app.get("/call-number", (req, res) => {
   res.json(getActiveCallNumber());
+});
+
+// TRACK A SUPPORT CHANNEL CLICK (public — fired when a customer opens a support option)
+app.post("/support-analytics/track", (req, res) => {
+  const channel = req.body.channel;
+  if (!SUPPORT_CHANNELS.has(channel)) {
+    return res.status(400).json({ message: "Unknown support channel" });
+  }
+  const events = readSupportAnalytics();
+  events.push({ channel, timestamp: new Date().toISOString() });
+  writeSupportAnalytics(events);
+  res.json({ message: "Tracked" });
+});
+
+// GET SUPPORT CHANNEL STATS (admin only)
+app.get("/support-analytics/stats", verifyToken, (req, res) => {
+  const events = readSupportAnalytics();
+  const totals = { ai: 0, ticket: 0, email: 0, phone: 0, whatsapp: 0 };
+  const last7Days = {};
+
+  const now = new Date();
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+  for (const e of events) {
+    if (totals[e.channel] !== undefined) totals[e.channel]++;
+    const t = new Date(e.timestamp);
+    if (t >= sevenDaysAgo) {
+      const day = t.toISOString().slice(0, 10);
+      if (!last7Days[day]) last7Days[day] = { ai: 0, ticket: 0, email: 0, phone: 0, whatsapp: 0 };
+      if (last7Days[day][e.channel] !== undefined) last7Days[day][e.channel]++;
+    }
+  }
+
+  res.json({ totals, last7Days, totalEvents: events.length });
 });
 
 // DELETE PRODUCT
