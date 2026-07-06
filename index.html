@@ -3818,6 +3818,10 @@ function closeMenu() {
   if (menuBtn) menuBtn.classList.remove('active');
   const reviewBtn = document.getElementById('floatingReviewBtn');
   if (reviewBtn) reviewBtn.classList.remove('menu-open');
+  // reset drawer scroll position so it reopens at the top next time
+  const resetScroll = () => { drawer.scrollTop = 0; };
+  drawer.addEventListener('transitionend', resetScroll, { once: true });
+  setTimeout(resetScroll, 400);
 }
 
 function drawerNav(page) {
@@ -3856,14 +3860,23 @@ function drawerNav(page) {
   drawer.addEventListener('touchend', () => {
     if (!dragging) return;
     dragging = false;
-    drawer.style.transition = '';
-    drawer.style.transform = '';
-    const overlay = document.getElementById('navDrawerOverlay');
-    if (overlay) overlay.style.opacity = '';
     const delta = Math.max(0, currentX - startX);
-    if (delta > drawerWidth * 0.3) {
-      closeMenu();
-    }
+    const shouldClose = delta > drawerWidth * 0.3;
+    const overlay = document.getElementById('navDrawerOverlay');
+
+    // force the browser to register the current dragged position first,
+    // then re-enable the transition so the drawer animates the rest of the
+    // way to its true resting state (fully closed, or back to fully open)
+    // instead of jumping straight there.
+    drawer.getBoundingClientRect();
+    drawer.style.transition = '';
+    requestAnimationFrame(() => {
+      drawer.style.transform = '';
+      if (overlay) overlay.style.opacity = '';
+      if (shouldClose) {
+        closeMenu();
+      }
+    });
   });
 
   drawer.addEventListener('touchcancel', () => {
