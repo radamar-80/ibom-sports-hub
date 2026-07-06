@@ -515,11 +515,12 @@ body.dark .sub-title { color: #ff3333; }
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  width: 100%; /* gives slides a definite base to resolve min-width: 100% against */
 }
 .rv-track::-webkit-scrollbar { display: none; }
 .rv-slide {
   flex-shrink: 0;
-  min-width: 100%;
+  width: 100%; /* same as wrapper — one full slide visible at a time */
   scroll-snap-align: center;
   box-sizing: border-box;
   display: flex;
