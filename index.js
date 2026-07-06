@@ -149,7 +149,7 @@ function writeDB(data) {
 
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({ limit: "25mb" }));
 app.use("/uploads", express.static("uploads"));
 app.use(express.static("."));
 app.get("/", (req, res) => {
@@ -337,7 +337,7 @@ app.get("/reviews", (req, res) => {
 });
 
 // SUBMIT REVIEW
-app.post("/submit-review", express.json({ limit: "10mb" }), (req, res) => {
+app.post("/submit-review", express.json({ limit: "25mb" }), (req, res) => {
   const { rating, text, name, photo } = req.body;
   const reviews = readReviews();
   reviews.push({
