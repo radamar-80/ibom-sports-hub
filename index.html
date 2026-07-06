@@ -519,13 +519,9 @@ body.dark .sub-title { color: #ff3333; }
 .rv-track::-webkit-scrollbar { display: none; }
 .rv-slide {
   flex-shrink: 0;
-  width: 100%;
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  min-width: 100%;
+  scroll-snap-align: center;
   box-sizing: border-box;
-  padding-bottom: 4px;
 }
 .rv-bar-track { margin: 12px 0 0; }
 
@@ -3714,13 +3710,8 @@ function renderReviewCards(reviews) {
       </div>`;
   }
 
-  // Group into slides of 3
-  const slides = [];
-  for (let i = 0; i < reviews.length; i += 3) {
-    const chunk = reviews.slice(i, i + 3);
-    slides.push(`<div class="rv-slide">${chunk.map((r, j) => cardHtml(r, i + j)).join('')}</div>`);
-  }
-  track.innerHTML = slides.join('');
+  // One review per slide
+  track.innerHTML = reviews.map((r, i) => `<div class="rv-slide">${cardHtml(r, i)}</div>`).join('');
 
   reviewSlider.init();
 }
