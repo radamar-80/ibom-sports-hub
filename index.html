@@ -540,7 +540,18 @@ body.dark .sub-title { color: #ff3333; }
 body.dark .review-card-new { background: #1e1e1e; }
 
 .review-card-left { flex: 1; min-width: 0; }
-.review-card-stars { font-size: 15px; color: gold; margin-bottom: 5px; }
+
+/* Play-Store-style header row: avatar + name */
+.review-card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 6px; }
+.review-avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 700; color: #fff; letter-spacing: 0;
+}
+.review-card-name { font-size: 14px; font-weight: 600; color: #1a1a1a; line-height: 1.2; }
+body.dark .review-card-name { color: #e8e8e8; }
+
+.review-card-stars { font-size: 14px; color: gold; margin-bottom: 5px; }
 .review-card-text {
   font-size: 13px;
   color: #444;
@@ -552,7 +563,6 @@ body.dark .review-card-new { background: #1e1e1e; }
 }
 body.dark .review-card-text { color: #bbb; }
 .review-card-more { color: #28b570; cursor: pointer; font-size: 13px; font-weight: 600; }
-.review-card-name { font-size: 12px; color: #888; margin-top: 6px; }
 
 .review-card-right {
   width: 76px;
@@ -3661,21 +3671,30 @@ function renderReviewCards(reviews) {
 
   const cameraIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
 
+  const avatarPalette = ['#28b570','#2196f3','#ff7043','#9c27b0','#00bcd4','#ff9800','#e91e63','#3f51b5'];
+
   function cardHtml(r, i) {
     const filled = '★'.repeat(r.rating || 0);
     const empty  = '☆'.repeat(5 - (r.rating || 0));
-    const name   = r.name ? '–' + r.name : '–Anonymous';
-    const long   = r.text && r.text.length > 100;
+    const displayName = r.name || 'Anonymous';
+    const initial = displayName[0].toUpperCase();
+    // Deterministic colour so the same name always gets the same avatar colour
+    const colorIdx = [...displayName].reduce((s, c) => s + c.charCodeAt(0), 0) % avatarPalette.length;
+    const avatarBg = avatarPalette[colorIdx];
+    const long = r.text && r.text.length > 100;
     const photoHtml = r.photo
       ? `<img src="${r.photo}" alt="photo" onclick="showReviewDetail(${i})" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`
       : `<div onclick="showReviewDetail(${i})" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">${cameraIcon}</div>`;
     return `
       <div class="review-card-new">
         <div class="review-card-left">
+          <div class="review-card-header">
+            <div class="review-avatar" style="background:${avatarBg}">${initial}</div>
+            <span class="review-card-name">${displayName}</span>
+          </div>
           <div class="review-card-stars">${filled}<span style="color:#ccc">${empty}</span></div>
           <div class="review-card-text">${r.text || '(No comment)'}</div>
           ${long ? `<span class="review-card-more" onclick="showReviewDetail(${i})">...more</span>` : ''}
-          <div class="review-card-name">${name}</div>
         </div>
         <div class="review-card-right">${photoHtml}</div>
       </div>`;
@@ -3721,6 +3740,12 @@ document.getElementById('submitBtn').style.display = 'none';
 
 function openReviewTab() {
   navigate({ page: 'review' });
+  // Autofill name from account if logged in and field is still empty
+  const savedName = localStorage.getItem('ibomCustomerName');
+  const nameInput = document.getElementById('reviewName');
+  if (savedName && nameInput && !nameInput.value.trim()) {
+    nameInput.value = savedName;
+  }
 }
 function toggleBootWall() {
   const items = document.getElementById('bootItems');
