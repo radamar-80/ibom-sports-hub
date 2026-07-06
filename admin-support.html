@@ -210,6 +210,10 @@ body.loaded { opacity: 1; }
   cursor: pointer;
 }
 
+.analytics-trend-card { margin-bottom: 14px; }
+.analytics-trend-title { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 10px; }
+.analytics-trend-svg { width: 100%; height: 110px; display: block; }
+
 /* Chat view */
 #chatView { display: none; }
 .chat-header {
@@ -566,9 +570,48 @@ function renderAnalytics(data) {
       <div class="analytics-total-count">${totalEvents}</div>
       <div class="analytics-total-label">Total support interactions</div>
     </div>
+    ${renderTrendChart(data.daily || [])}
     <div class="analytics-card">${rows}</div>
     <button class="analytics-export-btn" onclick="exportAnalyticsCSV()">⬇ Export to CSV</button>
   `;
+}
+
+function renderTrendChart(daily) {
+  if (!daily.length) return '';
+
+  const W = 300, H = 110, padX = 8, padTop = 10, padBottom = 22;
+  const chartW = W - padX * 2;
+  const chartH = H - padTop - padBottom;
+  const maxCount = Math.max(1, ...daily.map(d => d.count));
+  const n = daily.length;
+
+  const points = daily.map((d, i) => {
+    const x = n === 1 ? padX + chartW / 2 : padX + (i / (n - 1)) * chartW;
+    const y = padTop + chartH - (d.count / maxCount) * chartH;
+    return { x, y, d };
+  });
+
+  const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+  const areaPath = `${linePath} L ${points[points.length - 1].x.toFixed(1)} ${(padTop + chartH).toFixed(1)} L ${points[0].x.toFixed(1)} ${(padTop + chartH).toFixed(1)} Z`;
+
+  const dots = points.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3" fill="green"><title>${p.d.date}: ${p.d.count}</title></circle>`).join('');
+
+  const labelStep = Math.max(1, Math.ceil(n / 5));
+  const labels = points.filter((p, i) => i % labelStep === 0 || i === n - 1).map(p => {
+    const short = p.d.date.slice(5);
+    return `<text x="${p.x.toFixed(1)}" y="${H - 6}" font-size="8.5" fill="#999" text-anchor="middle">${short}</text>`;
+  }).join('');
+
+  return `
+    <div class="analytics-card analytics-trend-card">
+      <div class="analytics-trend-title">Interactions over time</div>
+      <svg viewBox="0 0 ${W} ${H}" class="analytics-trend-svg" preserveAspectRatio="none">
+        <path d="${areaPath}" fill="rgba(0,128,0,0.08)" stroke="none"></path>
+        <path d="${linePath}" fill="none" stroke="green" stroke-width="2"></path>
+        ${dots}
+        ${labels}
+      </svg>
+    </div>`;
 }
 
 async function exportAnalyticsCSV() {

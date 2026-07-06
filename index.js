@@ -237,22 +237,17 @@ app.get("/support-analytics/stats", verifyToken, (req, res) => {
   const { from, to } = req.query;
   const events = filterEventsByRange(readSupportAnalytics(), from, to);
   const totals = { ai: 0, ticket: 0, email: 0, phone: 0, whatsapp: 0 };
-  const last7Days = {};
-
-  const now = new Date();
-  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const dailyMap = {};
 
   for (const e of events) {
     if (totals[e.channel] !== undefined) totals[e.channel]++;
-    const t = new Date(e.timestamp);
-    if (t >= sevenDaysAgo) {
-      const day = t.toISOString().slice(0, 10);
-      if (!last7Days[day]) last7Days[day] = { ai: 0, ticket: 0, email: 0, phone: 0, whatsapp: 0 };
-      if (last7Days[day][e.channel] !== undefined) last7Days[day][e.channel]++;
-    }
+    const day = new Date(e.timestamp).toISOString().slice(0, 10);
+    dailyMap[day] = (dailyMap[day] || 0) + 1;
   }
 
-  res.json({ totals, last7Days, totalEvents: events.length });
+  const daily = Object.keys(dailyMap).sort().map(day => ({ date: day, count: dailyMap[day] }));
+
+  res.json({ totals, daily, totalEvents: events.length });
 });
 
 function filterEventsByRange(events, from, to) {
