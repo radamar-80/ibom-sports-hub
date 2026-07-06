@@ -1,0 +1,1 @@
+- [Admin auth token key](admin-auth-token-key.md) — admin pages must all use the same localStorage key for the JWT or admin fetches silently fail.
