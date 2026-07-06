@@ -146,6 +146,20 @@ body.loaded { opacity: 1; }
   transition: width 0.3s ease;
 }
 
+.analytics-export-btn {
+  width: 100%;
+  margin-top: 14px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 0;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.analytics-export-btn:disabled { opacity: 0.6; cursor: default; }
+
 /* Chat view */
 #chatView { display: none; }
 .chat-header {
@@ -440,7 +454,31 @@ function renderAnalytics(data) {
       <div class="analytics-total-label">Total support interactions</div>
     </div>
     <div class="analytics-card">${rows}</div>
+    <button class="analytics-export-btn" onclick="exportAnalyticsCSV()">⬇ Export to CSV</button>
   `;
+}
+
+async function exportAnalyticsCSV() {
+  const btn = document.querySelector(".analytics-export-btn");
+  const token = localStorage.getItem("adminToken");
+  if (btn) { btn.disabled = true; btn.textContent = "Exporting…"; }
+  try {
+    const res = await fetch("/support-analytics/export", { headers: { Authorization: "Bearer " + token } });
+    if (!res.ok) throw new Error("Export failed");
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `support-analytics-${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    alert("Could not export analytics. Please try again.");
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = "⬇ Export to CSV"; }
+  }
 }
 
 function openTicket(id) {

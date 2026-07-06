@@ -254,6 +254,19 @@ app.get("/support-analytics/stats", verifyToken, (req, res) => {
   res.json({ totals, last7Days, totalEvents: events.length });
 });
 
+// EXPORT SUPPORT ANALYTICS AS CSV (admin only)
+app.get("/support-analytics/export", verifyToken, (req, res) => {
+  const events = readSupportAnalytics();
+  const rows = ["Channel,Timestamp"];
+  for (const e of events) {
+    rows.push(`${e.channel},${e.timestamp}`);
+  }
+  const csv = rows.join("\n");
+  res.setHeader("Content-Type", "text/csv");
+  res.setHeader("Content-Disposition", `attachment; filename="support-analytics-${new Date().toISOString().slice(0,10)}.csv"`);
+  res.send(csv);
+});
+
 // DELETE PRODUCT
 app.delete("/products/:id", verifyToken, (req, res) => {
   const id = parseInt(req.params.id);
