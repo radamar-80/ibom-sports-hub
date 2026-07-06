@@ -515,14 +515,16 @@ body.dark .sub-title { color: #ff3333; }
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  width: 100%; /* gives slides a definite base to resolve min-width: 100% against */
 }
 .rv-track::-webkit-scrollbar { display: none; }
 .rv-slide {
   flex-shrink: 0;
-  width: 100%; /* one card visible at a time */
+  min-width: 100%;
   scroll-snap-align: center;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 .rv-bar-track { margin: 12px 0 0; }
 
@@ -3579,6 +3581,7 @@ async function loadReviews() {
 // ── REVIEW SLIDER CONTROLLER ──
 const reviewSlider = (() => {
   const INTERVAL = 15000;
+  const PER_SLIDE = 3;
   let autoTimer = null;
   let paused = false;
 
@@ -3710,8 +3713,12 @@ function renderReviewCards(reviews) {
       </div>`;
   }
 
-  // One card per slide
-  const slides = reviews.map((r, i) => `<div class="rv-slide">${cardHtml(r, i)}</div>`);
+  // Group into slides of 3
+  const slides = [];
+  for (let i = 0; i < reviews.length; i += 3) {
+    const chunk = reviews.slice(i, i + 3);
+    slides.push(`<div class="rv-slide">${chunk.map((r, j) => cardHtml(r, i + j)).join('')}</div>`);
+  }
   track.innerHTML = slides.join('');
 
   reviewSlider.init();
