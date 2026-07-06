@@ -956,6 +956,14 @@ body.dark #cartDrawer {
   pointer-events: none;
 }
 
+/* Hidden because the nav drawer is open — slides out to the right */
+#floatingReviewBtn.menu-open {
+  transform: translateX(160px) scale(0.85);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+}
+
 #floatingReviewBtn .frb-icon {
   font-size: 18px;
   line-height: 1;
@@ -1135,6 +1143,17 @@ header { padding: 10px 0; }
 }
 #navDrawer.open { transform: translateX(0); }
 body.dark #navDrawer { background: #121212; color: #f0f0f0; }
+
+#navDrawerOverlay {
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: 997;
+  background: rgba(0,0,0,0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.32s ease;
+}
+#navDrawerOverlay.open { opacity: 1; pointer-events: auto; }
 
 .drawer-item {
   display: flex;
@@ -2148,6 +2167,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   </div>
   </header>
 
+  <div id="navDrawerOverlay" onclick="closeMenu()"></div>
   <nav id="navDrawer" aria-hidden="true">
     <button class="drawer-item" onclick="drawerNav('boots')">
       Football Boots
@@ -3768,28 +3788,36 @@ function openMenu() {
   const hdr = document.querySelector('header');
   const banner = document.querySelector('.top-banner');
   const drawer = document.getElementById('navDrawer');
+  const overlay = document.getElementById('navDrawerOverlay');
   const bannerBottom = banner ? Math.max(0, banner.getBoundingClientRect().bottom) : 0;
   drawer.style.top = bannerBottom + 'px';
   drawer.style.paddingTop = (hdr.getBoundingClientRect().bottom - bannerBottom) + 'px';
   drawer.classList.add('open');
   drawer.setAttribute('aria-hidden', 'false');
+  if (overlay) overlay.classList.add('open');
   document.getElementById('headerIconsDefault').style.display = 'none';
   document.getElementById('headerIconsMenu').style.display = 'flex';
   document.body.style.overflow = 'hidden';
   setActiveHdrIcon('hdrBtnMenu');
+  const reviewBtn = document.getElementById('floatingReviewBtn');
+  if (reviewBtn) reviewBtn.classList.add('menu-open');
 }
 
 function closeMenu() {
   const drawer = document.getElementById('navDrawer');
+  const overlay = document.getElementById('navDrawerOverlay');
   drawer.classList.remove('open');
   drawer.setAttribute('aria-hidden', 'true');
   drawer.style.top = '';
+  if (overlay) overlay.classList.remove('open');
   document.getElementById('headerIconsDefault').style.display = '';
   document.getElementById('headerIconsMenu').style.display = 'none';
   document.body.style.overflow = '';
   // only clear menu icon glow — don't override whatever page is active
   const menuBtn = document.getElementById('hdrBtnMenu');
   if (menuBtn) menuBtn.classList.remove('active');
+  const reviewBtn = document.getElementById('floatingReviewBtn');
+  if (reviewBtn) reviewBtn.classList.remove('menu-open');
 }
 
 function drawerNav(page) {
