@@ -2126,7 +2126,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
       </button>
-      <button class="hdr-icon" id="hdrBtnMenu" onclick="openMenu()" title="Menu" aria-label="Open menu">
+      <button class="hdr-icon" id="hdrBtnMenu" onclick="toggleMenu()" title="Menu" aria-label="Open menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <line x1="3" y1="6" x2="21" y2="6"/>
           <line x1="3" y1="12" x2="21" y2="12"/>
@@ -3753,6 +3753,15 @@ function toggleDark() {
   localStorage.setItem("theme", isDark ? "dark" : "light");
   const cb = document.getElementById("darkModeToggle");
   if (cb) cb.checked = isDark;
+}
+
+function toggleMenu() {
+  const drawer = document.getElementById('navDrawer');
+  if (drawer.classList.contains('open')) {
+    closeMenu();
+  } else {
+    openMenu();
+  }
 }
 
 function openMenu() {
