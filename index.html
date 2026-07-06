@@ -507,7 +507,27 @@ body.dark .sub-title { color: #ff3333; }
 .avg-rating-value { font-size: 34px; font-weight: 700; color: #72cca0; line-height: 1; }
 .avg-rating-count { font-size: 12px; color: rgba(114,204,160,0.85); margin-top: 3px; }
 
-#reviewListContainer { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+/* REVIEW SLIDER */
+.rv-track-wrapper { width: 100%; overflow: hidden; }
+.rv-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.rv-track::-webkit-scrollbar { display: none; }
+.rv-slide {
+  flex-shrink: 0;
+  width: 100%;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  padding-bottom: 4px;
+}
+.rv-bar-track { margin: 12px 0 0; }
 
 .review-card-new {
   background: #f5f5f5;
@@ -2608,7 +2628,12 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
       <div class="avg-rating-count" id="avgRatingCount"></div>
     </div>
   </div>
-  <div id="reviewListContainer"></div>
+  <div class="rv-track-wrapper">
+    <div class="rv-track" id="rvTrack"></div>
+  </div>
+  <div class="na-bar-track rv-bar-track">
+    <div class="na-bar-thumb" id="rvBarThumb"></div>
+  </div>
 </div>
 </div>
 
@@ -3437,7 +3462,8 @@ async function submitReview() {
     document.querySelector('.photo-plus').style.display = '';
     document.getElementById('submitBtn').style.display = 'none';
     navigate({ page: 'home' });
-    loadReviews();
+    await loadReviews();
+    reviewSlider.flashToLast();
   } catch(e) {
     alert("Could not submit review. Please check your connection.");
   }
@@ -3543,10 +3569,90 @@ async function loadReviews() {
   } catch(e) { /* no reviews yet */ }
 }
 
+// ── REVIEW SLIDER CONTROLLER ──
+const reviewSlider = (() => {
+  const INTERVAL = 15000;
+  const PER_SLIDE = 3;
+  let autoTimer = null;
+  let paused = false;
+
+  function track() { return document.getElementById('rvTrack'); }
+  function thumb() { return document.getElementById('rvBarThumb'); }
+
+  function slideCount() {
+    const t = track();
+    return t ? t.querySelectorAll('.rv-slide').length : 0;
+  }
+
+  function updateBar() {
+    const t = track(), th = thumb();
+    if (!t || !th) return;
+    const n = slideCount();
+    if (n === 0) return;
+    const maxScroll = t.scrollWidth - t.clientWidth;
+    const tw = (1 / n) * 100;
+    const tl = maxScroll > 0 ? (t.scrollLeft / maxScroll) * (100 - tw) : 0;
+    th.style.width = tw + '%';
+    th.style.left  = tl + '%';
+  }
+
+  function stopAuto()  { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
+  function startAuto() {
+    stopAuto();
+    autoTimer = setInterval(() => { if (!paused) advance(); }, INTERVAL);
+  }
+
+  function advance() {
+    const t = track();
+    if (!t || slideCount() <= 1) return;
+    const maxScroll = t.scrollWidth - t.clientWidth;
+    const slideW = t.clientWidth;
+    const next = t.scrollLeft + slideW;
+    t.scrollTo({ left: next >= maxScroll - 4 ? 0 : next, behavior: 'smooth' });
+  }
+
+  function init() {
+    const t = track();
+    if (!t) return;
+    t.onscroll    = updateBar;
+    t.ontouchstart = () => { paused = true; };
+    t.ontouchend   = () => { setTimeout(() => { paused = false; }, 2500); };
+    updateBar();
+    startAuto();
+  }
+
+  // Speed through each slide to land on the last one (new review just added)
+  function flashToLast() {
+    const t = track();
+    if (!t) return;
+    const n = slideCount();
+    if (n <= 1) { return; }
+    stopAuto();
+    t.scrollLeft = 0; // instant reset — direct assignment works cross-browser
+    let cur = 0;
+    function step() {
+      cur++;
+      if (cur >= n) { startAuto(); return; }
+      t.scrollTo({ left: cur * t.clientWidth, behavior: 'smooth' });
+      // wait long enough for the smooth scroll to land before the next step
+      setTimeout(step, 520);
+    }
+    setTimeout(step, 80); // small delay lets the browser register the reset
+  }
+
+  return { init, flashToLast };
+})();
+
 function renderReviewCards(reviews) {
-  const container = document.getElementById('reviewListContainer');
-  const panel = document.getElementById('avgRatingPanel');
-  if (!reviews.length) { container.innerHTML = ''; panel.style.display = 'none'; return; }
+  const track   = document.getElementById('rvTrack');
+  const panel   = document.getElementById('avgRatingPanel');
+  if (!reviews.length) {
+    track.innerHTML = '';
+    panel.style.display = 'none';
+    const th = document.getElementById('rvBarThumb');
+    if (th) { th.style.width = '0'; th.style.left = '0'; }
+    return;
+  }
 
   const avg = (reviews.reduce((s, r) => s + (r.rating || 0), 0) / reviews.length).toFixed(1);
   document.getElementById('avgRatingValue').textContent = avg;
@@ -3555,7 +3661,7 @@ function renderReviewCards(reviews) {
 
   const cameraIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
 
-  container.innerHTML = reviews.map((r, i) => {
+  function cardHtml(r, i) {
     const filled = '★'.repeat(r.rating || 0);
     const empty  = '☆'.repeat(5 - (r.rating || 0));
     const name   = r.name ? '–' + r.name : '–Anonymous';
@@ -3573,7 +3679,17 @@ function renderReviewCards(reviews) {
         </div>
         <div class="review-card-right">${photoHtml}</div>
       </div>`;
-  }).join('');
+  }
+
+  // Group into slides of 3
+  const slides = [];
+  for (let i = 0; i < reviews.length; i += 3) {
+    const chunk = reviews.slice(i, i + 3);
+    slides.push(`<div class="rv-slide">${chunk.map((r, j) => cardHtml(r, i + j)).join('')}</div>`);
+  }
+  track.innerHTML = slides.join('');
+
+  reviewSlider.init();
 }
 
 function showReviewDetail(index) {
