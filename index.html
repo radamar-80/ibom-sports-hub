@@ -3673,15 +3673,29 @@ function renderReviewCards(reviews) {
 
   const avatarPalette = ['#28b570','#2196f3','#ff7043','#9c27b0','#00bcd4','#ff9800','#e91e63','#3f51b5'];
 
+  const ANON_AVATAR_SVG = `<svg class="review-avatar" viewBox="0 0 36 36" width="36" height="36" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+    <circle cx="18" cy="18" r="18" fill="#d0d0d0"/>
+    <circle cx="18" cy="14" r="6" fill="#a0a0a0"/>
+    <path d="M6 32c0-7 5.4-12 12-12s12 5 12 12" fill="#a0a0a0"/>
+  </svg>`;
+
   function cardHtml(r, i) {
     const filled = '★'.repeat(r.rating || 0);
     const empty  = '☆'.repeat(5 - (r.rating || 0));
-    const displayName = r.name || 'Anonymous';
-    const initial = displayName[0].toUpperCase();
-    // Deterministic colour so the same name always gets the same avatar colour
-    const colorIdx = [...displayName].reduce((s, c) => s + c.charCodeAt(0), 0) % avatarPalette.length;
-    const avatarBg = avatarPalette[colorIdx];
+    const hasName = r.name && r.name.trim();
+    const displayName = hasName ? r.name : 'Anonymous';
     const long = r.text && r.text.length > 100;
+
+    // Named reviewer → coloured initial; anonymous → grey person SVG
+    let avatarHtml;
+    if (hasName) {
+      const initial = r.name.trim()[0].toUpperCase();
+      const colorIdx = [...r.name].reduce((s, c) => s + c.charCodeAt(0), 0) % avatarPalette.length;
+      avatarHtml = `<div class="review-avatar" style="background:${avatarPalette[colorIdx]}">${initial}</div>`;
+    } else {
+      avatarHtml = ANON_AVATAR_SVG;
+    }
+
     const photoHtml = r.photo
       ? `<img src="${r.photo}" alt="photo" onclick="showReviewDetail(${i})" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`
       : `<div onclick="showReviewDetail(${i})" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">${cameraIcon}</div>`;
@@ -3689,7 +3703,7 @@ function renderReviewCards(reviews) {
       <div class="review-card-new">
         <div class="review-card-left">
           <div class="review-card-header">
-            <div class="review-avatar" style="background:${avatarBg}">${initial}</div>
+            ${avatarHtml}
             <span class="review-card-name">${displayName}</span>
           </div>
           <div class="review-card-stars">${filled}<span style="color:#ccc">${empty}</span></div>
