@@ -234,7 +234,8 @@ app.post("/support-analytics/track", (req, res) => {
 
 // GET SUPPORT CHANNEL STATS (admin only)
 app.get("/support-analytics/stats", verifyToken, (req, res) => {
-  const events = readSupportAnalytics();
+  const { from, to } = req.query;
+  const events = filterEventsByRange(readSupportAnalytics(), from, to);
   const totals = { ai: 0, ticket: 0, email: 0, phone: 0, whatsapp: 0 };
   const last7Days = {};
 
@@ -254,16 +255,28 @@ app.get("/support-analytics/stats", verifyToken, (req, res) => {
   res.json({ totals, last7Days, totalEvents: events.length });
 });
 
-// EXPORT SUPPORT ANALYTICS AS CSV (admin only)
+function filterEventsByRange(events, from, to) {
+  if (!from && !to) return events;
+  const fromTime = from ? new Date(from + "T00:00:00.000Z").getTime() : -Infinity;
+  const toTime = to ? new Date(to + "T23:59:59.999Z").getTime() : Infinity;
+  return events.filter(e => {
+    const t = new Date(e.timestamp).getTime();
+    return t >= fromTime && t <= toTime;
+  });
+}
+
+// EXPORT SUPPORT ANALYTICS AS CSV (admin only, optional ?from=YYYY-MM-DD&to=YYYY-MM-DD)
 app.get("/support-analytics/export", verifyToken, (req, res) => {
-  const events = readSupportAnalytics();
+  const { from, to } = req.query;
+  const events = filterEventsByRange(readSupportAnalytics(), from, to);
   const rows = ["Channel,Timestamp"];
   for (const e of events) {
     rows.push(`${e.channel},${e.timestamp}`);
   }
   const csv = rows.join("\n");
+  const rangeSuffix = (from || to) ? `_${from || "start"}_to_${to || "now"}` : "";
   res.setHeader("Content-Type", "text/csv");
-  res.setHeader("Content-Disposition", `attachment; filename="support-analytics-${new Date().toISOString().slice(0,10)}.csv"`);
+  res.setHeader("Content-Disposition", `attachment; filename="support-analytics${rangeSuffix}.csv"`);
   res.send(csv);
 });
 

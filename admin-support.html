@@ -160,6 +160,56 @@ body.loaded { opacity: 1; }
 }
 .analytics-export-btn:disabled { opacity: 0.6; cursor: default; }
 
+.analytics-filter-bar {
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.analytics-preset-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.analytics-preset-btn {
+  background: #f0f0f0;
+  color: #555;
+  border: none;
+  border-radius: 20px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.analytics-preset-btn.active { background: green; color: white; }
+.analytics-custom-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.analytics-custom-row input[type="date"] {
+  flex: 1;
+  min-width: 120px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 7px 8px;
+  font-size: 13px;
+  color: #333;
+}
+.analytics-range-sep { font-size: 12px; color: #999; }
+.analytics-apply-btn {
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 /* Chat view */
 #chatView { display: none; }
 .chat-header {
@@ -406,17 +456,79 @@ const CHANNEL_LABELS = {
   whatsapp: { label: "WhatsApp", icon: "💬", color: "#25d366" }
 };
 
+let analyticsPreset = 'all';
+let analyticsFrom = '';
+let analyticsTo = '';
+
+function isoDate(d) { return d.toISOString().slice(0, 10); }
+
+function applyAnalyticsPreset(preset) {
+  analyticsPreset = preset;
+  const today = new Date();
+  if (preset === '7') {
+    analyticsFrom = isoDate(new Date(today.getTime() - 6 * 86400000));
+    analyticsTo = isoDate(today);
+  } else if (preset === '30') {
+    analyticsFrom = isoDate(new Date(today.getTime() - 29 * 86400000));
+    analyticsTo = isoDate(today);
+  } else if (preset === '90') {
+    analyticsFrom = isoDate(new Date(today.getTime() - 89 * 86400000));
+    analyticsTo = isoDate(today);
+  } else if (preset === 'all') {
+    analyticsFrom = '';
+    analyticsTo = '';
+  }
+  loadAnalytics();
+}
+
+function applyAnalyticsCustomRange() {
+  const fromInput = document.getElementById("analyticsFromInput");
+  const toInput = document.getElementById("analyticsToInput");
+  analyticsPreset = 'custom';
+  analyticsFrom = fromInput.value || '';
+  analyticsTo = toInput.value || '';
+  loadAnalytics();
+}
+
+function buildAnalyticsQuery() {
+  const params = new URLSearchParams();
+  if (analyticsFrom) params.set('from', analyticsFrom);
+  if (analyticsTo) params.set('to', analyticsTo);
+  const qs = params.toString();
+  return qs ? `?${qs}` : '';
+}
+
+function renderAnalyticsFilterBar() {
+  const presets = [
+    { key: 'all', label: 'All time' },
+    { key: '7', label: '7 days' },
+    { key: '30', label: '30 days' },
+    { key: '90', label: '90 days' },
+  ];
+  const presetBtns = presets.map(p => `<button class="analytics-preset-btn ${analyticsPreset === p.key ? 'active' : ''}" onclick="applyAnalyticsPreset('${p.key}')">${p.label}</button>`).join('');
+  return `
+    <div class="analytics-filter-bar">
+      <div class="analytics-preset-row">${presetBtns}</div>
+      <div class="analytics-custom-row">
+        <input type="date" id="analyticsFromInput" value="${analyticsFrom}">
+        <span class="analytics-range-sep">to</span>
+        <input type="date" id="analyticsToInput" value="${analyticsTo}">
+        <button class="analytics-apply-btn" onclick="applyAnalyticsCustomRange()">Apply</button>
+      </div>
+    </div>`;
+}
+
 async function loadAnalytics() {
   const view = document.getElementById("analyticsView");
-  view.innerHTML = '<div class="empty"><div class="empty-icon">⏳</div>Loading analytics…</div>';
+  view.innerHTML = renderAnalyticsFilterBar() + '<div class="empty"><div class="empty-icon">⏳</div>Loading analytics…</div>';
   const token = localStorage.getItem("adminToken");
   try {
-    const res = await fetch("/support-analytics/stats", { headers: { Authorization: "Bearer " + token } });
+    const res = await fetch("/support-analytics/stats" + buildAnalyticsQuery(), { headers: { Authorization: "Bearer " + token } });
     if (!res.ok) throw new Error("Request failed");
     const data = await res.json();
     renderAnalytics(data);
   } catch (e) {
-    view.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div>Could not load analytics</div>';
+    view.innerHTML = renderAnalyticsFilterBar() + '<div class="empty"><div class="empty-icon">⚠️</div>Could not load analytics</div>';
   }
 }
 
@@ -427,7 +539,7 @@ function renderAnalytics(data) {
   const maxCount = Math.max(1, ...Object.values(totals));
 
   if (totalEvents === 0) {
-    view.innerHTML = '<div class="empty"><div class="empty-icon">📊</div>No support channel activity yet</div>';
+    view.innerHTML = renderAnalyticsFilterBar() + '<div class="empty"><div class="empty-icon">📊</div>No support channel activity in this range</div>';
     return;
   }
 
@@ -449,6 +561,7 @@ function renderAnalytics(data) {
   }).join('');
 
   view.innerHTML = `
+    ${renderAnalyticsFilterBar()}
     <div class="analytics-summary">
       <div class="analytics-total-count">${totalEvents}</div>
       <div class="analytics-total-label">Total support interactions</div>
@@ -463,7 +576,7 @@ async function exportAnalyticsCSV() {
   const token = localStorage.getItem("adminToken");
   if (btn) { btn.disabled = true; btn.textContent = "Exporting…"; }
   try {
-    const res = await fetch("/support-analytics/export", { headers: { Authorization: "Bearer " + token } });
+    const res = await fetch("/support-analytics/export" + buildAnalyticsQuery(), { headers: { Authorization: "Bearer " + token } });
     if (!res.ok) throw new Error("Export failed");
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
