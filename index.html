@@ -1172,6 +1172,7 @@ header { padding: 10px 0; }
   -webkit-overflow-scrolling: touch;
   transform: translateX(100%);
   transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  padding-bottom: 32px; /* ensure bottom of member card is fully scrollable into view */
 }
 #navDrawer.open { transform: translateX(0); }
 body.dark #navDrawer { background: #121212; color: #f0f0f0; }
@@ -1277,6 +1278,90 @@ body.dark .drawer-member-perks li { color: #aaa; }
   cursor: pointer; font-family: 'Poppins', sans-serif;
 }
 body.dark .drawer-btn-login { border-color: #444; }
+
+/* Drawer quick-link rows (Help & Support / About Us) */
+.drawer-quicklink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 17px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  color: inherit;
+  border: none;
+  border-top: 1px solid #f0f0f0;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.drawer-quicklink:active { background: #f5f5f5; }
+body.dark .drawer-quicklink { border-color: #222; }
+body.dark .drawer-quicklink:active { background: #1c1c1c; }
+.drawer-quicklink-chevron { color: #bbb; flex-shrink: 0; }
+
+/* ── ABOUT US / STORE INFO PAGE ── */
+#storeInfoPage { display: none; padding: 0; }
+.store-info-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 10;
+}
+body.dark .store-info-header { background: #121212; border-color: #222; }
+.store-info-back {
+  background: none; border: none; cursor: pointer;
+  color: inherit; padding: 4px; flex-shrink: 0;
+}
+.store-info-header h2 {
+  font-size: 17px; font-weight: 800;
+  margin: 0; letter-spacing: 0.5px;
+  font-family: 'Poppins', sans-serif;
+}
+.store-info-body { padding: 20px 16px 40px; }
+.store-info-logo-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  margin-bottom: 24px;
+}
+.store-info-logo {
+  width: 80px; height: 80px; border-radius: 50%;
+  object-fit: cover; border: 3px solid #28b570;
+  margin-bottom: 10px;
+}
+.store-info-name {
+  font-size: 20px; font-weight: 900;
+  font-family: 'Poppins', sans-serif; text-align: center;
+  letter-spacing: -0.3px;
+}
+.store-info-tagline {
+  font-size: 13px; color: #888; text-align: center; margin-top: 4px;
+}
+.store-info-card {
+  background: #f7f7f7; border-radius: 14px;
+  padding: 18px; margin-bottom: 14px;
+}
+body.dark .store-info-card { background: #1c1c1c; }
+.store-info-card-title {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: #28b570; margin-bottom: 10px;
+}
+.store-info-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; line-height: 1.5; padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+body.dark .store-info-row { border-color: #2a2a2a; }
+.store-info-row:last-child { border-bottom: none; padding-bottom: 0; }
+.store-info-row-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.store-info-row-text { flex: 1; color: #444; }
+body.dark .store-info-row-text { color: #bbb; }
 
 /* Header menu-open icons */
 #headerIconsMenu { display: none; align-items: center; gap: 8px; justify-self: end; }
@@ -2249,6 +2334,14 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
         <button class="drawer-btn-login" onclick="drawerNav('account')">Login</button>
       </div>
     </div>
+    <button class="drawer-quicklink" onclick="drawerNav('support')">
+      Help &amp; Support
+      <svg class="drawer-quicklink-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <button class="drawer-quicklink" onclick="drawerNav('storeInfo')">
+      About Us
+      <svg class="drawer-quicklink-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
   </nav>
 
   <div id="topHomeArea">
@@ -3015,6 +3108,60 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
     </div>
   </div>
 
+  <!-- ABOUT US / STORE INFO PAGE -->
+  <div id="storeInfoPage">
+    <div class="store-info-header">
+      <button class="store-info-back" onclick="history.back()">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
+      </button>
+      <h2>ABOUT US</h2>
+    </div>
+    <div class="store-info-body">
+      <div class="store-info-logo-wrap">
+        <img src="logo.png" alt="Ibom Sports Hub" class="store-info-logo">
+        <div class="store-info-name">Ibom Sports Hub</div>
+        <div class="store-info-tagline">Your home for premium football gear in Uyo</div>
+      </div>
+
+      <div class="store-info-card">
+        <div class="store-info-card-title">Our Story</div>
+        <p style="font-size:14px;line-height:1.7;color:#555;margin:0;">
+          Ibom Sports Hub was founded with one goal — to bring world-class football boots, jerseys,
+          and training gear to players and fans in Akwa Ibom and beyond. We stock authentic products
+          from the biggest brands so every player, from grassroots to elite, can perform at their best.
+        </p>
+      </div>
+
+      <div class="store-info-card">
+        <div class="store-info-card-title">Find Us</div>
+        <div class="store-info-row">
+          <span class="store-info-row-icon">📍</span>
+          <span class="store-info-row-text">227, Ikot Ekpene Road, Uyo, Akwa Ibom State, Nigeria</span>
+        </div>
+        <div class="store-info-row">
+          <span class="store-info-row-icon">🕐</span>
+          <span class="store-info-row-text">Mon – Sat: 9 AM – 7 PM &nbsp;|&nbsp; Sun: 12 PM – 5 PM</span>
+        </div>
+      </div>
+
+      <div class="store-info-card">
+        <div class="store-info-card-title">Contact</div>
+        <div class="store-info-row">
+          <span class="store-info-row-icon">📧</span>
+          <span class="store-info-row-text">ibomsportshub@gmail.com</span>
+        </div>
+        <div class="store-info-row">
+          <span class="store-info-row-icon">💬</span>
+          <span class="store-info-row-text">WhatsApp us for quick replies and order updates</span>
+        </div>
+      </div>
+
+      <button onclick="navigate({page:'support'})" style="width:100%;padding:15px;background:#28b570;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;margin-top:4px;">
+        Contact Support
+      </button>
+    </div>
+  </div>
+
   <!-- TICKET PAGE -->
   <div id="ticketPage">
     <div class="ticket-chat-header">
@@ -3123,7 +3270,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
 function getCurrentEl() {
   const pages = ['payment','reviewPage','reviewDetail','supportPage','ticketPage','aiChatPage','phonePage',
-                 'accountPage','wishlistPage','searchPage','categoriesPage'];
+                 'accountPage','wishlistPage','searchPage','categoriesPage','storeInfoPage'];
   for (const id of pages) {
     const el = document.getElementById(id);
     if (el && el.style.display === 'block') return el;
@@ -3137,7 +3284,7 @@ function getCurrentEl() {
 
 function hideAll() {
   ['home','payment','reviewPage','reviewDetail','resultView',
-   'supportPage','ticketPage','aiChatPage','phonePage','accountPage','wishlistPage','searchPage','categoriesPage']
+   'supportPage','ticketPage','aiChatPage','phonePage','accountPage','wishlistPage','searchPage','categoriesPage','storeInfoPage']
     .forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
 }
@@ -3147,7 +3294,7 @@ function showTarget(state, inClass) {
   const isReview = (page === 'review' || page === 'reviewDetail');
   const isSupport = (page === 'support' || page === 'ticket' || page === 'aichat' || page === 'phone' ||
                      page === 'account' || page === 'wishlist' || page === 'searchPage' ||
-                     page === 'categoriesPage');
+                     page === 'categoriesPage' || page === 'storeInfo');
 
   const hdrMap = { account:'hdrBtnAccount', wishlist:'hdrBtnWishlist', searchPage:'hdrBtnSearch' };
   const navMap = { home:'navHome', support:'navSupport', ticket:'navSupport', aichat:'navSupport', phone:'navSupport', categoriesPage:'navCategories' };
@@ -3216,6 +3363,9 @@ function showTarget(state, inClass) {
     el = document.getElementById('categoriesPage');
     el.style.display = 'flex';
     initCategoriesPage();
+  } else if (page === 'storeInfo') {
+    el = document.getElementById('storeInfoPage');
+    el.style.display = 'block';
   }
 
   // ✅ apply animation
