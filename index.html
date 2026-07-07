@@ -1442,6 +1442,81 @@ body.dark .account-action-btn { background: #1e1e1e; border-color: rgba(255,255,
 body.dark .account-action-btn:hover { background: #2a2a2a; }
 .account-action-btn svg { width: 20px; height: 20px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .account-logout { color: #e53935; border-color: rgba(229,57,53,0.2) !important; }
+.account-email-sub { text-align:center; font-size:12px; color:#888; margin-top:-18px; margin-bottom:26px; word-break:break-all; padding: 0 20px; }
+
+/* ── ACCOUNT LOGIN PAGE (guest view) ── */
+.acct-login-body { padding: 28px 24px 48px; }
+.acct-login-title {
+  font-size: 22px; font-weight: 900; line-height: 1.25;
+  letter-spacing: 0.3px; margin-bottom: 24px;
+}
+.acct-benefit-list {
+  list-style: none; padding: 0; margin: 0 0 28px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.acct-benefit-list li {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 14px; line-height: 1.4;
+}
+.acct-benefit-list li::before {
+  content: '✓'; font-weight: 800; font-size: 15px; flex-shrink: 0; margin-top: 1px;
+}
+.acct-field-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+  text-transform: uppercase; color: #666; margin-bottom: 8px;
+}
+body.dark .acct-field-label { color: #aaa; }
+.acct-email-input {
+  width: 100%; box-sizing: border-box;
+  padding: 16px 18px;
+  border: 1.5px solid #ccc; border-radius: 12px;
+  font-size: 16px; font-family: 'Poppins', sans-serif;
+  outline: none; background: white; color: #111;
+  transition: border-color 0.2s; margin-bottom: 14px;
+}
+.acct-email-input:focus { border-color: #7c3aed; }
+body.dark .acct-email-input { background: #1e1e1e; border-color: #444; color: #fff; }
+body.dark .acct-email-input:focus { border-color: #a78bfa; }
+.acct-main-btn {
+  width: 100%; padding: 17px; border: none; border-radius: 50px;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: white; font-size: 15px; font-weight: 700;
+  font-family: 'Poppins', sans-serif; cursor: pointer;
+  letter-spacing: 0.3px; transition: opacity 0.18s;
+}
+.acct-main-btn:active { opacity: 0.82; }
+.acct-divider {
+  display: flex; align-items: center; gap: 14px;
+  margin: 22px 0; color: #aaa; font-size: 13px;
+}
+.acct-divider::before, .acct-divider::after {
+  content: ''; flex: 1; height: 1px; background: #ddd;
+}
+body.dark .acct-divider::before, body.dark .acct-divider::after { background: #333; }
+.acct-social-btn {
+  width: 100%; padding: 16px; border: none; border-radius: 50px;
+  font-size: 15px; font-weight: 700; font-family: 'Poppins', sans-serif;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; gap: 12px;
+  transition: opacity 0.18s; margin-bottom: 12px; letter-spacing: 0.3px;
+}
+.acct-social-btn:active { opacity: 0.82; }
+.acct-google-btn { background: #4285f4; color: white; }
+.acct-apple-btn { background: #000; color: white; }
+body.dark .acct-apple-btn { background: #f0f0f0; color: #000; }
+body.dark .acct-apple-btn svg path { fill: #000; }
+.acct-social-icon {
+  width: 26px; height: 26px; background: white; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.acct-apple-icon { background: transparent; }
+#acctNameStep { display: none; }
+#acctNameStep.visible { display: block; }
+.acct-back-link {
+  background: none; border: none; color: #7c3aed; font-size: 13px;
+  font-family: 'Poppins', sans-serif; cursor: pointer; padding: 0;
+  margin-bottom: 24px; display: flex; align-items: center; gap: 4px; font-weight: 600;
+}
 
 .wishlist-empty {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -3005,6 +3080,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
       <div class="account-avatar" id="accountAvatar">👤</div>
       <div class="account-name" id="accountDisplayName"></div>
       <div class="account-sub">Ibom Sports Hub Member</div>
+      <div class="account-email-sub" id="accountEmailDisplay"></div>
       <div class="account-actions">
         <button class="account-action-btn" onclick="navigate({page:'wishlist'})">
           <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -3020,15 +3096,51 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
         </button>
       </div>
     </div>
-    <div id="accountGuest" style="display:none; padding:30px 20px;">
-      <div class="account-avatar">👤</div>
-      <div class="account-name">Welcome!</div>
-      <div class="account-sub">Create a profile to save your wishlist</div>
-      <div class="ticket-field" style="margin-top:20px">
-        <label>Your Name</label>
-        <input type="text" id="customerNameInput" placeholder="Enter your name">
+    <div id="accountGuest" style="display:none">
+      <div class="acct-login-body">
+        <!-- Step 1: Email + social -->
+        <div id="acctEmailStep">
+          <div class="acct-login-title">LOG IN OR BECOME A MEMBER</div>
+          <ul class="acct-benefit-list">
+            <li>Access member exclusive products</li>
+            <li>Participate in exclusive events &amp; giveaways</li>
+            <li>Get early access to new arrivals</li>
+            <li>Create wishlists with your favourite products</li>
+          </ul>
+          <div class="acct-field-label">EMAIL</div>
+          <input class="acct-email-input" type="email" id="customerEmailInput" placeholder="Email" autocomplete="email" onkeydown="if(event.key==='Enter')handleEmailLogin()">
+          <button class="acct-main-btn" onclick="handleEmailLogin()">Log in or sign up</button>
+          <div class="acct-divider">Or</div>
+          <button class="acct-social-btn acct-google-btn" onclick="handleGoogleLogin()">
+            <span class="acct-social-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+            </span>
+            Log in with Google
+          </button>
+          <button class="acct-social-btn acct-apple-btn" onclick="handleAppleLogin()">
+            <span class="acct-social-icon acct-apple-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                <path fill="white" d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.32.07 2.24.74 3.01.77 1.14-.22 2.24-.91 3.46-.82 1.46.12 2.56.69 3.27 1.79-3.01 1.81-2.29 5.78.27 6.87-.57 1.47-1.3 2.93-2.01 4.25zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+              </svg>
+            </span>
+            Sign in with Apple
+          </button>
+        </div>
+        <!-- Step 2: Name (new email users only) -->
+        <div id="acctNameStep">
+          <button class="acct-back-link" onclick="showEmailStep()">← Back</button>
+          <div class="acct-login-title">COMPLETE YOUR PROFILE</div>
+          <div class="account-sub" style="text-align:left;margin-bottom:22px">What should we call you?</div>
+          <div class="acct-field-label">YOUR NAME</div>
+          <input class="acct-email-input" type="text" id="customerNameInput" placeholder="Full name" autocomplete="name" onkeydown="if(event.key==='Enter')saveCustomerAccount()">
+          <button class="acct-main-btn" onclick="saveCustomerAccount()">Create Account</button>
+        </div>
       </div>
-      <button class="submit-ticket-btn" onclick="saveCustomerAccount()" style="margin-top:8px">Create Profile</button>
     </div>
   </div>
 
@@ -4344,29 +4456,163 @@ function openSupport() {
 }
 
 // ── CUSTOMER ACCOUNT ──
+// ── ACCOUNT AUTH CONFIG ──
+// Drop your Google OAuth Client ID here (from https://console.cloud.google.com/)
+const GOOGLE_CLIENT_ID = '';
+// Drop your Apple Services ID here (from https://developer.apple.com/)
+const APPLE_SERVICE_ID = '';
+
 function initAccountPage() {
-  const name = localStorage.getItem('ibomCustomerName');
-  if (name) {
+  // Migrate legacy users who only have a name (no email stored yet)
+  const name  = localStorage.getItem('ibomCustomerName');
+  const email = localStorage.getItem('ibomCustomerEmail');
+  if (name && !email) {
+    // Give them a placeholder email so they stay logged in
+    localStorage.setItem('ibomCustomerEmail', name.toLowerCase().replace(/\s+/g,'') + '@ibom.member');
+    localStorage.setItem('ibomAuthProvider', 'legacy');
+  }
+
+  const resolvedName  = localStorage.getItem('ibomCustomerName');
+  const resolvedEmail = localStorage.getItem('ibomCustomerEmail');
+  if (resolvedName && resolvedEmail) {
     document.getElementById('accountLoggedIn').style.display = 'block';
     document.getElementById('accountGuest').style.display = 'none';
-    document.getElementById('accountDisplayName').textContent = name;
-    document.getElementById('accountAvatar').textContent = name[0].toUpperCase();
+    document.getElementById('accountDisplayName').textContent = resolvedName;
+    document.getElementById('accountAvatar').textContent = resolvedName[0].toUpperCase();
+    const emailEl = document.getElementById('accountEmailDisplay');
+    if (emailEl) emailEl.textContent = resolvedEmail.endsWith('@ibom.member') ? '' : resolvedEmail;
   } else {
     document.getElementById('accountLoggedIn').style.display = 'none';
     document.getElementById('accountGuest').style.display = 'block';
+    showEmailStep();
+  }
+}
+
+function showEmailStep() {
+  const emailStep = document.getElementById('acctEmailStep');
+  const nameStep  = document.getElementById('acctNameStep');
+  if (emailStep) emailStep.style.display = 'block';
+  if (nameStep)  nameStep.classList.remove('visible');
+}
+
+function handleEmailLogin() {
+  const email = (document.getElementById('customerEmailInput').value || '').trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('customerEmailInput').focus();
+    return;
+  }
+  const storedEmail = localStorage.getItem('ibomCustomerEmail');
+  const storedName  = localStorage.getItem('ibomCustomerName');
+  if (storedEmail === email && storedName) {
+    // Returning user — log straight in
+    finishLogin(email, storedName, 'email');
+  } else {
+    // New user — ask for name
+    document.getElementById('acctEmailStep').style.display = 'none';
+    document.getElementById('acctNameStep').classList.add('visible');
+    setTimeout(() => document.getElementById('customerNameInput').focus(), 80);
   }
 }
 
 function saveCustomerAccount() {
-  const name = document.getElementById('customerNameInput').value.trim();
-  if (!name) return;
-  localStorage.setItem('ibomCustomerName', name);
+  const name  = (document.getElementById('customerNameInput').value || '').trim();
+  const email = (document.getElementById('customerEmailInput').value || '').trim()
+                || localStorage.getItem('ibomCustomerEmail') || '';
+  if (!name) { document.getElementById('customerNameInput').focus(); return; }
+  finishLogin(email, name, 'email');
+}
+
+function finishLogin(email, name, provider) {
+  localStorage.setItem('ibomCustomerEmail', email);
+  localStorage.setItem('ibomCustomerName',  name);
+  localStorage.setItem('ibomAuthProvider',  provider);
   initAccountPage();
 }
 
 function logoutCustomer() {
+  localStorage.removeItem('ibomCustomerEmail');
   localStorage.removeItem('ibomCustomerName');
+  localStorage.removeItem('ibomAuthProvider');
   initAccountPage();
+}
+
+// Safely decode a JWT payload (handles base64url padding)
+function _decodeJwtPayload(token) {
+  try {
+    const part = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    const padded = part + '='.repeat((4 - part.length % 4) % 4);
+    return JSON.parse(atob(padded));
+  } catch(e) { return null; }
+}
+
+// ── GOOGLE SIGN-IN ──
+let _googleLoading = false;
+function handleGoogleLogin() {
+  if (!GOOGLE_CLIENT_ID) {
+    alert('Google Sign-In isn\'t configured yet.\nPlease enter your email above to sign up for now.');
+    return;
+  }
+  if (window.google) { _initGoogleSignIn(); return; }
+  if (_googleLoading) return;
+  _googleLoading = true;
+  const s = document.createElement('script');
+  s.src = 'https://accounts.google.com/gsi/client';
+  s.onload = () => { _googleLoading = false; _initGoogleSignIn(); };
+  s.onerror = () => { _googleLoading = false; alert('Could not load Google Sign-In. Please check your connection and try again.'); };
+  document.head.appendChild(s);
+}
+function _initGoogleSignIn() {
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: (res) => {
+      const p = _decodeJwtPayload(res.credential);
+      if (p && p.email) finishLogin(p.email, p.name || p.email.split('@')[0], 'google');
+      else alert('Google Sign-In failed. Please try again or use email.');
+    }
+  });
+  google.accounts.id.prompt();
+}
+
+// ── APPLE SIGN-IN ──
+let _appleLoading = false;
+function handleAppleLogin() {
+  if (!APPLE_SERVICE_ID) {
+    alert('Apple Sign-In isn\'t configured yet.\nPlease enter your email above to sign up for now.');
+    return;
+  }
+  if (window.AppleID) { _initAppleSignIn(); return; }
+  if (_appleLoading) return;
+  _appleLoading = true;
+  const s = document.createElement('script');
+  s.src = 'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';
+  s.onload = () => { _appleLoading = false; _initAppleSignIn(); };
+  s.onerror = () => { _appleLoading = false; alert('Could not load Apple Sign-In. Please check your connection and try again.'); };
+  document.head.appendChild(s);
+}
+function _initAppleSignIn() {
+  AppleID.auth.init({
+    clientId: APPLE_SERVICE_ID,
+    scope: 'name email',
+    redirectURI: window.location.href.split('?')[0],
+    usePopup: true
+  });
+  AppleID.auth.signIn().then(data => {
+    let email = '', name = '';
+    if (data.authorization?.id_token) {
+      const p = _decodeJwtPayload(data.authorization.id_token);
+      if (p) email = p.email || '';
+    }
+    if (data.user) {
+      const fn = data.user.name?.firstName || '';
+      const ln = data.user.name?.lastName  || '';
+      name  = (fn + ' ' + ln).trim();
+      email = email || data.user.email || '';
+    }
+    if (email) finishLogin(email, name || email.split('@')[0], 'apple');
+    else alert('Apple Sign-In did not return an email. Please use email sign-up instead.');
+  }).catch(err => {
+    if (err.error !== 'popup_closed_by_user') console.error('Apple login error', err);
+  });
 }
 
 // ── WISHLIST ──
