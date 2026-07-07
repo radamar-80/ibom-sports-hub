@@ -522,7 +522,7 @@ body.dark .sub-title { color: #ff3333; }
 .rv-track::-webkit-scrollbar { display: none; }
 .rv-slide {
   flex-shrink: 0;
-  width: calc(100vw - 40px); /* viewport minus the review-section's 20px padding on each side */
+  min-width: 100%;
   scroll-snap-align: center;
   box-sizing: border-box;
   display: flex;
