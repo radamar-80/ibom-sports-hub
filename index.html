@@ -3841,6 +3841,7 @@ async function loadReviews() {
   try {
     const res = await fetch('/reviews');
     allReviews = await res.json();
+    allReviews.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     renderReviewCards(allReviews);
   } catch(e) { /* no reviews yet */ }
 }
