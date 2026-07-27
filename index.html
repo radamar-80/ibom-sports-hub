@@ -3506,19 +3506,29 @@ function restoreState(state, direction) {
   const outEl = getCurrentEl();
   const outClass = direction === 'forward' ? 'page-out-left' : 'page-out-right';
   const inClass  = direction === 'forward' ? 'page-in-right' : 'page-in-left';
+  const savedY = (state && state.scrollY != null) ? state.scrollY : 0;
   if (outEl) {
     outEl.classList.add(outClass);
     setTimeout(() => {
       outEl.classList.remove(outClass);
       showTarget(state, inClass);
+      window.scrollTo(0, savedY);
     }, 270);
   } else {
     showTarget(state, inClass);
+    window.scrollTo(0, savedY);
   }
 }
 
 function navigate(state) {
   const current = getCurrentEl();
+
+  // Save scroll position into the current history entry before leaving
+  try {
+    const cur = history.state ? Object.assign({}, history.state) : {};
+    cur.scrollY = window.scrollY;
+    history.replaceState(cur, '');
+  } catch(e) {}
 
   // animate current OUT (forward)
   if (current) {
@@ -3528,6 +3538,7 @@ function navigate(state) {
       current.classList.remove('page-out-left');
 
       history.pushState(state, '');
+      window.scrollTo(0, 0);
 
       // animate new page IN
       showTarget(state, 'page-in-right');
@@ -3536,6 +3547,7 @@ function navigate(state) {
 
   } else {
     history.pushState(state, '');
+    window.scrollTo(0, 0);
     showTarget(state, 'page-in-right');
   }
     }
