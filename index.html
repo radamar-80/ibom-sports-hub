@@ -1174,7 +1174,7 @@ header { padding: 10px 0; }
   -webkit-overflow-scrolling: touch;
   transform: translateX(100%);
   transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
-  padding-bottom: 32px; /* ensure bottom of member card is fully scrollable into view */
+  padding-bottom: 24px;
 }
 #navDrawer.open { transform: translateX(0); }
 body.dark #navDrawer { background: #121212; color: #f0f0f0; }
@@ -4212,7 +4212,10 @@ function openMenu() {
   const drawer = document.getElementById('navDrawer');
   const overlay = document.getElementById('navDrawerOverlay');
   const bannerBottom = banner ? Math.max(0, banner.getBoundingClientRect().bottom) : 0;
+  const bottomNav = document.getElementById('bottomNav');
+  const bottomNavH = bottomNav ? bottomNav.getBoundingClientRect().height : 0;
   drawer.style.top = bannerBottom + 'px';
+  drawer.style.bottom = bottomNavH + 'px';
   drawer.style.paddingTop = (hdr.getBoundingClientRect().bottom - bannerBottom) + 'px';
   drawer.classList.add('open');
   drawer.setAttribute('aria-hidden', 'false');
