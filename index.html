@@ -2813,8 +2813,8 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <div class="rv-track-wrapper">
     <div class="rv-track" id="rvTrack"></div>
   </div>
-  <div class="na-bar-track rv-bar-track">
-    <div class="na-bar-thumb" id="rvBarThumb"></div>
+  <div style="text-align:right; margin-top:10px;">
+    <span onclick="navigate({page:'allReviews'})" style="font-size:13px; font-weight:600; color:#28b570; cursor:pointer;">See all reviews →</span>
   </div>
 </div>
 </div>
@@ -3065,6 +3065,14 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <div class="submit-review" id="submitBtn" onclick="submitReview()">Submit</div>
 </div>
  
+  <div id="allReviewsPage" style="display:none; padding:20px;">
+    <div class="page-header">
+      <button class="support-back" onclick="history.back()"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg></button>
+      <h2>All Reviews</h2>
+    </div>
+    <div id="allReviewsList"></div>
+  </div>
+
   <div id="reviewDetail" style="display:none; padding:24px 20px;">
     <button class="support-back" onclick="history.back()" style="margin-bottom:16px;"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg></button>
     <div id="reviewDetailContent"></div>
@@ -3383,7 +3391,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   let allReviews = [];
 
 function getCurrentEl() {
-  const pages = ['payment','reviewPage','reviewDetail','supportPage','ticketPage','aiChatPage','phonePage',
+  const pages = ['payment','reviewPage','reviewDetail','allReviewsPage','supportPage','ticketPage','aiChatPage','phonePage',
                  'accountPage','wishlistPage','searchPage','categoriesPage','storeInfoPage'];
   for (const id of pages) {
     const el = document.getElementById(id);
@@ -3397,7 +3405,7 @@ function getCurrentEl() {
 }
 
 function hideAll() {
-  ['home','payment','reviewPage','reviewDetail','resultView',
+  ['home','payment','reviewPage','reviewDetail','allReviewsPage','resultView',
    'supportPage','ticketPage','aiChatPage','phonePage','accountPage','wishlistPage','searchPage','categoriesPage','storeInfoPage']
     .forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -3442,6 +3450,10 @@ function showTarget(state, inClass) {
   } else if (page === 'review') {
     el = document.getElementById('reviewPage');
     el.style.display = 'block';
+  } else if (page === 'allReviews') {
+    el = document.getElementById('allReviewsPage');
+    el.style.display = 'block';
+    renderAllReviewsPage();
   } else if (page === 'reviewDetail') {
     el = document.getElementById('reviewDetail');
     el.style.display = 'block';
@@ -3981,19 +3993,48 @@ function renderReviewCards(reviews) {
       </div>`;
   }
 
-  // Group into slides of 3
-  const slides = [];
-  for (let i = 0; i < reviews.length; i += 3) {
-    const chunk = reviews.slice(i, i + 3);
-    slides.push(`<div class="rv-slide">${chunk.map((r, j) => cardHtml(r, i + j)).join('')}</div>`);
-  }
-  track.innerHTML = slides.join('');
-
-  reviewSlider.init();
+  // Show only the latest 3 as a single static block
+  const top3 = reviews.slice(0, 3);
+  track.innerHTML = `<div class="rv-slide">${top3.map((r, i) => cardHtml(r, i)).join('')}</div>`;
 }
 
 function showReviewDetail(index) {
   navigate({ page: 'reviewDetail', index });
+}
+
+function renderAllReviewsPage() {
+  const list = document.getElementById('allReviewsList');
+  if (!allReviews.length) {
+    list.innerHTML = '<p style="text-align:center;color:#aaa;margin-top:32px;">No reviews yet.</p>';
+    return;
+  }
+  const cameraIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
+  const avatarPalette = ['#28b570','#2196f3','#ff7043','#9c27b0','#00bcd4','#ff9800','#e91e63','#3f51b5'];
+  const ANON = `<svg class="review-avatar" viewBox="0 0 36 36" width="36" height="36" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="18" cy="18" r="18" fill="#d0d0d0"/><circle cx="18" cy="14" r="6" fill="#a0a0a0"/><path d="M6 32c0-7 5.4-12 12-12s12 5 12 12" fill="#a0a0a0"/></svg>`;
+  list.innerHTML = allReviews.map((r, i) => {
+    const filled = '★'.repeat(r.rating || 0);
+    const empty  = '☆'.repeat(5 - (r.rating || 0));
+    const hasName = r.name && r.name.trim();
+    const displayName = hasName ? r.name : 'Anonymous';
+    const long = r.text && r.text.length > 100;
+    let avatarHtml;
+    if (hasName) {
+      const colorIdx = [...r.name].reduce((s, c) => s + c.charCodeAt(0), 0) % avatarPalette.length;
+      avatarHtml = `<div class="review-avatar" style="background:${avatarPalette[colorIdx]}">${r.name.trim()[0].toUpperCase()}</div>`;
+    } else { avatarHtml = ANON; }
+    const photoHtml = r.photo
+      ? `<img src="${r.photo}" alt="photo" onclick="navigate({page:'reviewDetail',index:${i}})" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`
+      : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">${cameraIcon}</div>`;
+    return `<div class="review-card-new" style="margin-bottom:10px;">
+      <div class="review-card-left">
+        <div class="review-card-header">${avatarHtml}<span class="review-card-name">${displayName}</span></div>
+        <div class="review-card-stars">${filled}<span style="color:#ccc">${empty}</span></div>
+        <div class="review-card-text">${r.text || '(No comment)'}</div>
+        ${long ? `<span class="review-card-more" onclick="navigate({page:'reviewDetail',index:${i}})">...more</span>` : ''}
+      </div>
+      <div class="review-card-right">${photoHtml}</div>
+    </div>`;
+  }).join('');
 }
 
 function renderReviewDetail(index) {
