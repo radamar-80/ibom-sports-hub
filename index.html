@@ -4053,20 +4053,62 @@ function renderAllReviewsPage() {
   }).join('');
 }
 
+function getOrCreateUserId() {
+  let uid = localStorage.getItem('ibomUserId');
+  if (!uid) { uid = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + Math.random().toString(36)); localStorage.setItem('ibomUserId', uid); }
+  return uid;
+}
+
 function renderReviewDetail(index) {
   const r = allReviews[index];
   if (!r) return;
   const filled = '★'.repeat(r.rating || 0);
   const empty  = '☆'.repeat(5 - (r.rating || 0));
   const name   = r.name || 'Anonymous';
+  const dateStr = r.timestamp ? (() => { const d = new Date(r.timestamp); return d.getDate()+'/'+(d.getMonth()+1)+'/'+String(d.getFullYear()).slice(-2); })() : '';
   const photoHtml = r.photo
     ? `<img class="review-detail-photo" src="${r.photo}" alt="Product photo">`
     : `<div style="text-align:center;padding:24px;color:#aaa;"><svg viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5" width="52" height="52"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`;
+  const myVote   = localStorage.getItem('helpful_' + r.id);
+  const yesCount = r.helpful ? r.helpful.yes : 0;
+  const helpfulText = yesCount === 1 ? '1 user found this review helpful' : yesCount + ' users found this review helpful';
+  const yBg = myVote==='yes' ? '#28b570' : '#fff', yBorder = myVote==='yes' ? '#28b570' : '#ccc', yColor = myVote==='yes' ? '#fff' : '#333';
+  const nBg = myVote==='no'  ? '#e53935' : '#fff', nBorder = myVote==='no'  ? '#e53935' : '#ccc', nColor = myVote==='no'  ? '#fff' : '#333';
   document.getElementById('reviewDetailContent').innerHTML = `
     <div class="review-detail-name">${name}</div>
-    <div class="review-detail-stars">${filled}<span style="color:#ccc">${empty}</span></div>
+    <div class="review-detail-stars">${filled}<span style="color:#ccc">${empty}</span>${dateStr ? `<span style="font-size:11px;color:#999;margin-left:8px;font-weight:400;">${dateStr}</span>` : ''}</div>
     ${photoHtml}
-    <div class="review-detail-text">${r.text || '(No comment)'}</div>`;
+    <div class="review-detail-text">${r.text || '(No comment)'}</div>
+    <div id="helpfulCount" style="font-size:12px;color:#888;margin-top:18px;">${helpfulText}</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;flex-wrap:wrap;gap:8px;">
+      <span style="font-size:13px;color:#444;font-family:'Poppins',sans-serif;">Was this review helpful?</span>
+      <div style="display:flex;gap:8px;">
+        <button id="helpYesBtn" onclick="voteHelpful(${r.id},'yes')" style="padding:7px 20px;border:1.5px solid ${yBorder};background:${yBg};color:${yColor};border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;">Yes</button>
+        <button id="helpNoBtn"  onclick="voteHelpful(${r.id},'no')"  style="padding:7px 20px;border:1.5px solid ${nBorder};background:${nBg};color:${nColor};border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;">No</button>
+      </div>
+    </div>`;
+}
+
+async function voteHelpful(reviewId, vote) {
+  const userId = getOrCreateUserId();
+  const voteKey = 'helpful_' + reviewId;
+  try {
+    const res = await fetch('/reviews/' + reviewId + '/helpful', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, vote })
+    });
+    const data = await res.json();
+    localStorage.setItem(voteKey, vote);
+    const r = allReviews.find(r => r.id === reviewId);
+    if (r) { if (!r.helpful) r.helpful = {}; r.helpful.yes = data.yes; r.helpful.no = data.no; }
+    const countEl = document.getElementById('helpfulCount');
+    if (countEl) { const y = data.yes; countEl.textContent = y === 1 ? '1 user found this review helpful' : y + ' users found this review helpful'; }
+    const yBtn = document.getElementById('helpYesBtn'), nBtn = document.getElementById('helpNoBtn');
+    if (yBtn) { yBtn.style.background = vote==='yes'?'#28b570':'#fff'; yBtn.style.borderColor = vote==='yes'?'#28b570':'#ccc'; yBtn.style.color = vote==='yes'?'#fff':'#333'; }
+    if (nBtn) { nBtn.style.background = vote==='no'?'#e53935':'#fff'; nBtn.style.borderColor = vote==='no'?'#e53935':'#ccc'; nBtn.style.color = vote==='no'?'#fff':'#333'; }
+    showToast('Thanks for your feedback!');
+  } catch(e) { showToast('Something went wrong. Please try again.'); }
 }
 
 // init — hide review form fields until a star is tapped

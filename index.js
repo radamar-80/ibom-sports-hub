@@ -336,6 +336,38 @@ app.get("/reviews", (req, res) => {
   res.json(readReviews());
 });
 
+// VOTE HELPFUL
+app.post("/reviews/:id/helpful", express.json(), (req, res) => {
+  const id = parseInt(req.params.id);
+  const { userId, vote } = req.body;
+  if (!userId || !['yes','no'].includes(vote)) return res.status(400).json({ message: "Invalid" });
+  const reviews = readReviews();
+  const r = reviews.find(r => r.id === id);
+  if (!r) return res.status(404).json({ message: "Review not found" });
+  if (!r.helpful) r.helpful = { yes: 0, no: 0, voters: {} };
+  const prev = r.helpful.voters[userId];
+  if (prev === vote) return res.json({ yes: r.helpful.yes, no: r.helpful.no, vote });
+  if (prev) r.helpful[prev] = Math.max(0, r.helpful[prev] - 1);
+  r.helpful[vote]++;
+  r.helpful.voters[userId] = vote;
+  writeReviews(reviews);
+  res.json({ yes: r.helpful.yes, no: r.helpful.no, vote });
+});
+
+// HELPFUL STATS — admin
+app.get("/reviews/helpful-stats", verifyToken, (req, res) => {
+  const reviews = readReviews();
+  res.json(reviews.map(r => ({
+    id: r.id,
+    name: r.name || 'Anonymous',
+    rating: r.rating || 0,
+    text: r.text || '',
+    timestamp: r.timestamp || '',
+    yes: r.helpful ? r.helpful.yes : 0,
+    no:  r.helpful ? r.helpful.no  : 0,
+  })));
+});
+
 // SUBMIT REVIEW
 app.post("/submit-review", express.json({ limit: "25mb" }), (req, res) => {
   const { rating, text, name, photo } = req.body;
