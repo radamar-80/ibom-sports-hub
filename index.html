@@ -3967,12 +3967,19 @@ function renderReviewCards(reviews) {
     <path d="M6 32c0-7 5.4-12 12-12s12 5 12 12" fill="#a0a0a0"/>
   </svg>`;
 
+  function fmtDate(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    return d.getDate() + '/' + (d.getMonth()+1) + '/' + String(d.getFullYear()).slice(-2);
+  }
+
   function cardHtml(r, i) {
     const filled = '★'.repeat(r.rating || 0);
     const empty  = '☆'.repeat(5 - (r.rating || 0));
     const hasName = r.name && r.name.trim();
     const displayName = hasName ? r.name : 'Anonymous';
     const long = r.text && r.text.length > 120;
+    const dateStr = fmtDate(r.timestamp);
 
     // Named reviewer → coloured initial; anonymous → grey person SVG
     let avatarHtml;
@@ -3994,7 +4001,7 @@ function renderReviewCards(reviews) {
             ${avatarHtml}
             <span class="review-card-name">${displayName}</span>
           </div>
-          <div class="review-card-stars">${filled}<span style="color:#ccc">${empty}</span></div>
+          <div class="review-card-stars">${filled}<span style="color:#ccc">${empty}</span>${dateStr ? `<span style="font-size:10px;color:#999;margin-left:6px;font-weight:400;">${dateStr}</span>` : ''}</div>
           <div class="review-card-text">${r.text || '(No comment)'}</div>
           ${long ? `<span class="review-card-more" onclick="showReviewDetail(${i})">...more</span>` : ''}
         </div>
@@ -4037,7 +4044,7 @@ function renderAllReviewsPage() {
     return `<div class="review-card-new" style="margin-bottom:10px;">
       <div class="review-card-left">
         <div class="review-card-header">${avatarHtml}<span class="review-card-name">${displayName}</span></div>
-        <div class="review-card-stars">${filled}<span style="color:#ccc">${empty}</span></div>
+        <div class="review-card-stars">${filled}<span style="color:#ccc">${empty}</span>${r.timestamp ? `<span style="font-size:10px;color:#999;margin-left:6px;font-weight:400;">${(d=>d.getDate()+'/'+(d.getMonth()+1)+'/'+String(d.getFullYear()).slice(-2))(new Date(r.timestamp))}</span>` : ''}</div>
         <div class="review-card-text">${r.text || '(No comment)'}</div>
         ${long ? `<span class="review-card-more" onclick="navigate({page:'reviewDetail',index:${i}})">...more</span>` : ''}
       </div>
