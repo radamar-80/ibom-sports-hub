@@ -3507,16 +3507,20 @@ function restoreState(state, direction) {
   const outClass = direction === 'forward' ? 'page-out-left' : 'page-out-right';
   const inClass  = direction === 'forward' ? 'page-in-right' : 'page-in-left';
   const savedY = (state && state.scrollY != null) ? state.scrollY : 0;
+  const restoreScroll = () => {
+    // Double rAF: wait for display change + layout before scrolling
+    requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo(0, savedY)));
+  };
   if (outEl) {
     outEl.classList.add(outClass);
     setTimeout(() => {
       outEl.classList.remove(outClass);
       showTarget(state, inClass);
-      window.scrollTo(0, savedY);
+      restoreScroll();
     }, 270);
   } else {
     showTarget(state, inClass);
-    window.scrollTo(0, savedY);
+    restoreScroll();
   }
 }
 
