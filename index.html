@@ -3388,6 +3388,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   <script>
   let allProducts = [];
   let allReviews = [];
+  let _homeScrollY = 0; // always current home-page scroll position
 
 function getCurrentEl() {
   const pages = ['payment','reviewPage','reviewDetail','allReviewsPage','supportPage','ticketPage','aiChatPage','phonePage',
@@ -3508,33 +3509,28 @@ function restoreState(state, direction) {
   const outEl = getCurrentEl();
   const outClass = direction === 'forward' ? 'page-out-left' : 'page-out-right';
   const inClass  = direction === 'forward' ? 'page-in-right' : 'page-in-left';
-  const savedY = (state && state.scrollY != null) ? state.scrollY : 0;
-  const restoreScroll = () => {
-    // Double rAF: wait for display change + layout before scrolling
-    requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo(0, savedY)));
-  };
+  // Going back to home? restore the tracked home scroll position.
+  const isBackToHome = direction === 'back' && (!state || !state.page || state.page === 'home');
   if (outEl) {
     outEl.classList.add(outClass);
     setTimeout(() => {
       outEl.classList.remove(outClass);
       showTarget(state, inClass);
-      restoreScroll();
+      if (isBackToHome && _homeScrollY > 0) {
+        // Wait for layout then scroll — setTimeout beats rAF here for reliability
+        setTimeout(() => window.scrollTo({ top: _homeScrollY, behavior: 'instant' }), 50);
+      }
     }, 270);
   } else {
     showTarget(state, inClass);
-    restoreScroll();
+    if (isBackToHome && _homeScrollY > 0) {
+      setTimeout(() => window.scrollTo({ top: _homeScrollY, behavior: 'instant' }), 50);
+    }
   }
 }
 
 function navigate(state) {
   const current = getCurrentEl();
-
-  // Save scroll position into the current history entry before leaving
-  try {
-    const cur = history.state ? Object.assign({}, history.state) : {};
-    cur.scrollY = window.scrollY;
-    history.replaceState(cur, '');
-  } catch(e) {}
 
   // animate current OUT (forward)
   if (current) {
@@ -4249,6 +4245,9 @@ function prevSlide(){
   const header = document.querySelector("header");
   window.addEventListener("scroll", () => {
     const y = window.scrollY;
+    // Track home scroll position continuously so back-nav can restore it
+    const homeEl = document.getElementById('home');
+    if (homeEl && homeEl.style.display !== 'none') _homeScrollY = y;
     if (y > lastScrollY && y > 60) {
       header.classList.add("hide");
     } else {
