@@ -1187,6 +1187,74 @@ body.dark #navDrawer { background: #121212; color: #f0f0f0; }
 }
 #navDrawerOverlay.open { opacity: 1; pointer-events: auto; }
 
+.drawer-vip-card {
+  margin: 14px 16px 8px;
+  padding: 16px;
+  color: #fff;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #3b4143 0%, #1d2526 55%, #101415 100%);
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow: 0 8px 22px rgba(0,0,0,.16);
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+}
+.drawer-vip-card:active { transform: scale(.985); }
+.drawer-vip-top { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.drawer-vip-label { font-size: 18px; font-weight: 900; letter-spacing: .7px; }
+.drawer-vip-crown { color:#f3c94b; font-size: 24px; }
+.drawer-vip-sub { color:#c9d0d0; font-size:11px; margin-top:2px; }
+.drawer-vip-track { height:8px; background:#111a1b; border-radius:10px; overflow:hidden; margin-top:14px; }
+.drawer-vip-fill { height:100%; width:0; background:linear-gradient(90deg,#f5c542,#fff0a5); border-radius:inherit; transition:width .3s; }
+.drawer-vip-bottom { display:flex; justify-content:space-between; gap:10px; margin-top:8px; color:#dfe5e4; font-size:11px; }
+body.dark .drawer-vip-card { background:linear-gradient(135deg,#424a4c,#182021 60%,#101314); }
+
+.vip-page { padding: 18px 16px 34px; max-width: 760px; margin: 0 auto; font-family:'Poppins',sans-serif; }
+.vip-page .page-header { margin-bottom: 16px; }
+.vip-hero { color:#fff; border-radius:18px; padding:22px 18px 20px; background:linear-gradient(135deg,#464d4e,#1b2324 58%,#101415); box-shadow:0 10px 25px rgba(0,0,0,.14); }
+.vip-kicker { color:#f3c94b; font-size:11px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; }
+.vip-level-title { display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-top:5px; }
+.vip-level-title h2 { margin:0; font-size:28px; letter-spacing:.3px; }
+.vip-level-title span { color:#d7dddd; font-size:12px; white-space:nowrap; }
+.vip-progress { height:10px; background:#111a1b; border-radius:10px; overflow:hidden; margin:18px 0 9px; }
+.vip-progress-fill { height:100%; width:0; border-radius:inherit; background:linear-gradient(90deg,#f0bd36,#fff2a5); transition:width .3s; }
+.vip-progress-meta { display:flex; justify-content:space-between; color:#dce2e1; font-size:11px; }
+.vip-copy { margin:13px 0 0; color:#c8d0cf; font-size:12px; line-height:1.55; }
+.vip-panel { margin-top:14px; padding:18px 14px; border-radius:16px; background:#f6f7f7; }
+body.dark .vip-panel { background:#1a1d1d; }
+.vip-panel-title { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:13px; }
+.vip-panel-title h3 { margin:0; font-size:16px; }
+.vip-panel-title button { border:0; background:none; color:#139c5b; font-weight:800; font-size:12px; cursor:pointer; }
+.vip-current-row { display:flex; align-items:center; justify-content:space-between; padding:12px; border-radius:12px; background:#fff; border:1px solid #e5e8e8; }
+body.dark .vip-current-row { background:#222727; border-color:#333; }
+.vip-current-row strong { display:block; font-size:17px; }
+.vip-current-row small { display:block; color:#888; font-size:11px; margin-top:3px; }
+.vip-badge { width:42px; height:42px; display:grid; place-items:center; border-radius:50%; background:#f3c94b; color:#322808; font-weight:900; font-size:12px; }
+.vip-level-list { display:none; margin-top:12px; max-height:440px; overflow:auto; }
+.vip-level-list.open { display:block; }
+.vip-level-line { display:flex; align-items:center; gap:10px; padding:10px 4px; border-bottom:1px solid #e4e7e7; font-size:12px; }
+body.dark .vip-level-line { border-color:#303535; }
+.vip-level-line.current { color:#139c5b; font-weight:800; }
+.vip-level-dot { width:25px; height:25px; flex:0 0 25px; display:grid; place-items:center; border-radius:50%; background:#dfe4e3; color:#4d5554; font-size:10px; font-weight:800; }
+.vip-level-line.current .vip-level-dot { background:#28b570; color:#fff; }
+.vip-level-points { margin-left:auto; color:#7b8584; font-size:11px; }
+.vip-month-note { color:#7a8382; font-size:11px; line-height:1.5; margin:0 0 14px; }
+.vip-month-count { display:flex; justify-content:space-between; align-items:end; margin-bottom:8px; }
+.vip-month-count strong { font-size:21px; }
+.vip-month-count span { color:#788180; font-size:11px; }
+.vip-month-track { height:8px; border-radius:9px; background:#dfe4e3; overflow:hidden; }
+body.dark .vip-month-track { background:#303535; }
+.vip-month-fill { height:100%; width:0; background:#28b570; border-radius:inherit; }
+.vip-reward-list { margin-top:15px; display:grid; gap:9px; }
+.vip-reward { display:flex; align-items:center; gap:11px; padding:12px; background:#fff; border:1px solid #e5e8e8; border-radius:11px; }
+body.dark .vip-reward { background:#222727; border-color:#333; }
+.vip-reward-num { width:27px; height:27px; display:grid; place-items:center; border-radius:50%; background:#e8eceb; color:#555; font-size:11px; font-weight:800; }
+.vip-reward-copy { flex:1; font-size:12px; font-weight:700; }
+.vip-reward-copy small { display:block; color:#89918f; font-weight:400; margin-top:2px; }
+.vip-reward-status { font-size:11px; color:#89918f; white-space:nowrap; }
+.vip-reward.reached { border-color:#28b570; }
+.vip-reward.reached .vip-reward-num { background:#28b570; color:#fff; }
+.vip-reset { margin-top:16px; text-align:center; color:#89918f; font-size:11px; }
+
 .drawer-item {
   display: flex;
   align-items: center;
@@ -2362,6 +2430,14 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
   <div id="navDrawerOverlay" onclick="closeMenu()"></div>
   <nav id="navDrawer" aria-hidden="true">
+    <div class="drawer-vip-card" onclick="drawerNav('vip')">
+      <div class="drawer-vip-top">
+        <div><div class="drawer-vip-label">VIP <span class="drawer-vip-crown">♛</span></div><div class="drawer-vip-sub" id="drawerVipLevel">NOOB · LEVEL 0</div></div>
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#dfe5e4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="drawer-vip-track"><div class="drawer-vip-fill" id="drawerVipFill"></div></div>
+      <div class="drawer-vip-bottom"><span id="drawerVipPoints">0 VIP points</span><span id="drawerVipNext">1 to Beginner I</span></div>
+    </div>
     <button class="drawer-item" onclick="drawerNav('boots')">
       Football Boots
       <svg class="drawer-item-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -3079,6 +3155,34 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
   <div id="resultView" style="display:none; padding:20px;"></div>
 
+  <!-- VIP PAGE -->
+  <div id="vipPage" class="vip-page" style="display:none;">
+    <div class="page-header">
+      <button class="support-back" onclick="history.back()"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="13 8 9 12 13 16"/><line x1="9" y1="12" x2="15" y2="12"/></svg></button>
+      <h2>VIP REWARDS</h2>
+    </div>
+    <div class="vip-hero">
+      <div class="vip-kicker">Ibom Sports Hub VIP</div>
+      <div class="vip-level-title"><h2 id="vipCurrentLevel">NOOB</h2><span id="vipTotalPoints">0 points</span></div>
+      <div class="vip-progress"><div id="vipLevelFill" class="vip-progress-fill"></div></div>
+      <div class="vip-progress-meta"><span id="vipLevelProgress">0 points</span><span id="vipNextLevel">1 point to Beginner I</span></div>
+      <p class="vip-copy">Earn 1 VIP point for every ₦1,000 spent on completed orders. Keep shopping to unlock the next level.</p>
+    </div>
+    <section class="vip-panel">
+      <div class="vip-panel-title"><h3>Current level</h3><button onclick="toggleVipLevels()" id="vipLevelsToggle">View all levels</button></div>
+      <div class="vip-current-row"><div><strong id="vipCurrentLevelSmall">NOOB</strong><small id="vipCurrentRequirement">Level Zero · 0 points</small></div><div class="vip-badge">VIP</div></div>
+      <div id="vipLevelList" class="vip-level-list"></div>
+    </section>
+    <section class="vip-panel">
+      <div class="vip-panel-title"><h3>Monthly milestone</h3><span style="font-size:21px;">🎁</span></div>
+      <p class="vip-month-note">Earn points each month to unlock milestone rewards. Rewards will be announced soon.</p>
+      <div class="vip-month-count"><strong id="vipMonthlyPoints">0 points</strong><span id="vipMonthlyNext">Next level: 1 point</span></div>
+      <div class="vip-month-track"><div id="vipMonthlyFill" class="vip-month-fill"></div></div>
+      <div id="vipRewardList" class="vip-reward-list"></div>
+      <div class="vip-reset" id="vipResetText">Monthly points reset on the 28th at 01:59:59 AM</div>
+    </section>
+  </div>
+
   <!-- ACCOUNT PAGE -->
   <div id="accountPage">
     <div class="page-header">
@@ -3392,7 +3496,7 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
 
 function getCurrentEl() {
   const pages = ['payment','reviewPage','reviewDetail','allReviewsPage','supportPage','ticketPage','aiChatPage','phonePage',
-                 'accountPage','wishlistPage','searchPage','categoriesPage','storeInfoPage'];
+                 'accountPage','wishlistPage','searchPage','categoriesPage','storeInfoPage','vipPage'];
   for (const id of pages) {
     const el = document.getElementById(id);
     if (el && el.style.display === 'block') return el;
@@ -3406,7 +3510,7 @@ function getCurrentEl() {
 
 function hideAll() {
   ['home','payment','reviewPage','reviewDetail','allReviewsPage','resultView',
-   'supportPage','ticketPage','aiChatPage','phonePage','accountPage','wishlistPage','searchPage','categoriesPage','storeInfoPage']
+   'supportPage','ticketPage','aiChatPage','phonePage','accountPage','wishlistPage','searchPage','categoriesPage','storeInfoPage','vipPage']
     .forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
 }
@@ -3416,10 +3520,10 @@ function showTarget(state, inClass) {
   const isReview = (page === 'review' || page === 'reviewDetail');
   const isSupport = (page === 'support' || page === 'ticket' || page === 'aichat' || page === 'phone' ||
                      page === 'account' || page === 'wishlist' || page === 'searchPage' ||
-                     page === 'categoriesPage' || page === 'storeInfo');
+                     page === 'categoriesPage' || page === 'storeInfo' || page === 'vip');
 
   const hdrMap = { account:'hdrBtnAccount', wishlist:'hdrBtnWishlist', searchPage:'hdrBtnSearch' };
-  const navMap = { home:'navHome', support:'navSupport', ticket:'navSupport', aichat:'navSupport', phone:'navSupport', categoriesPage:'navCategories' };
+  const navMap = { home:'navHome', support:'navSupport', ticket:'navSupport', aichat:'navSupport', phone:'navSupport', categoriesPage:'navCategories', vip:'navHome' };
   if (hdrMap[page]) {
     setActiveHdrIcon(hdrMap[page]);
   } else {
@@ -3489,6 +3593,10 @@ function showTarget(state, inClass) {
     el = document.getElementById('categoriesPage');
     el.style.display = 'flex';
     initCategoriesPage();
+  } else if (page === 'vip') {
+    el = document.getElementById('vipPage');
+    el.style.display = 'block';
+    renderVipPage();
   } else if (page === 'storeInfo') {
     el = document.getElementById('storeInfoPage');
     el.style.display = 'block';
@@ -3699,7 +3807,18 @@ document.getElementById('bankDetails').innerHTML = `
 }
 
 function completePayment() {
+  awardVipSpend(parseInt(String(window.currentPrice || '').replace(/[^\d]/g, ''), 10) || 0);
   navigate({ page: 'home' });
+}
+
+function awardVipSpend(amount) {
+  if (!amount || amount < 1) return;
+  const remainder = Number(localStorage.getItem('ibomVipSpendRemainder')) || 0;
+  const earned = Math.floor((remainder + amount) / 1000);
+  localStorage.setItem('ibomVipSpendRemainder', String((remainder + amount) % 1000));
+  if (!earned) return;
+  localStorage.setItem('ibomVipPoints', String(getVipPoints() + earned));
+  localStorage.setItem('ibomVipMonthlyPoints', String(getMonthlyVipPoints() + earned));
 }
 let selectedRating = 0;
 
@@ -4311,6 +4430,7 @@ function toggleMenu() {
 }
 
 function openMenu() {
+  renderVipSummary();
   const hdr = document.querySelector('header');
   const banner = document.querySelector('.top-banner');
   const drawer = document.getElementById('navDrawer');
@@ -5251,6 +5371,131 @@ function addToCart() {
   badge.innerText = cartCount;
   badge.classList.add("show");
     }
+
+const VIP_LEVELS = [
+  { name:'Noob', stage:'Level Zero', points:0 },
+  { name:'Beginner', stage:'I', points:1 },
+  { name:'Beginner', stage:'II', points:5 },
+  { name:'Beginner', stage:'III', points:15 },
+  { name:'Amateur', stage:'I', points:45 },
+  { name:'Amateur', stage:'II', points:60 },
+  { name:'Amateur', stage:'III', points:75 },
+  { name:'Pro', stage:'I', points:100 },
+  { name:'Pro', stage:'II', points:150 },
+  { name:'Pro', stage:'III', points:200 },
+  { name:'World Class', stage:'I', points:250 },
+  { name:'World Class', stage:'II', points:315 },
+  { name:'World Class', stage:'III', points:400 },
+  { name:'Master', stage:'I', points:500 },
+  { name:'Master', stage:'II', points:575 },
+  { name:'Master', stage:'III', points:650 },
+  { name:'Grandmaster', stage:'I', points:750 },
+  { name:'Grandmaster', stage:'II', points:820 },
+  { name:'Grandmaster', stage:'III', points:900 },
+  { name:'Legend', stage:'I', points:1000 },
+  { name:'Legend', stage:'II', points:1150 },
+  { name:'Legend', stage:'III', points:1300 },
+  { name:'Supreme Customer', stage:'Final level', points:1500 }
+];
+const MONTHLY_VIP_LEVELS = [1,20,30,40,50,60,70,80,90,100];
+
+function getVipPoints() {
+  const stored = Number(localStorage.getItem('ibomVipPoints'));
+  return Number.isFinite(stored) && stored >= 0 ? Math.floor(stored) : 0;
+}
+
+function getMonthlyVipPoints() {
+  const now = new Date();
+  const currentKey = `${now.getFullYear()}-${now.getMonth()}`;
+  const resetAt = new Date(now.getFullYear(), now.getMonth(), 28, 1, 59, 59);
+  const activeKey = now >= resetAt ? currentKey : `${now.getFullYear()}-${now.getMonth() - 1}`;
+  if (localStorage.getItem('ibomVipMonthKey') !== activeKey) {
+    localStorage.setItem('ibomVipMonthKey', activeKey);
+    localStorage.setItem('ibomVipMonthlyPoints', '0');
+  }
+  const stored = Number(localStorage.getItem('ibomVipMonthlyPoints'));
+  return Number.isFinite(stored) && stored >= 0 ? Math.floor(stored) : 0;
+}
+
+function getVipLevelIndex(points) {
+  let index = 0;
+  VIP_LEVELS.forEach((level, i) => { if (points >= level.points) index = i; });
+  return index;
+}
+
+function vipLabel(level) {
+  return level.name === 'Noob' ? 'NOOB' : `${level.name.toUpperCase()} ${level.stage}`;
+}
+
+function renderVipSummary() {
+  const points = getVipPoints();
+  const index = getVipLevelIndex(points);
+  const current = VIP_LEVELS[index];
+  const next = VIP_LEVELS[index + 1];
+  const progress = next ? Math.min(100, Math.max(0, ((points - current.points) / (next.points - current.points)) * 100)) : 100;
+  const remaining = next ? Math.max(0, next.points - points) : 0;
+  const drawerLevel = document.getElementById('drawerVipLevel');
+  const drawerPoints = document.getElementById('drawerVipPoints');
+  const drawerNext = document.getElementById('drawerVipNext');
+  const drawerFill = document.getElementById('drawerVipFill');
+  if (drawerLevel) drawerLevel.textContent = `${vipLabel(current)} · LEVEL ${index === 0 ? 0 : index}`;
+  if (drawerPoints) drawerPoints.textContent = `${points} VIP point${points === 1 ? '' : 's'}`;
+  if (drawerNext) drawerNext.textContent = next ? `${remaining} to ${vipLabel(next)}` : 'Highest level reached';
+  if (drawerFill) drawerFill.style.width = `${progress}%`;
+}
+
+function renderVipPage() {
+  renderVipSummary();
+  const points = getVipPoints();
+  const index = getVipLevelIndex(points);
+  const current = VIP_LEVELS[index];
+  const next = VIP_LEVELS[index + 1];
+  const progress = next ? ((points - current.points) / (next.points - current.points)) * 100 : 100;
+  const remaining = next ? next.points - points : 0;
+  document.getElementById('vipCurrentLevel').textContent = vipLabel(current);
+  document.getElementById('vipCurrentLevelSmall').textContent = vipLabel(current);
+  document.getElementById('vipTotalPoints').textContent = `${points} VIP points`;
+  document.getElementById('vipLevelProgress').textContent = `${points} / ${next ? next.points : current.points} points`;
+  document.getElementById('vipNextLevel').textContent = next ? `${remaining} point${remaining === 1 ? '' : 's'} to ${vipLabel(next)}` : 'Highest level reached';
+  document.getElementById('vipCurrentRequirement').textContent = current.name === 'Noob' ? 'Level Zero · 0 points' : `Unlocks at ${current.points} points`;
+  document.getElementById('vipLevelFill').style.width = `${Math.min(100, Math.max(0, progress))}%`;
+  document.getElementById('vipLevelList').innerHTML = VIP_LEVELS.map((level, i) => `
+    <div class="vip-level-line ${i === index ? 'current' : ''}">
+      <span class="vip-level-dot">${i === 0 ? '0' : i}</span>
+      <span>${vipLabel(level)}</span>
+      <span class="vip-level-points">${level.points.toLocaleString()} pts</span>
+    </div>`).join('');
+
+  const monthly = getMonthlyVipPoints();
+  const monthlyNext = MONTHLY_VIP_LEVELS.find(n => monthly < n) || 100;
+  document.getElementById('vipMonthlyPoints').textContent = `${monthly} point${monthly === 1 ? '' : 's'}`;
+  document.getElementById('vipMonthlyNext').textContent = monthly >= 100 ? 'All milestones reached' : `Next level: ${monthlyNext} points`;
+  document.getElementById('vipMonthlyFill').style.width = `${Math.min(100, (monthly / 100) * 100)}%`;
+  document.getElementById('vipRewardList').innerHTML = MONTHLY_VIP_LEVELS.map((needed, i) => `
+    <div class="vip-reward ${monthly >= needed ? 'reached' : ''}">
+      <span class="vip-reward-num">${monthly >= needed ? '✓' : i + 1}</span>
+      <span class="vip-reward-copy">Milestone ${i + 1}<small>${needed} monthly VIP point${needed === 1 ? '' : 's'}</small></span>
+      <span class="vip-reward-status">${monthly >= needed ? 'Reached' : `${Math.max(0, needed - monthly)} to go`}</span>
+    </div>`).join('');
+  updateVipResetText();
+}
+
+function updateVipResetText() {
+  const now = new Date();
+  let reset = new Date(now.getFullYear(), now.getMonth(), 28, 1, 59, 59);
+  if (now >= reset) reset = new Date(now.getFullYear(), now.getMonth() + 1, 28, 1, 59, 59);
+  const days = Math.floor((reset - now) / 86400000);
+  const hours = Math.floor((reset - now) % 86400000 / 3600000);
+  const el = document.getElementById('vipResetText');
+  if (el) el.textContent = `Resets on the 28th at 01:59:59 AM · ${days}d ${hours}h remaining`;
+}
+
+function toggleVipLevels() {
+  const list = document.getElementById('vipLevelList');
+  const button = document.getElementById('vipLevelsToggle');
+  list.classList.toggle('open');
+  button.textContent = list.classList.contains('open') ? 'Hide levels' : 'View all levels';
+}
 
 // ── SWIPE-BACK GESTURE (left-edge swipe like iPhone) ──
 (function() {
