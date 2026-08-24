@@ -1816,6 +1816,78 @@ body.dark .bootwall-overlay {
   );
 }
 
+/* ── HOME FOOTER ── */
+.sports-footer {
+  position: relative;
+  margin-top: 28px;
+  padding: 0 18px 92px;
+  overflow: hidden;
+  color: #fff;
+  background: #050505;
+  font-family: 'Poppins', sans-serif;
+}
+.sports-footer-grass {
+  height: 9px;
+  margin: 0 -18px 18px;
+  background: #28b570;
+  box-shadow: 0 -5px 0 #1c8f59;
+}
+.sports-silhouettes {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  height: 190px;
+  margin: 0 -18px 22px;
+  padding: 0 14px;
+  background: linear-gradient(to bottom, transparent 70%, rgba(40,181,112,.12) 100%);
+  border-bottom: 4px solid #28b570;
+}
+.sports-silhouette {
+  width: 33.333%;
+  height: 180px;
+  object-fit: contain;
+  object-position: bottom center;
+  filter: brightness(0) grayscale(1) drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff) drop-shadow(0 1px 0 #fff);
+}
+.sports-footer-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1fr;
+  gap: 24px 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.sports-footer-brand { grid-column: 1 / -1; }
+.sports-footer-brand-row { display:flex; align-items:center; gap:10px; }
+.sports-footer-logo { width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid #fff; }
+.sports-footer-brand h2 { margin:0; font-size:15px; letter-spacing:.7px; }
+.sports-footer-title { margin:0 0 11px; font-size:14px; font-weight:900; letter-spacing:.4px; }
+.sports-footer a { color:inherit; text-decoration:none; }
+.sports-footer a:hover { color:#28b570; }
+.sports-footer-contact { grid-column: 1 / -1; }
+.sports-footer-list { display:grid; gap:7px; margin:0; padding:0; list-style:none; color:#d1d1d1; font-size:11px; line-height:1.4; }
+.sports-footer-socials { display:flex; align-items:center; gap:14px; margin-top:14px; }
+.sports-footer-socials a { display:grid; place-items:center; width:28px; height:28px; color:#fff; }
+.sports-footer-socials svg { width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.sports-footer-socials .social-fill { fill:currentColor; stroke:none; }
+.sports-footer-note { margin:28px 0 0; padding-top:14px; border-top:1px solid #333; text-align:center; color:#aaa; font-size:11px; }
+body.dark .sports-footer { color:#000; background:#fff; }
+body.dark .sports-footer-grass { box-shadow:0 -5px 0 #1c8f59; }
+body.dark .sports-silhouettes { background:linear-gradient(to bottom, transparent 70%, rgba(40,181,112,.16) 100%); border-color:#28b570; }
+body.dark .sports-silhouette { filter:brightness(0) grayscale(1) drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000); }
+body.dark .sports-footer-logo { border-color:#000; }
+body.dark .sports-footer-list { color:#333; }
+body.dark .sports-footer-socials a { color:#000; }
+body.dark .sports-footer-note { color:#555; border-color:#ddd; }
+@media (min-width: 600px) {
+  .sports-footer { padding-left:30px; padding-right:30px; }
+  .sports-footer-grid { grid-template-columns:1.3fr 1fr 1fr 1fr; gap:28px; }
+  .sports-footer-brand { grid-column:auto; }
+  .sports-footer-contact { grid-column:auto; }
+  .sports-footer-grass { margin-left:-30px; margin-right:-30px; }
+  .sports-silhouettes { margin-left:-30px; margin-right:-30px; }
+}
+
 /* ── BOOT WALL TOGGLE BUTTON ── */
 #toggleBtn {
   display: inline-flex;
@@ -2955,6 +3027,57 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
   
 <div id="bootItems"></div>
 </div>  <!-- closes bootwall -->
+<footer class="sports-footer">
+  <div class="sports-footer-grass"></div>
+  <div class="sports-silhouettes" aria-label="Sports legends">
+    <img class="sports-silhouette" src="attached_assets/IMG_8360_1787600897678.JPG" alt="Roger Federer silhouette" loading="lazy">
+    <img class="sports-silhouette" src="attached_assets/IMG_8361_1787600897680.JPG" alt="LeBron James silhouette" loading="lazy">
+    <img class="sports-silhouette" src="attached_assets/IMG_8359_1787600897683.JPG" alt="Ronaldinho silhouette" loading="lazy">
+  </div>
+  <div class="sports-footer-grid">
+    <div class="sports-footer-brand">
+      <div class="sports-footer-brand-row">
+        <img class="sports-footer-logo" src="logo.png" alt="Ibom Sports Hub logo">
+        <h2>IBOM SPORTS HUB</h2>
+      </div>
+      <div class="sports-footer-socials" aria-label="Social media">
+        <a href="https://www.facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path class="social-fill" d="M14 8h3V4h-3c-3.3 0-5 1.9-5 5v3H6v4h3v6h4v-6h3l1-4h-4V9c0-.7.3-1 1-1z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/ibomsportshub1" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" class="social-fill"/></svg>
+        </a>
+        <a href="https://www.tiktok.com" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg viewBox="0 0 24 24"><path d="M14 4v10.2a4.3 4.3 0 1 1-3-4.1v3.1a1.5 1.5 0 1 0 1.3 1.5V4h3c.3 1.8 1.4 3 3.2 3.5v3A7.1 7.1 0 0 1 14 8.8"/></svg>
+        </a>
+        <a href="https://www.youtube.com" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg viewBox="0 0 24 24"><path class="social-fill" d="M23 12s0-3.4-.4-5c-.2-.9-.9-1.6-1.8-1.8C19.2 4.8 12 4.8 12 4.8s-7.2 0-8.8.4C2.3 5.4 1.6 6.1 1.4 7 1 8.6 1 12 1 12s0 3.4.4 5c.2.9.9 1.6 1.8 1.8 1.6.4 8.8.4 8.8.4s7.2 0 8.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-5 .4-5zm-13 3.5v-7l6 3.5-6 3.5z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="sports-footer-contact">
+      <h3 class="sports-footer-title">Contact</h3>
+      <ul class="sports-footer-list">
+        <li><a href="https://www.google.com/maps/search/?api=1&query=227+Ikot+Ekpene+Road,+Uyo" target="_blank" rel="noopener">227, Ikot Ekpene Road, Uyo</a></li>
+        <li><a href="tel:+2341234567890">+234 123 456 7890</a></li>
+        <li><a href="mailto:ibomsportshub@gmail.com">ibomsportshub@gmail.com</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="sports-footer-title">Quick Links</h3>
+      <ul class="sports-footer-list">
+        <li><a href="#" onclick="event.preventDefault();goHome()">Shop</a></li><li><a href="#" onclick="event.preventDefault();navigate({page:'storeInfo'})">About</a></li><li><a href="#">FAQ</a></li><li><a href="tel:+2341234567890">Contact</a></li><li><a href="#">Warranty</a></li><li><a href="#">Size Guide</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="sports-footer-title">Support</h3>
+      <ul class="sports-footer-list">
+        <li><a href="#">Shipping &amp; Returns</a></li><li><a href="#">Order Tracking</a></li><li><a href="#">Care Instructions</a></li><li><a href="#">Terms and Conditions</a></li><li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="sports-footer-note">@ 2026. All rights reserved.</p>
+</footer>
 </div>  <!-- closes grid -->
 </div>  <!-- closes home -->
 
