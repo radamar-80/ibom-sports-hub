@@ -20,10 +20,40 @@ body.loaded {
 .header {
   background: green;
   color: white;
-  padding: 20px;
-  text-align: center;
+  min-height: 72px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
   font-weight: bold;
   line-height: 1.4;
+}
+
+.admin-brand-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,.9);
+  flex-shrink: 0;
+}
+
+.admin-brand-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-brand-name {
+  font-size: 16px;
+  letter-spacing: .5px;
+}
+
+.admin-brand-subtitle {
+  font-size: 12px;
+  opacity: .9;
+  letter-spacing: .7px;
 }
 
 /* SECTION BOXES */
@@ -310,8 +340,11 @@ body.loaded {
 <body>
 
 <div class="header">
-  IBOM SPORTS HUB<br>
-  ADMIN DASHBOARD
+  <img class="admin-brand-logo" src="logo.png" alt="Ibom Sports Hub logo">
+  <div class="admin-brand-title">
+    <span class="admin-brand-name">IBOM SPORTS HUB</span>
+    <span class="admin-brand-subtitle">ADMIN DASHBOARD</span>
+  </div>
 </div>
 
 <button class="logout-btn" onclick="logout()">Logout</button>
