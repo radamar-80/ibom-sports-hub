@@ -5395,7 +5395,7 @@ const VIP_LEVELS = [
   { name:'Legend', stage:'I', points:1000 },
   { name:'Legend', stage:'II', points:1150 },
   { name:'Legend', stage:'III', points:1300 },
-  { name:'Supreme Customer', stage:'Final level', points:1500 }
+  { name:'Supreme Customer', stage:'', points:1500 }
 ];
 const MONTHLY_VIP_LEVELS = [1,20,30,40,50,60,70,80,90,100];
 
@@ -5424,7 +5424,7 @@ function getVipLevelIndex(points) {
 }
 
 function vipLabel(level) {
-  return level.name === 'Noob' ? 'NOOB' : `${level.name.toUpperCase()} ${level.stage}`;
+  return level.name === 'Noob' || !level.stage ? level.name.toUpperCase() : `${level.name.toUpperCase()} ${level.stage}`;
 }
 
 function renderVipSummary() {
