@@ -2,12 +2,16 @@
 <html>
 <head>
 <title>Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 body {
-  font-family: Arial;
+  font-family: 'Poppins', Arial, sans-serif;
   margin: 0;
-  background: #f5f5f5;
+  background: #f1f5f3;
+  color: #17201b;
   opacity: 0;
   transition: opacity 0.25s ease;
 }
@@ -18,10 +22,11 @@ body.loaded {
 
 /* HEADER */
 .header {
-  background: green;
+  position: relative;
+  background: linear-gradient(135deg, #075b36 0%, #0c8d53 58%, #20b86f 100%);
   color: white;
-  min-height: 72px;
-  padding: 12px 20px;
+  min-height: 82px;
+  padding: 15px 20px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -31,8 +36,8 @@ body.loaded {
 }
 
 .admin-brand-logo {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid rgba(255,255,255,.9);
@@ -46,50 +51,75 @@ body.loaded {
 }
 
 .admin-brand-name {
-  font-size: 16px;
+  font-size: 17px;
   letter-spacing: .5px;
 }
 
 .admin-brand-subtitle {
-  font-size: 12px;
+  font-size: 11px;
   opacity: .9;
   letter-spacing: .7px;
 }
 
 /* SECTION BOXES */
 .container {
-  padding: 20px;
+  width: min(100% - 32px, 980px);
+  margin: 0 auto;
+  padding: 28px 0 40px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .section {
+  position: relative;
   background: white;
-  padding: 18px;
-  margin-bottom: 15px;
-  border-radius: 12px;
+  min-height: 54px;
+  padding: 18px 45px 18px 20px;
+  border: 1px solid rgba(13, 79, 48, .08);
+  border-radius: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  transition: 0.2s ease;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .15px;
+  box-shadow: 0 4px 14px rgba(20, 62, 40, .06);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
 
 .section:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  border-color: rgba(40,181,112,.45);
+  box-shadow: 0 10px 22px rgba(20, 92, 55, .13);
 }
 
 .arrow {
-  font-size: 18px;
-  color: green;
+  position: absolute;
+  right: 16px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e7f7ee;
+  color: #0a9154;
+  font-size: 17px;
+  transition: transform .2s ease, background .2s ease;
 }
+.section:hover .arrow { transform: translateX(3px); background:#c9f0da; }
 
 /* LOW STOCK ALERT */
 .alert-box {
-  margin: 0 20px 16px;
+  width: min(calc(100% - 32px), 980px);
+  box-sizing: border-box;
+  margin: 0 auto 2px;
   border-radius: 14px;
   overflow: hidden;
   border: 1.5px solid #f59f00;
   background: #fffbea;
+  box-shadow: 0 5px 16px rgba(110, 75, 0, .08);
   display: none;
 }
 
@@ -200,19 +230,24 @@ body.loaded {
 .alert-box.has-out .alert-cta { background: #e53935; }
 
 .logout-btn {
-  margin: 10px 20px;
-  padding: 10px 15px;
-  background: white;
-  color: green;
-  border: 1px solid green;
-  border-radius: 8px;
+  position: absolute;
+  top: 24px;
+  right: 20px;
+  margin: 0;
+  padding: 9px 14px;
+  background: rgba(255,255,255,.14);
+  color: white;
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 999px;
   cursor: pointer;
-  float: right;
+  font: 600 12px 'Poppins', Arial, sans-serif;
+  transition: background .2s ease, transform .2s ease;
 }
 
 .logout-btn:hover {
-  background: green;
-  color: white;
+  background: white;
+  color: #087a48;
+  transform: translateY(-1px);
 }
 
 /* MODAL */
@@ -232,11 +267,24 @@ body.loaded {
 
 .modal {
   background: white;
-  border-radius: 14px;
+  border-radius: 18px;
   padding: 28px 24px;
   width: 90%;
   max-width: 380px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 560px) {
+  .header { padding-right: 100px; }
+  .admin-brand-name { font-size: 15px; }
+  .container {
+    width: calc(100% - 24px);
+    padding-top: 20px;
+    grid-template-columns: 1fr;
+    gap: 11px;
+  }
+  .section { min-height: 42px; padding-top: 15px; padding-bottom: 15px; }
+  .alert-box { width: calc(100% - 24px); }
 }
 
 .modal h2 {
@@ -333,6 +381,59 @@ body.loaded {
 
 .btn-delete-row:hover { opacity: 0.85; }
 .btn-delete-row:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  /* ── SECTION GROUP (EDIT CUSTOMER END) ── */
+  .section-group {
+    margin-bottom: 15px;
+  }
+  .section-group .section {
+    margin-bottom: 0;
+  }
+  .group-header .group-arrow {
+    transition: transform 0.25s ease;
+    display: inline-block;
+  }
+  .section-group.open .group-header {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .section-group.open .group-arrow {
+    transform: rotate(180deg);
+  }
+  .subsections {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: white;
+    border-radius: 0 0 12px 12px;
+  }
+  .section-group.open .subsections {
+    max-height: 400px;
+    border-top: 1px solid #eee;
+  }
+  .subsection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px 14px 34px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.15s ease;
+  }
+  .subsection:last-child {
+    border-bottom: none;
+    border-radius: 0 0 12px 12px;
+  }
+  .subsection:hover {
+    background: #f4fbf4;
+    color: green;
+  }
+  .subsection .sub-icon {
+    margin-right: 8px;
+  }
+  
 </style>
 
 </head>
@@ -384,6 +485,27 @@ body.loaded {
 
   <div class="section" onclick="openPage('admin-support.html')">
     CUSTOMER SUPPORT — LIVE TICKETS <span class="arrow">→</span>
+  </div>
+
+  <!-- EDIT CUSTOMER END GROUP -->
+  <div class="section-group" id="customerEndGroup">
+    <div class="section group-header" onclick="toggleGroup('customerEndGroup')">
+      EDIT CUSTOMER END <span class="arrow group-arrow">▾</span>
+    </div>
+    <div class="subsections">
+      <div class="subsection" onclick="openPage('edit-hero.html')">
+        <span><span class="sub-icon">🖼️</span>EDIT HERO CAROUSEL</span> <span class="arrow">→</span>
+      </div>
+      <div class="subsection" onclick="openPage('edit-new-arrivals.html')">
+        <span><span class="sub-icon">🆕</span>EDIT NEW ARRIVALS</span> <span class="arrow">→</span>
+      </div>
+      <div class="subsection" onclick="openPage('edit-special-packs.html')">
+        <span><span class="sub-icon">🎁</span>EDIT SPECIAL PACKS</span> <span class="arrow">→</span>
+      </div>
+      <div class="subsection" onclick="openPage('edit-categories.html')">
+        <span><span class="sub-icon">🗂️</span>EDIT CATEGORIES</span> <span class="arrow">→</span>
+      </div>
+    </div>
   </div>
 
   <div class="section" onclick="openChangePassword()">
@@ -472,6 +594,17 @@ window.onload = () => {
 function openPage(page) {
   window.location.href = page;
 }
+
+  function toggleGroup(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle("open");
+    localStorage.setItem(id + "_open", el.classList.contains("open"));
+  }
+
+  // restore state on load
+  if (localStorage.getItem("customerEndGroup_open") === "true") {
+    document.getElementById("customerEndGroup").classList.add("open");
+  }
 
 function logout() {
   localStorage.removeItem("adminLoggedIn");
