@@ -327,8 +327,8 @@ app.get("/categories", (req, res) => {
 
 // UPDATE CATEGORIES (admin only)
 app.put("/categories", verifyToken, (req, res) => {
-  const categories = req.body;
-  const valid = Array.isArray(categories) && categories.every(category =>
+  const rawCategories = req.body;
+  const valid = Array.isArray(rawCategories) && rawCategories.every(category =>
     category && typeof category.id === "string" && typeof category.name === "string" &&
     Array.isArray(category.subcategories) &&
     category.subcategories.every(subcategory =>
@@ -337,12 +337,25 @@ app.put("/categories", verifyToken, (req, res) => {
       subcategory.sections.every(section =>
         section && typeof section.id === "string" && typeof section.name === "string" &&
         (section.image === undefined || typeof section.image === "string")
-      ) &&
-      (subcategory.image === undefined || typeof subcategory.image === "string")
-    ) &&
-    (category.image === undefined || typeof category.image === "string")
+      )
+    )
   );
   if (!valid) return res.status(400).json({ message: "Invalid category structure" });
+
+  // Keep images limited to the customer-facing tiles inside each group.
+  const categories = rawCategories.map(category => ({
+    id: category.id,
+    name: category.name,
+    subcategories: category.subcategories.map(subcategory => ({
+      id: subcategory.id,
+      name: subcategory.name,
+      sections: subcategory.sections.map(section => ({
+        id: section.id,
+        name: section.name,
+        ...(section.image ? { image: section.image } : {})
+      }))
+    }))
+  }));
   writeCategories(categories);
   res.json({ message: "Categories updated" });
 });

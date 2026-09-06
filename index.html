@@ -2401,10 +2401,6 @@ body.dark .cat-sidebar { background: #181818; border-color: #222; }
   font-family: 'Poppins', sans-serif;
   word-break: break-word;
 }
-.cat-sidebar-thumb {
-  width: 38px; height: 38px; border-radius: 8px;
-  object-fit: cover; display: block; margin: 0 auto 6px;
-}
 body.dark .cat-sidebar-item { color: #888; }
 .cat-sidebar-item.active {
   border-left-color: #28b570;
@@ -2425,13 +2421,6 @@ body.dark .subcat-card { background: #1a1a1a; }
   display: flex; align-items: center;
   justify-content: space-between;
   padding: 11px 13px; border-bottom: 1px solid #f5f5f5;
-}
-.subcat-heading {
-  display: flex; align-items: center; gap: 8px; min-width: 0;
-}
-.subcat-thumb {
-  width: 28px; height: 28px; border-radius: 6px;
-  object-fit: cover; flex-shrink: 0;
 }
 body.dark .subcat-header { border-color: #252525; }
 
@@ -4770,7 +4759,6 @@ function renderCatSidebar(q) {
   const filtered = q ? categoryData.filter(c => (c.name || '').toLowerCase().includes(q.toLowerCase())) : categoryData;
   sidebar.innerHTML = filtered.map(cat =>
     `<div class="cat-sidebar-item ${cat.id === activeCategoryId ? 'active' : ''}" onclick="selectCat('${catJsString(cat.id)}')">
-      ${cat.image ? `<img class="cat-sidebar-thumb" src="${escapeHtml(cat.image)}" alt="">` : ''}
       <span>${escapeHtml(cat.name || 'Unnamed category')}</span>
     </div>`
   ).join('') || '<div style="padding:12px 8px;font-size:11px;color:#aaa;text-align:center">None</div>';
@@ -4808,10 +4796,7 @@ function renderCatPanel(cat, q) {
     const hasMore = sections.length > 6;
     return `<div class="subcat-card">
       <div class="subcat-header">
-         <div class="subcat-heading">
-           ${sub.image ? `<img class="subcat-thumb" src="${escapeHtml(sub.image)}" alt="">` : ''}
-           <span class="subcat-title">${escapeHtml(sub.name || 'Unnamed section')}</span>
-         </div>
+         <span class="subcat-title">${escapeHtml(sub.name || 'Unnamed section')}</span>
          ${hasMore ? `<button class="subcat-toggle" onclick="toggleSubcatGrid(this,'${catJsString(cat.id)}','${catJsString(sub.id)}')">SEE ALL</button>` : ''}
       </div>
        <div class="section-grid" id="catgrid-${escapeHtml(sub.id)}" data-catid="${escapeHtml(cat.id)}" data-subid="${escapeHtml(sub.id)}" data-expanded="false">

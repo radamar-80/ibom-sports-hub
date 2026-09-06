@@ -267,7 +267,7 @@
   <main class="page">
     <section class="intro">
       <h1>Category Editor</h1>
-      <p>Edit the left-hand drawers, the groups inside them, and the display tiles within each group. You can upload an optional image at every level. Keep IDs unchanged when products already use them, otherwise those products may no longer match their category.</p>
+      <p>Edit the left-hand drawers, the groups inside them, and the display tiles within each group. Images are supported only on the display tiles shown in the grids below each group. Keep IDs unchanged when products already use them, otherwise those products may no longer match their category.</p>
     </section>
 
     <div class="toolbar">
@@ -354,7 +354,6 @@
           <div class="field-grid">
             ${renderField("Display name", category.name, "category", categoryIndex, -1, -1, "name")}
             ${renderField("ID", category.id, "category", categoryIndex, -1, -1, "id", "Keep this unchanged if products use this drawer.")}
-            ${imageControl("category", categoryIndex, -1, -1, category.image)}
           </div>
           <div class="children-heading">
             <span>Groups inside this drawer</span>
@@ -380,7 +379,6 @@
         <div class="field-grid">
           ${renderField("Display name", subcategory.name, "subcategory", categoryIndex, subcategoryIndex, -1, "name")}
           ${renderField("ID", subcategory.id, "subcategory", categoryIndex, subcategoryIndex, -1, "id", "Keep this unchanged if products use this group.")}
-          ${imageControl("subcategory", categoryIndex, subcategoryIndex, -1, subcategory.image)}
         </div>
         <div class="children-heading">
           <span>Display tiles inside this group</span>
