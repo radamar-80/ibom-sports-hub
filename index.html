@@ -4031,7 +4031,7 @@ async function submitReview() {
     });
     if (!response.ok) throw new Error('Review submission failed');
     launchConfetti();
-    showToast("🎉 Thanks for your review!");
+    showToast("🎉 Thanks! Your review is awaiting approval.");
     selectedRating = 0;
     document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
     document.getElementById('reviewText').value = '';

@@ -333,7 +333,31 @@ app.put("/categories", verifyToken, (req, res) => {
 
 // GET REVIEWS
 app.get("/reviews", (req, res) => {
+  res.json(readReviews().filter(review => review.status !== "pending" && review.status !== "rejected"));
+});
+
+// GET ALL REVIEWS FOR ADMIN MODERATION
+app.get("/admin/reviews", verifyToken, (req, res) => {
   res.json(readReviews());
+});
+
+// UPDATE REVIEW MODERATION STATUS
+app.put("/admin/reviews/:id/status", verifyToken, (req, res) => {
+  const id = parseInt(req.params.id);
+  const { status } = req.body;
+  if (!["approved", "rejected"].includes(status)) {
+    return res.status(400).json({ message: "Status must be approved or rejected" });
+  }
+
+  const reviews = readReviews();
+  const review = reviews.find(item => item.id === id);
+  if (!review) return res.status(404).json({ message: "Review not found" });
+
+  review.status = status;
+  review.moderatedAt = new Date().toISOString();
+  review.moderatedBy = req.user.username;
+  writeReviews(reviews);
+  res.json(review);
 });
 
 // VOTE HELPFUL
@@ -378,7 +402,8 @@ app.post("/submit-review", express.json({ limit: "25mb" }), (req, res) => {
     text: text || "",
     name: name || "",
     photo: photo || "",
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    status: "pending"
   });
   writeReviews(reviews);
   res.json({ message: "Review submitted!" });
