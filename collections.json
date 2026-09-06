@@ -1,0 +1,16 @@
+{
+  "newArrivals": [
+    { "id": "arrival-1", "name": "New Arrival 1", "image": "arrival1.jpg" },
+    { "id": "arrival-2", "name": "New Arrival 2", "image": "arrival2.jpg" },
+    { "id": "arrival-3", "name": "New Arrival 3", "image": "arrival3.jpg" },
+    { "id": "arrival-4", "name": "New Arrival 4", "image": "arrival4.jpg" },
+    { "id": "arrival-5", "name": "New Arrival 5", "image": "arrival5.jpg" }
+  ],
+  "specialPacks": [
+    { "id": "pack-1", "name": "Special Pack 1", "image": "pack1.jpg" },
+    { "id": "pack-2", "name": "Special Pack 2", "image": "pack2.jpg" },
+    { "id": "pack-3", "name": "Special Pack 3", "image": "pack3.jpg" },
+    { "id": "pack-4", "name": "Special Pack 4", "image": "pack4.jpg" },
+    { "id": "pack-5", "name": "Special Pack 5", "image": "pack5.jpg" }
+  ]
+}

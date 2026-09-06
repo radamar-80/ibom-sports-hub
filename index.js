@@ -16,6 +16,7 @@ const TICKETS_FILE = "tickets.json";
 const CATEGORIES_FILE = "categories.json";
 const AI_CHATS_FILE = "ai-chats.json";
 const SUPPORT_ANALYTICS_FILE = "support-analytics.json";
+const COLLECTIONS_FILE = "collections.json";
 const UPLOAD_DIR = "uploads";
 
 const SUPPORT_CHANNELS = new Set(["ai", "ticket", "email", "phone", "whatsapp"]);
@@ -45,6 +46,23 @@ function readCategories() {
 }
 function writeCategories(data) {
   fs.writeFileSync(CATEGORIES_FILE, JSON.stringify(data, null, 2));
+}
+
+function readCollections() {
+  if (!fs.existsSync(COLLECTIONS_FILE)) return { newArrivals: [], specialPacks: [] };
+  try {
+    const data = JSON.parse(fs.readFileSync(COLLECTIONS_FILE));
+    return {
+      newArrivals: Array.isArray(data.newArrivals) ? data.newArrivals : [],
+      specialPacks: Array.isArray(data.specialPacks) ? data.specialPacks : []
+    };
+  } catch (e) {
+    return { newArrivals: [], specialPacks: [] };
+  }
+}
+
+function writeCollections(data) {
+  fs.writeFileSync(COLLECTIONS_FILE, JSON.stringify(data, null, 2));
 }
 
 function readReviews() {
@@ -358,6 +376,40 @@ app.put("/categories", verifyToken, (req, res) => {
   }));
   writeCategories(categories);
   res.json({ message: "Categories updated" });
+});
+
+// GET HOME COLLECTIONS (public)
+app.get("/collections", (req, res) => {
+  res.json(readCollections());
+});
+
+// UPDATE HOME COLLECTIONS (admin only)
+app.put("/collections", verifyToken, (req, res) => {
+  const raw = req.body;
+  const validList = list => Array.isArray(list) && list.every(item =>
+    item && typeof item.id === "string" && item.id.trim() &&
+    typeof item.name === "string" && item.name.trim() &&
+    typeof item.image === "string" && item.image.trim()
+  ) && new Set(list.map(item => item.id)).size === list.length;
+
+  if (!raw || !validList(raw.newArrivals) || !validList(raw.specialPacks)) {
+    return res.status(400).json({ message: "Each collection needs unique subsection IDs, names, and images" });
+  }
+
+  const collections = {
+    newArrivals: raw.newArrivals.map(item => ({
+      id: item.id.trim(),
+      name: item.name.trim(),
+      image: item.image
+    })),
+    specialPacks: raw.specialPacks.map(item => ({
+      id: item.id.trim(),
+      name: item.name.trim(),
+      image: item.image
+    }))
+  };
+  writeCollections(collections);
+  res.json({ message: "Collections updated", collections });
 });
 
 // GET REVIEWS

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Special Packs — Ibom Sports Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="collection-editor.css">
+</head>
+<body>
+  <header class="header">
+    <img class="brand-logo" src="logo.png" alt="Ibom Sports Hub logo">
+    <div class="brand-title">
+      <span class="brand-name">IBOM SPORTS HUB</span>
+      <span class="brand-subtitle">EDIT SPECIAL PACKS</span>
+    </div>
+    <a class="back-link" href="admin-dashboard.html">← Dashboard</a>
+  </header>
+  <main class="page">
+    <section class="intro">
+      <h1>Special Packs</h1>
+      <p>Manage the subsections shown in the Special Packs slider. Each subsection needs a name, a unique ID, and a display picture. The arrow on each home slider picture opens that exact subsection.</p>
+    </section>
+    <div class="toolbar">
+      <div>
+        <div class="toolbar-title">Special Packs subsections</div>
+        <div class="save-status" id="saveStatus"></div>
+      </div>
+      <button class="save-btn" id="saveBtn" onclick="saveCollection()">Save Changes</button>
+    </div>
+    <div id="collectionEditor"><div class="loading">Loading special packs…</div></div>
+    <button class="add-btn" onclick="addCollectionItem()">＋ Add subsection</button>
+  </main>
+  <script>window.COLLECTION_KEY = "specialPacks";</script>
+  <script src="collection-editor.js"></script>
+</body>
+</html>
