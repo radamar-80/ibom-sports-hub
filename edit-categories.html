@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Categories — Ibom Sports Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f1f5f3;
+      color: #17201b;
+      font-family: 'Poppins', Arial, sans-serif;
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+    body.loaded { opacity: 1; }
+    .header {
+      background: linear-gradient(135deg, #075b36 0%, #0c8d53 58%, #20b86f 100%);
+      color: white;
+      min-height: 82px;
+      padding: 15px max(20px, calc((100% - 980px) / 2));
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,.9);
+      flex-shrink: 0;
+    }
+    .brand-title { display: flex; flex-direction: column; gap: 2px; }
+    .brand-name { font-size: 17px; font-weight: 800; letter-spacing: .5px; }
+    .brand-subtitle { font-size: 11px; opacity: .9; letter-spacing: .7px; }
+    .back-link {
+      margin-left: auto;
+      color: white;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.6);
+      border-radius: 999px;
+      padding: 8px 13px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .back-link:hover { background: white; color: #087a48; }
+    .page {
+      width: min(100% - 32px, 980px);
+      margin: 0 auto;
+      padding: 26px 0 48px;
+    }
+    .intro {
+      background: white;
+      border: 1px solid rgba(13,79,48,.08);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 14px rgba(20,62,40,.06);
+    }
+    .intro h1 { margin: 0 0 6px; font-size: 20px; }
+    .intro p { margin: 0; color: #68736d; font-size: 13px; line-height: 1.6; }
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .toolbar-title { font-size: 14px; font-weight: 700; }
+    .save-btn {
+      border: none;
+      border-radius: 9px;
+      padding: 11px 18px;
+      background: #16804b;
+      color: white;
+      cursor: pointer;
+      font: 700 13px 'Poppins', Arial, sans-serif;
+    }
+    .save-btn:hover { background: #0e6c3d; }
+    .save-btn:disabled { opacity: .55; cursor: not-allowed; }
+    .save-status { font-size: 12px; color: #16804b; min-height: 18px; }
+    .save-status.error { color: #c0392b; }
+    .category-card {
+      background: white;
+      border: 1px solid #dce8df;
+      border-radius: 16px;
+      padding: 17px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(20,62,40,.05);
+    }
+    .subcat-card {
+      background: #f7fbf8;
+      border: 1px solid #dfece3;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+    .section-card {
+      background: white;
+      border: 1px solid #e4ebe6;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 9px;
+    }
+    .node-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 13px;
+    }
+    .node-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .node-level {
+      color: #16804b;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .65px;
+      text-transform: uppercase;
+    }
+    .node-count { color: #89968e; font-size: 11px; }
+    .field-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 10px;
+    }
+    .field label {
+      display: block;
+      color: #536158;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .35px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+    .field input[type="text"] {
+      width: 100%;
+      border: 1px solid #d5e0d8;
+      border-radius: 8px;
+      padding: 9px 10px;
+      color: #1d2821;
+      font: 13px 'Poppins', Arial, sans-serif;
+      outline: none;
+      background: white;
+    }
+    .field input[type="text"]:focus { border-color: #28b570; box-shadow: 0 0 0 2px rgba(40,181,112,.12); }
+    .id-note { color: #89968e; font-size: 10px; margin-top: 4px; line-height: 1.4; }
+    .image-field {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding-top: 2px;
+    }
+    .image-preview {
+      width: 48px;
+      height: 48px;
+      border-radius: 9px;
+      object-fit: cover;
+      border: 1px solid #d5e0d8;
+      background: #edf4ef;
+      flex-shrink: 0;
+    }
+    .image-placeholder {
+      display: grid;
+      place-items: center;
+      color: #93a198;
+      font-size: 19px;
+    }
+    .image-actions { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+    .image-actions label {
+      color: #16804b;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .image-actions input { display: none; }
+    .clear-image {
+      align-self: flex-start;
+      border: none;
+      background: none;
+      padding: 0;
+      color: #c0392b;
+      cursor: pointer;
+      font: 500 10px 'Poppins', Arial, sans-serif;
+    }
+    .children-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid #e8efea;
+      padding-top: 14px;
+      margin-top: 15px;
+    }
+    .children-heading span { font-size: 12px; font-weight: 700; color: #3f4d44; }
+    .add-btn, .delete-btn {
+      border: none;
+      border-radius: 7px;
+      padding: 7px 10px;
+      cursor: pointer;
+      font: 700 11px 'Poppins', Arial, sans-serif;
+    }
+    .add-btn { background: #e3f6eb; color: #16804b; }
+    .add-btn:hover { background: #ccefd9; }
+    .delete-btn { background: #fdecea; color: #c0392b; }
+    .delete-btn:hover { background: #f9d5d1; }
+    .empty-node {
+      color: #8d9891;
+      font-size: 12px;
+      padding: 12px 0 3px;
+    }
+    .section-actions { display: flex; align-items: center; gap: 8px; }
+    .add-category {
+      width: 100%;
+      border: 1px dashed #8acaa4;
+      border-radius: 11px;
+      background: #f4fcf7;
+      color: #16804b;
+      padding: 12px;
+      cursor: pointer;
+      font: 700 12px 'Poppins', Arial, sans-serif;
+    }
+    .add-category:hover { background: #e7f8ed; }
+    .loading, .error-state {
+      background: white;
+      border-radius: 14px;
+      padding: 28px;
+      text-align: center;
+      color: #7d8981;
+      font-size: 13px;
+    }
+    .error-state { color: #c0392b; }
+    @media (max-width: 600px) {
+      .header { padding: 13px 14px; }
+      .brand-logo { width: 44px; height: 44px; }
+      .brand-name { font-size: 14px; }
+      .back-link { padding: 7px 9px; font-size: 11px; }
+      .page { width: calc(100% - 20px); padding-top: 18px; }
+      .category-card { padding: 13px; }
+      .field-grid { grid-template-columns: 1fr; }
+      .toolbar { align-items: flex-start; flex-direction: column; }
+      .save-btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <img class="brand-logo" src="logo.png" alt="Ibom Sports Hub logo">
+    <div class="brand-title">
+      <span class="brand-name">IBOM SPORTS HUB</span>
+      <span class="brand-subtitle">EDIT CATEGORIES</span>
+    </div>
+    <a class="back-link" href="admin-dashboard.html">← Dashboard</a>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <h1>Category Editor</h1>
+      <p>Edit the left-hand drawers, the groups inside them, and the display tiles within each group. You can upload an optional image at every level. Keep IDs unchanged when products already use them, otherwise those products may no longer match their category.</p>
+    </section>
+
+    <div class="toolbar">
+      <div>
+        <div class="toolbar-title">Category structure</div>
+        <div class="save-status" id="saveStatus"></div>
+      </div>
+      <button class="save-btn" id="saveBtn" onclick="saveCategories()">Save Changes</button>
+    </div>
+
+    <div id="categoryEditor"><div class="loading">Loading categories…</div></div>
+  </main>
+
+  <script>
+    if (localStorage.getItem("adminLoggedIn") !== "true") {
+      window.location.href = "admin-login.html";
+    }
+
+    let categories = [];
+    let saving = false;
+
+    window.addEventListener("load", () => {
+      document.body.classList.add("loaded");
+      loadCategories();
+    });
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        "\"": "&quot;", "'": "&#039;"
+      }[char]));
+    }
+
+    function getNode(level, categoryIndex, subcategoryIndex, sectionIndex) {
+      if (level === "category") return categories[categoryIndex];
+      if (level === "subcategory") return categories[categoryIndex]?.subcategories?.[subcategoryIndex];
+      return categories[categoryIndex]?.subcategories?.[subcategoryIndex]?.sections?.[sectionIndex];
+    }
+
+    function nodePath(level, categoryIndex, subcategoryIndex, sectionIndex) {
+      return level + "-" + categoryIndex + "-" + subcategoryIndex + "-" + sectionIndex;
+    }
+
+    function imageControl(level, categoryIndex, subcategoryIndex, sectionIndex, image) {
+      const path = nodePath(level, categoryIndex, subcategoryIndex, sectionIndex);
+      const preview = image
+        ? `<img class="image-preview" src="${escapeHtml(image)}" alt="Current display image">`
+        : `<div class="image-preview image-placeholder">＋</div>`;
+      return `<div class="image-field">
+        ${preview}
+        <div class="image-actions">
+          <label for="image-${path}">${image ? "Change display image" : "Add display image"}
+            <input type="file" id="image-${path}" accept="image/*" onchange="handleImageUpload('${level}',${categoryIndex},${subcategoryIndex},${sectionIndex},event)">
+          </label>
+          ${image ? `<button class="clear-image" type="button" onclick="clearImage('${level}',${categoryIndex},${subcategoryIndex},${sectionIndex})">Remove image</button>` : ""}
+        </div>
+      </div>`;
+    }
+
+    function renderField(label, value, level, categoryIndex, subcategoryIndex, sectionIndex, key, note) {
+      return `<div class="field">
+        <label>${label}</label>
+        <input type="text" value="${escapeHtml(value || "")}" oninput="updateNodeField('${level}',${categoryIndex},${subcategoryIndex},${sectionIndex},'${key}',this.value)">
+        ${note ? `<div class="id-note">${note}</div>` : ""}
+      </div>`;
+    }
+
+    function renderCategories() {
+      const editor = document.getElementById("categoryEditor");
+      if (!categories.length) {
+        editor.innerHTML = `<div class="empty-node">No drawers yet.</div><button class="add-category" onclick="addCategory()">＋ Add drawer</button>`;
+        return;
+      }
+      editor.innerHTML = categories.map((category, categoryIndex) => {
+        const subcategories = category.subcategories || [];
+        return `<article class="category-card">
+          <div class="node-heading">
+            <div class="node-title">
+              <span class="node-level">Drawer ${categoryIndex + 1}</span>
+              <span class="node-count">${subcategories.length} group${subcategories.length === 1 ? "" : "s"}</span>
+            </div>
+            <button class="delete-btn" onclick="deleteCategory(${categoryIndex})">Delete drawer</button>
+          </div>
+          <div class="field-grid">
+            ${renderField("Display name", category.name, "category", categoryIndex, -1, -1, "name")}
+            ${renderField("ID", category.id, "category", categoryIndex, -1, -1, "id", "Keep this unchanged if products use this drawer.")}
+            ${imageControl("category", categoryIndex, -1, -1, category.image)}
+          </div>
+          <div class="children-heading">
+            <span>Groups inside this drawer</span>
+            <button class="add-btn" onclick="addSubcategory(${categoryIndex})">＋ Add group</button>
+          </div>
+          ${subcategories.length ? subcategories.map((subcategory, subcategoryIndex) =>
+            renderSubcategory(subcategory, categoryIndex, subcategoryIndex)
+          ).join("") : `<div class="empty-node">No groups yet. Add one to show content on the right side of the customer categories page.</div>`}
+        </article>`;
+      }).join("") + `<button class="add-category" onclick="addCategory()">＋ Add drawer</button>`;
+    }
+
+    function renderSubcategory(subcategory, categoryIndex, subcategoryIndex) {
+      const sections = subcategory.sections || [];
+      return `<div class="subcat-card">
+        <div class="node-heading">
+          <div class="node-title">
+            <span class="node-level">Group</span>
+            <span class="node-count">${sections.length} tile${sections.length === 1 ? "" : "s"}</span>
+          </div>
+          <button class="delete-btn" onclick="deleteSubcategory(${categoryIndex},${subcategoryIndex})">Delete group</button>
+        </div>
+        <div class="field-grid">
+          ${renderField("Display name", subcategory.name, "subcategory", categoryIndex, subcategoryIndex, -1, "name")}
+          ${renderField("ID", subcategory.id, "subcategory", categoryIndex, subcategoryIndex, -1, "id", "Keep this unchanged if products use this group.")}
+          ${imageControl("subcategory", categoryIndex, subcategoryIndex, -1, subcategory.image)}
+        </div>
+        <div class="children-heading">
+          <span>Display tiles inside this group</span>
+          <button class="add-btn" onclick="addSection(${categoryIndex},${subcategoryIndex})">＋ Add tile</button>
+        </div>
+        ${sections.length ? sections.map((section, sectionIndex) =>
+          renderSection(section, categoryIndex, subcategoryIndex, sectionIndex)
+        ).join("") : `<div class="empty-node">No tiles yet. Add one to create a customer-facing section.</div>`}
+      </div>`;
+    }
+
+    function renderSection(section, categoryIndex, subcategoryIndex, sectionIndex) {
+      return `<div class="section-card">
+        <div class="node-heading">
+          <div class="node-title"><span class="node-level">Tile ${sectionIndex + 1}</span></div>
+          <div class="section-actions">
+            <button class="delete-btn" onclick="deleteSection(${categoryIndex},${subcategoryIndex},${sectionIndex})">Delete tile</button>
+          </div>
+        </div>
+        <div class="field-grid">
+          ${renderField("Display name", section.name, "section", categoryIndex, subcategoryIndex, sectionIndex, "name")}
+          ${renderField("ID", section.id, "section", categoryIndex, subcategoryIndex, sectionIndex, "id", "Keep this unchanged if products use this tile.")}
+          ${imageControl("section", categoryIndex, subcategoryIndex, sectionIndex, section.image)}
+        </div>
+      </div>`;
+    }
+
+    async function loadCategories() {
+      try {
+        const response = await fetch("/categories");
+        if (!response.ok) throw new Error("Failed to load categories");
+        categories = await response.json();
+        if (!Array.isArray(categories)) throw new Error("Invalid category data");
+        categories = categories.map(category => ({
+          ...category,
+          subcategories: Array.isArray(category.subcategories) ? category.subcategories.map(subcategory => ({
+            ...subcategory,
+            sections: Array.isArray(subcategory.sections) ? subcategory.sections : []
+          })) : []
+        }));
+        renderCategories();
+      } catch (error) {
+        document.getElementById("categoryEditor").innerHTML =
+          `<div class="error-state">Could not load categories. Please refresh and try again.</div>`;
+      }
+    }
+
+    function updateNodeField(level, categoryIndex, subcategoryIndex, sectionIndex, key, value) {
+      const node = getNode(level, categoryIndex, subcategoryIndex, sectionIndex);
+      if (node) node[key] = value;
+    }
+
+    function newId(prefix, items) {
+      const base = prefix + "-new";
+      let id = base;
+      let number = 2;
+      const used = new Set(items.map(item => item.id));
+      while (used.has(id)) id = base + "-" + number++;
+      return id;
+    }
+
+    function addCategory() {
+      categories.push({
+        id: newId("category", categories),
+        name: "New Drawer",
+        subcategories: []
+      });
+      renderCategories();
+    }
+
+    function addSubcategory(categoryIndex) {
+      const category = categories[categoryIndex];
+      if (!category) return;
+      category.subcategories = category.subcategories || [];
+      category.subcategories.push({
+        id: newId("group", category.subcategories),
+        name: "New Group",
+        sections: []
+      });
+      renderCategories();
+    }
+
+    function addSection(categoryIndex, subcategoryIndex) {
+      const subcategory = categories[categoryIndex]?.subcategories?.[subcategoryIndex];
+      if (!subcategory) return;
+      subcategory.sections = subcategory.sections || [];
+      subcategory.sections.push({
+        id: newId("tile", subcategory.sections),
+        name: "New Tile"
+      });
+      renderCategories();
+    }
+
+    function deleteCategory(categoryIndex) {
+      if (!confirm("Delete this drawer and everything inside it?")) return;
+      categories.splice(categoryIndex, 1);
+      renderCategories();
+    }
+
+    function deleteSubcategory(categoryIndex, subcategoryIndex) {
+      if (!confirm("Delete this group and all its tiles?")) return;
+      categories[categoryIndex]?.subcategories?.splice(subcategoryIndex, 1);
+      renderCategories();
+    }
+
+    function deleteSection(categoryIndex, subcategoryIndex, sectionIndex) {
+      if (!confirm("Delete this display tile?")) return;
+      categories[categoryIndex]?.subcategories?.[subcategoryIndex]?.sections?.splice(sectionIndex, 1);
+      renderCategories();
+    }
+
+    function clearImage(level, categoryIndex, subcategoryIndex, sectionIndex) {
+      const node = getNode(level, categoryIndex, subcategoryIndex, sectionIndex);
+      if (!node) return;
+      delete node.image;
+      renderCategories();
+    }
+
+    function handleImageUpload(level, categoryIndex, subcategoryIndex, sectionIndex, event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith("image/")) {
+        alert("Please choose an image file.");
+        event.target.value = "";
+        return;
+      }
+      if (file.size > 4 * 1024 * 1024) {
+        alert("Please choose an image smaller than 4 MB.");
+        event.target.value = "";
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const node = getNode(level, categoryIndex, subcategoryIndex, sectionIndex);
+        if (!node) return;
+        node.image = reader.result;
+        renderCategories();
+      };
+      reader.onerror = () => alert("Could not read that image. Please try another one.");
+      reader.readAsDataURL(file);
+    }
+
+    function validateCategories() {
+      if (!Array.isArray(categories) || !categories.length) return "Add at least one drawer.";
+      const checkSiblings = (items, label) => {
+        const ids = new Set();
+        for (const item of items) {
+          if (!String(item.name || "").trim()) return label + " names cannot be blank.";
+          if (!String(item.id || "").trim()) return label + " IDs cannot be blank.";
+          if (ids.has(item.id)) return label + " IDs must be unique within their level.";
+          ids.add(item.id);
+        }
+        return "";
+      };
+      let error = checkSiblings(categories, "Drawer");
+      if (error) return error;
+      for (const category of categories) {
+        error = checkSiblings(category.subcategories || [], "Group");
+        if (error) return error;
+        for (const subcategory of category.subcategories || []) {
+          error = checkSiblings(subcategory.sections || [], "Tile");
+          if (error) return error;
+        }
+      }
+      return "";
+    }
+
+    async function saveCategories() {
+      if (saving) return;
+      const error = validateCategories();
+      const status = document.getElementById("saveStatus");
+      if (error) {
+        status.className = "save-status error";
+        status.textContent = error;
+        return;
+      }
+
+      const token = localStorage.getItem("adminToken");
+      if (!token) {
+        status.className = "save-status error";
+        status.textContent = "Session expired. Please log in again.";
+        return;
+      }
+
+      saving = true;
+      const button = document.getElementById("saveBtn");
+      button.disabled = true;
+      button.textContent = "Saving…";
+      status.className = "save-status";
+      status.textContent = "Saving category changes…";
+
+      try {
+        const response = await fetch("/categories", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify(categories)
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || "Could not save categories");
+        status.textContent = "Changes saved successfully.";
+      } catch (error) {
+        status.className = "save-status error";
+        status.textContent = error.message || "Could not save categories.";
+      } finally {
+        saving = false;
+        button.disabled = false;
+        button.textContent = "Save Changes";
+      }
+    }
+  </script>
+</body>
+</html>
