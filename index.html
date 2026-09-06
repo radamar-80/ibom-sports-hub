@@ -668,6 +668,33 @@ body.dark .review-detail-text { color: #ccc; }
   display:none;
   font-weight:bold;
 }
+.submit-review-row {
+  display: none;
+  align-items: center;
+  gap: 9px;
+  margin-top: 10px;
+}
+.submit-review-row.visible { display: flex; }
+.submit-review-row .submit-review {
+  margin-top: 0;
+}
+.submit-review.is-loading {
+  opacity: 0.55;
+  pointer-events: none;
+}
+.review-submit-spinner {
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(0, 0, 255, 0.22);
+  border-top-color: blue;
+  border-radius: 50%;
+  display: none;
+  animation: reviewSubmitSpin 0.7s linear infinite;
+}
+.review-submit-spinner.visible { display: inline-block; }
+@keyframes reviewSubmitSpin {
+  to { transform: rotate(360deg); }
+}
   
 .collections { 
   padding: 0.5px; 
@@ -3263,7 +3290,10 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
     <img id="photoPreview" alt="preview">
   </div>
   <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event)">
-  <div class="submit-review" id="submitBtn" onclick="submitReview()">Submit</div>
+  <div class="submit-review-row" id="submitRow">
+    <div class="submit-review" id="submitBtn" onclick="submitReview()">Submit</div>
+    <span class="review-submit-spinner" id="submitSpinner" aria-label="Submitting review"></span>
+  </div>
 </div>
  
   <div id="allReviewsPage" style="display:none; padding:20px;">
@@ -3959,6 +3989,7 @@ function rate(stars) {
   document.getElementById('reviewText').style.display = 'block';
   document.getElementById('reviewName').style.display = 'block';
   document.getElementById('photoBox').style.display = 'flex';
+  document.getElementById('submitRow').classList.add('visible');
   document.getElementById('submitBtn').style.display = 'block';
 }
 
@@ -3982,16 +4013,23 @@ function handlePhotoUpload(event) {
 
 async function submitReview() {
   if (!selectedRating) { alert("Please tap a star to rate us first!"); return; }
+  if (document.getElementById('submitBtn').classList.contains('is-loading')) return;
   const text = document.getElementById('reviewText').value.trim();
   const name = document.getElementById('reviewName').value.trim();
   const preview = document.getElementById('photoPreview');
   const photo = preview.style.display !== 'none' ? preview.src : '';
+  const submitBtn = document.getElementById('submitBtn');
+  const submitSpinner = document.getElementById('submitSpinner');
+  submitBtn.classList.add('is-loading');
+  submitBtn.setAttribute('aria-disabled', 'true');
+  submitSpinner.classList.add('visible');
   try {
-    await fetch('/submit-review', {
+    const response = await fetch('/submit-review', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ rating: selectedRating, text, name, photo })
     });
+    if (!response.ok) throw new Error('Review submission failed');
     launchConfetti();
     showToast("🎉 Thanks for your review!");
     selectedRating = 0;
@@ -4004,12 +4042,17 @@ async function submitReview() {
     preview.style.display = 'none';
     document.querySelector('.photo-hint').style.display = '';
     document.querySelector('.photo-plus').style.display = '';
+    document.getElementById('submitRow').classList.remove('visible');
     document.getElementById('submitBtn').style.display = 'none';
     navigate({ page: 'home' });
     await loadReviews();
     reviewSlider.flashToLast();
   } catch(e) {
     alert("Could not submit review. Please check your connection.");
+  } finally {
+    submitBtn.classList.remove('is-loading');
+    submitBtn.removeAttribute('aria-disabled');
+    submitSpinner.classList.remove('visible');
   }
 }
 
