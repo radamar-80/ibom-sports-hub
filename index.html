@@ -3808,6 +3808,14 @@ function showTarget(state, inClass) {
   } else if (page === 'section') {
     el = document.getElementById(state.id);
     if (el) el.classList.add('active');
+  } else if (page === 'collection') {
+    const collectionKey = state.collection === 'specialPacks' ? 'specialPacks' : 'newArrivals';
+    const pageId = collectionKey === 'specialPacks' ? 'specialpacks' : 'newarrivals';
+    el = document.getElementById(pageId);
+    if (el) {
+      el.classList.add('active');
+      renderCollectionPage(collectionKey, state.subsectionId);
+    }
   } else if (page === 'filter') {
     el = document.getElementById('resultView');
     showFilterResults(state.type, state.value, state.label);
@@ -3926,7 +3934,114 @@ function navigate(state) {
     }
 
 function showSection(section) {
+  if (section === 'newarrivals') {
+    navigate({ page: 'collection', collection: 'newArrivals' });
+    return;
+  }
+  if (section === 'specialpacks') {
+    navigate({ page: 'collection', collection: 'specialPacks' });
+    return;
+  }
   navigate({ page: 'section', id: section });
+}
+
+let collectionData = { newArrivals: [], specialPacks: [] };
+
+function collectionItems(collectionKey) {
+  return Array.isArray(collectionData[collectionKey]) ? collectionData[collectionKey] : [];
+}
+
+function openCollection(collectionKey) {
+  navigate({ page: 'collection', collection: collectionKey });
+}
+
+function openCollectionSubsection(collectionKey, subsectionId) {
+  navigate({ page: 'collection', collection: collectionKey, subsectionId });
+}
+
+function renderHomeCollectionSlides() {
+  const configs = [
+    { key: 'newArrivals', trackId: 'naTrack', thumbId: 'naBarThumb', label: 'New Arrival' },
+    { key: 'specialPacks', trackId: 'spTrack', thumbId: 'spBarThumb', label: 'Special Pack' }
+  ];
+
+  configs.forEach(config => {
+    const track = document.getElementById(config.trackId);
+    if (!track) return;
+    const items = collectionItems(config.key);
+    track.innerHTML = items.map(item => `
+      <div class="na-slide">
+        <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}">
+        <div class="na-go-btn" role="button" tabindex="0"
+          aria-label="Open ${escapeHtml(item.name)}"
+          onclick="openCollectionSubsection('${config.key}','${catJsString(item.id)}')"
+          onkeydown="if(event.key==='Enter'||event.key===' ')openCollectionSubsection('${config.key}','${catJsString(item.id)}')">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>`).join('') + `
+      <div class="na-more-inline" onclick="openCollection('${config.key}')"
+        role="button" tabindex="0" aria-label="View all ${escapeHtml(config.label)}s">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>`;
+    track.dispatchEvent(new Event('scroll'));
+  });
+}
+
+function renderCollectionPage(collectionKey, selectedId) {
+  const items = collectionItems(collectionKey);
+  const isSpecial = collectionKey === 'specialPacks';
+  const title = isSpecial ? 'SPECIAL PACKS' : 'NEW ARRIVALS';
+  const contentId = isSpecial ? 'specialPacksPageContent' : 'newArrivalsPageContent';
+  const content = document.getElementById(contentId);
+  if (!content) return;
+
+  const selected = items.find(item => item.id === selectedId);
+  content.innerHTML = `
+    <div class="collection-page-inner">
+      <button onclick="history.back()" style="display:flex;align-items:center;gap:6px;background:none;border:none;padding:0;color:inherit;cursor:pointer;font-size:13px;">
+        <span style="font-size:22px;line-height:1;">‹</span> Back
+      </button>
+      <h2 class="collection-page-title">${title}</h2>
+      <div class="collection-page-rule"></div>
+      ${selected ? `<div class="collection-selected">
+        <div class="collection-selected-label">Selected subsection</div>
+        <div class="collection-selected-name">${escapeHtml(selected.name)}</div>
+      </div>` : `<p class="collection-page-subtitle">Browse our ${isSpecial ? 'special pack' : 'new arrival'} subsections.</p>`}
+      ${items.length ? `<div class="collection-subsection-list">
+        ${items.map(item => `<div class="collection-subsection-card ${item.id === selectedId ? 'selected' : ''}"
+          onclick="openCollectionSubsection('${collectionKey}','${catJsString(item.id)}')">
+          <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}">
+          <div class="collection-subsection-copy">
+            <span class="collection-subsection-name">${escapeHtml(item.name)}</span>
+            <span class="collection-subsection-arrow">→</span>
+          </div>
+        </div>`).join('')}
+      </div>` : `<div class="collection-page-subtitle">No subsections are available yet.</div>`}
+    </div>`;
+}
+
+async function loadCollections() {
+  try {
+    const response = await fetch('/collections');
+    if (!response.ok) throw new Error('Could not load collections');
+    const data = await response.json();
+    collectionData = {
+      newArrivals: Array.isArray(data.newArrivals) ? data.newArrivals : [],
+      specialPacks: Array.isArray(data.specialPacks) ? data.specialPacks : []
+    };
+    renderHomeCollectionSlides();
+    const state = history.state;
+    if (state?.page === 'collection') {
+      renderCollectionPage(state.collection === 'specialPacks' ? 'specialPacks' : 'newArrivals', state.subsectionId);
+    }
+  } catch (error) {
+    collectionData = { newArrivals: [], specialPacks: [] };
+  }
 }
     
 async function loadProducts() {
@@ -4659,6 +4774,9 @@ function prevSlide(){
 
   // load products
   loadProducts();
+
+  // load admin-managed home collections
+  loadCollections();
 
   // load reviews
   loadReviews();
