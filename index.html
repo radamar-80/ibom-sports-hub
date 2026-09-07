@@ -819,11 +819,19 @@ body.dark .review-detail-text { color: #ccc; }
   margin: 0 auto;
 }
 .collection-page-title {
-  margin: 0 0 6px;
-  font-size: 26px;
+   margin: 0 0 20px;
+   font-size: 22px;
   font-weight: 800;
-  letter-spacing: 2px;
+   letter-spacing: 1px;
   text-align: center;
+}
+.collection-page-title span {
+   display: block;
+   width: 48px;
+   height: 3px;
+   margin: 8px auto 0;
+   border-radius: 2px;
+   background: #28b570;
 }
 .collection-page-rule {
   width: 48px;
@@ -4003,11 +4011,12 @@ function renderCollectionPage(collectionKey, selectedId) {
   const selected = items.find(item => item.id === selectedId);
   content.innerHTML = `
     <div class="collection-page-inner">
+      <h2 class="collection-page-title">${title}
+        <span></span>
+      </h2>
       <button onclick="history.back()" style="display:flex;align-items:center;gap:6px;background:none;border:none;padding:0;color:inherit;cursor:pointer;font-size:13px;">
         <span style="font-size:22px;line-height:1;">‹</span> Back
       </button>
-      <h2 class="collection-page-title">${title}</h2>
-      <div class="collection-page-rule"></div>
       ${selected ? `<div class="collection-selected">
         <div class="collection-selected-label">Selected subsection</div>
         <div class="collection-selected-name">${escapeHtml(selected.name)}</div>
