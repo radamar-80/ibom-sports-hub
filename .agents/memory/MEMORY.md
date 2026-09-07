@@ -1,1 +1,2 @@
 - [Admin auth token key](admin-auth-token-key.md) — admin pages must all use the same localStorage key for the JWT or admin fetches silently fail.
+- [SPA page containment](spa-page-containment.md) — independently navigated pages must not be nested inside a parent container that routing hides.
