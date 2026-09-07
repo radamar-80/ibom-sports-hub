@@ -4004,6 +4004,7 @@ function renderCollectionPage(collectionKey, selectedId) {
   const items = collectionItems(collectionKey);
   const isSpecial = collectionKey === 'specialPacks';
   const title = isSpecial ? 'SPECIAL PACKS' : 'NEW ARRIVALS';
+  const browseCopy = isSpecial ? 'browse our special packs' : 'browse our new arrivals';
   const contentId = isSpecial ? 'specialPacksPageContent' : 'newArrivalsPageContent';
   const content = document.getElementById(contentId);
   if (!content) return;
@@ -4020,7 +4021,7 @@ function renderCollectionPage(collectionKey, selectedId) {
       ${selected ? `<div class="collection-selected">
         <div class="collection-selected-label">Selected subsection</div>
         <div class="collection-selected-name">${escapeHtml(selected.name)}</div>
-      </div>` : `<p class="collection-page-subtitle">Browse our ${isSpecial ? 'special pack' : 'new arrival'} subsections.</p>`}
+      </div>` : `<p class="collection-page-subtitle">${browseCopy}</p>`}
       ${items.length ? `<div class="collection-subsection-list">
         ${items.map(item => `<div class="collection-subsection-card ${item.id === selectedId ? 'selected' : ''}"
           onclick="openCollectionSubsection('${collectionKey}','${catJsString(item.id)}')">
