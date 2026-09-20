@@ -5950,11 +5950,11 @@ function toggleVipLevels() {
 };
 
 const heroTrack = document.getElementById("heroTrack");
-const heroSlides = document.querySelectorAll(".hero-slide");
+let heroSlides = document.querySelectorAll(".hero-slide");
 const heroDotsContainer = document.getElementById("heroDots");
 
 let heroIndex = 0;
-const totalSlides = heroSlides.length;
+let totalSlides = heroSlides.length;
 
 /* CREATE DOTS AUTOMATICALLY */
 heroDotsContainer.innerHTML = "";
@@ -5986,9 +5986,8 @@ function updateHeroSlider(){
     .querySelectorAll(".hero-dot")
     .forEach(dot => dot.classList.remove("active"));
 
-  document
-    .querySelectorAll(".hero-dot")[heroIndex]
-    .classList.add("active");
+  const activeDot = document.querySelectorAll(".hero-dot")[heroIndex];
+  if (activeDot) activeDot.classList.add("active");
 }
 
 /* AUTO SLIDE */
@@ -6038,6 +6037,73 @@ heroTrack.addEventListener("touchend", e => {
   updateHeroSlider();
 
 });
+
+function rebuildHeroDots() {
+  heroSlides = document.querySelectorAll(".hero-slide");
+  totalSlides = heroSlides.length;
+  heroIndex = 0;
+  heroDotsContainer.innerHTML = "";
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement("span");
+    dot.className = "hero-dot" + (i === 0 ? " active" : "");
+    dot.addEventListener("click", () => {
+      heroIndex = i;
+      updateHeroSlider();
+    });
+    heroDotsContainer.appendChild(dot);
+  }
+  updateHeroSlider();
+}
+
+function homepageImage(value) {
+  return String(value || "").trim();
+}
+
+function renderHomepageContent(content) {
+  const heroItems = Array.isArray(content.hero) ? content.hero : [];
+  const arrivals = Array.isArray(content.newArrivals) ? content.newArrivals : [];
+  const packs = Array.isArray(content.specialPacks) ? content.specialPacks : [];
+
+  heroTrack.innerHTML = heroItems.map(item => `
+    <div class="hero-slide">
+      <img src="${escapeHtml(homepageImage(item.image))}" alt="${escapeHtml(item.title || '')}" loading="eager">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>${escapeHtml(item.title || '')}</h1>
+        <p>${escapeHtml(item.subtitle || '')}</p>
+        <button class="shop-btn" onclick="showSection('${escapeHtml(item.target || 'boots')}')">SHOP NOW <span>→</span></button>
+      </div>
+    </div>`).join('');
+
+  const cardMarkup = item => `
+    <div class="na-slide">
+      <img src="${escapeHtml(homepageImage(item.image))}" alt="${escapeHtml(item.alt || '')}" loading="lazy">
+      <div class="na-go-btn" onclick="showSection('${escapeHtml(item.target || '')}')">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>`;
+  document.getElementById("naTrack").innerHTML = arrivals.map(cardMarkup).join('') + `
+    <div class="na-more-inline" onclick="showSection('newarrivals')">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5"/><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>`;
+  document.getElementById("spTrack").innerHTML = packs.map(cardMarkup).join('') + `
+    <div class="na-more-inline" onclick="showSection('specialpacks')">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5"/><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>`;
+  rebuildHeroDots();
+}
+
+async function loadHomepageContent() {
+  try {
+    const res = await fetch("/homepage-content");
+    if (!res.ok) throw new Error("Homepage content request failed");
+    renderHomepageContent(await res.json());
+  } catch (e) {
+    console.warn("Using the built-in homepage content fallback.", e);
+  }
+}
+
+loadHomepageContent();
     
     function joinMember(){
 

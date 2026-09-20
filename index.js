@@ -17,6 +17,7 @@ const CATEGORIES_FILE = "categories.json";
 const AI_CHATS_FILE = "ai-chats.json";
 const SUPPORT_ANALYTICS_FILE = "support-analytics.json";
 const COLLECTIONS_FILE = "collections.json";
+const HOMEPAGE_CONTENT_FILE = "homepage-content.json";
 const UPLOAD_DIR = "uploads";
 
 const SUPPORT_CHANNELS = new Set(["ai", "ticket", "email", "phone", "whatsapp"]);
@@ -165,6 +166,24 @@ function writeDB(data) {
   fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
 }
 
+function readHomepageContent() {
+  if (!fs.existsSync(HOMEPAGE_CONTENT_FILE)) return { hero: [], newArrivals: [], specialPacks: [] };
+  try {
+    const content = JSON.parse(fs.readFileSync(HOMEPAGE_CONTENT_FILE));
+    return {
+      hero: Array.isArray(content.hero) ? content.hero : [],
+      newArrivals: Array.isArray(content.newArrivals) ? content.newArrivals : [],
+      specialPacks: Array.isArray(content.specialPacks) ? content.specialPacks : []
+    };
+  } catch (e) {
+    return { hero: [], newArrivals: [], specialPacks: [] };
+  }
+}
+
+function writeHomepageContent(data) {
+  fs.writeFileSync(HOMEPAGE_CONTENT_FILE, JSON.stringify(data, null, 2));
+}
+
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: "25mb" }));
@@ -201,6 +220,57 @@ function verifyToken(req, res, next) {
     next();
   });
 }
+
+// HOMEPAGE CONTENT
+app.get("/homepage-content", (req, res) => {
+  res.json(readHomepageContent());
+});
+
+app.put("/homepage-content", verifyToken, upload.any(), (req, res) => {
+  let content;
+  try {
+    content = JSON.parse(req.body.content || "{}");
+  } catch (e) {
+    return res.status(400).json({ message: "Invalid homepage content." });
+  }
+
+  const clean = {
+    hero: Array.isArray(content.hero) ? content.hero : [],
+    newArrivals: Array.isArray(content.newArrivals) ? content.newArrivals : [],
+    specialPacks: Array.isArray(content.specialPacks) ? content.specialPacks : []
+  };
+
+  clean.hero = clean.hero.map((item, index) => ({
+    image: String(item.image || "").trim(),
+    title: String(item.title || "").trim(),
+    subtitle: String(item.subtitle || "").trim(),
+    target: String(item.target || "").trim(),
+    _uploadField: `heroImage_${index}`
+  }));
+  clean.newArrivals = clean.newArrivals.map((item, index) => ({
+    image: String(item.image || "").trim(),
+    alt: String(item.alt || "").trim(),
+    target: String(item.target || "newarrivals").trim(),
+    _uploadField: `newArrivalImage_${index}`
+  }));
+  clean.specialPacks = clean.specialPacks.map((item, index) => ({
+    image: String(item.image || "").trim(),
+    alt: String(item.alt || "").trim(),
+    target: String(item.target || "specialpacks").trim(),
+    _uploadField: `specialPackImage_${index}`
+  }));
+
+  for (const file of req.files || []) {
+    const item = [...clean.hero, ...clean.newArrivals, ...clean.specialPacks]
+      .find(entry => entry._uploadField === file.fieldname);
+    if (item) item.image = `/uploads/${file.filename}`;
+  }
+  [...clean.hero, ...clean.newArrivals, ...clean.specialPacks]
+    .forEach(item => delete item._uploadField);
+
+  writeHomepageContent(clean);
+  res.json({ message: "Homepage content updated", content: clean });
+});
 
 // ADD PRODUCT
 app.post("/add-product", verifyToken, upload.single("image"), (req, res) => {
