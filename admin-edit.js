@@ -1,9 +1,7 @@
 /* ══ SHARED ADMIN EDIT HELPERS ══ */
 
-// Auth guard
-if (localStorage.getItem('adminLoggedIn') !== 'true') {
-  window.location.href = 'admin-login.html';
-}
+// Auth guard. The page includes admin-auth.js before this file.
+adminRequireSession();
 
 function authHeaders(json) {
   const h = { 'Authorization': 'Bearer ' + (localStorage.getItem('adminToken') || '') };

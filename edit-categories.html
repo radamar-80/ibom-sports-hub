@@ -281,10 +281,9 @@
     <div id="categoryEditor"><div class="loading">Loading categories…</div></div>
   </main>
 
+  <script src="admin-auth.js"></script>
   <script>
-    if (localStorage.getItem("adminLoggedIn") !== "true") {
-      window.location.href = "admin-login.html";
-    }
+    adminRequireSession();
 
     let categories = [];
     let saving = false;

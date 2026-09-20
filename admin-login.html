@@ -127,7 +127,10 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
   <button id="loginBtn" onclick="login()">LOGIN</button>
 </div>
 
+<script src="admin-auth.js"></script>
 <script>
+adminClearExpiredSession();
+
 function showError(msg) {
   const el = document.getElementById("errorMsg");
   el.textContent = msg;
@@ -169,7 +172,7 @@ async function login() {
 
     if (res.ok) {
       localStorage.setItem("adminToken", data.token);
-      localStorage.setItem("adminLoggedIn", "true");
+      adminBeginSession();
       window.location.href = "admin-dashboard.html";
     } else {
       showError(data.message || "Login failed. Please try again.");

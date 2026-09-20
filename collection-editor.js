@@ -1,6 +1,4 @@
-if (localStorage.getItem("adminLoggedIn") !== "true") {
-  window.location.href = "admin-login.html";
-}
+adminRequireSession();
 
 const collectionKey = window.COLLECTION_KEY;
 let collectionItems = [];

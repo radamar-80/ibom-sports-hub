@@ -735,11 +735,10 @@ body.loaded {
   </div>
 </div>
 
+<script src="admin-auth.js"></script>
 <script>
 
-if (localStorage.getItem("adminLoggedIn") !== "true") {
-  window.location.href = "admin-login.html";
-}
+adminRequireSession();
 
 window.onload = () => {
   document.body.classList.add("loaded");
@@ -761,9 +760,7 @@ function openPage(page) {
   }
 
 function logout() {
-  localStorage.removeItem("adminLoggedIn");
-  localStorage.removeItem("adminToken");
-  window.location.href = "admin-login.html";
+  adminLogout();
 }
 
 function openChangePassword() {

@@ -80,11 +80,10 @@ body.loaded {
 
 </div>
 
+<script src="admin-auth.js"></script>
 <script>
 
-if (localStorage.getItem("adminLoggedIn") !== "true") {
-  window.location.href = "admin-login.html";
-}
+adminRequireSession();
 
 
 window.onload = () => {

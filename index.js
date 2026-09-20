@@ -812,6 +812,18 @@ app.post("/login", async (req, res) => {
   res.json({ token });
 });
 
+// Refresh an active admin JWT without forcing an active dashboard user to log in again.
+// The browser only calls this shortly before expiry and while the 60-minute session
+// has recent activity. An expired or invalid token is rejected by verifyToken.
+app.post("/admin/session/refresh", verifyToken, (req, res) => {
+  const token = jwt.sign(
+    { id: req.user.id, username: req.user.username },
+    SECRET,
+    { expiresIn: "1h" }
+  );
+  res.json({ token });
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, "0.0.0.0", () => {

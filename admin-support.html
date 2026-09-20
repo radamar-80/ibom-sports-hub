@@ -378,10 +378,9 @@ body.loaded { opacity: 1; }
   <div id="closedNotice" class="closed-notice" style="display:none">This ticket is closed</div>
 </div>
 
+<script src="admin-auth.js"></script>
 <script>
-if (localStorage.getItem("adminLoggedIn") !== "true") {
-  window.location.href = "admin-login.html";
-}
+adminRequireSession();
 
 window.onload = () => {
   document.body.classList.add("loaded");
