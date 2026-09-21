@@ -115,6 +115,28 @@
       gap: 12px;
       margin-bottom: 13px;
     }
+    .collapse-btn {
+      border: 1px solid #cfe0d4;
+      border-radius: 7px;
+      background: #f7fbf8;
+      color: #16804b;
+      min-width: 32px;
+      height: 29px;
+      padding: 0 8px;
+      cursor: pointer;
+      font: 700 14px 'Poppins', Arial, sans-serif;
+      line-height: 1;
+    }
+    .collapse-btn:hover { background: #e3f6eb; }
+    .collapse-btn .collapse-icon {
+      display: inline-block;
+      transition: transform .18s ease;
+    }
+    .collapsible-node.is-collapsed > .node-heading .collapse-btn .collapse-icon {
+      transform: rotate(-90deg);
+    }
+    .collapsible-body { display: block; }
+    .collapsible-node.is-collapsed > .collapsible-body { display: none; }
     .node-title {
       display: flex;
       align-items: center;
@@ -310,6 +332,34 @@
       return level + "-" + categoryIndex + "-" + subcategoryIndex + "-" + sectionIndex;
     }
 
+    function collapseKey(level, categoryIndex, subcategoryIndex, sectionIndex) {
+      const category = categories[categoryIndex];
+      const subcategory = category?.subcategories?.[subcategoryIndex];
+      const section = subcategory?.sections?.[sectionIndex];
+      return "category-editor-collapsed:" + [
+        level,
+        category?.id || categoryIndex,
+        subcategory?.id || subcategoryIndex,
+        section?.id || sectionIndex
+      ].join(":");
+    }
+
+    function isCollapsed(level, categoryIndex, subcategoryIndex, sectionIndex) {
+      return localStorage.getItem(collapseKey(level, categoryIndex, subcategoryIndex, sectionIndex)) === "true";
+    }
+
+    function toggleNode(button, level, categoryIndex, subcategoryIndex, sectionIndex) {
+      const node = button.closest(".collapsible-node");
+      const shouldCollapse = !node.classList.contains("is-collapsed");
+      node.classList.toggle("is-collapsed", shouldCollapse);
+      button.setAttribute("aria-expanded", String(!shouldCollapse));
+      button.setAttribute("aria-label", shouldCollapse ? "Expand" : "Collapse");
+      localStorage.setItem(
+        collapseKey(level, categoryIndex, subcategoryIndex, sectionIndex),
+        String(shouldCollapse)
+      );
+    }
+
     function imageControl(level, categoryIndex, subcategoryIndex, sectionIndex, image) {
       const path = nodePath(level, categoryIndex, subcategoryIndex, sectionIndex);
       const preview = image
@@ -342,65 +392,81 @@
       }
       editor.innerHTML = categories.map((category, categoryIndex) => {
         const subcategories = category.subcategories || [];
-        return `<article class="category-card">
+        const collapsed = isCollapsed("category", categoryIndex, -1, -1);
+        return `<article class="category-card collapsible-node${collapsed ? " is-collapsed" : ""}">
           <div class="node-heading">
             <div class="node-title">
               <span class="node-level">Drawer ${categoryIndex + 1}</span>
               <span class="node-count">${subcategories.length} group${subcategories.length === 1 ? "" : "s"}</span>
             </div>
-            <button class="delete-btn" onclick="deleteCategory(${categoryIndex})">Delete drawer</button>
+             <div class="section-actions">
+               <button class="collapse-btn" type="button" onclick="toggleNode(this,'category',${categoryIndex},-1,-1)" aria-expanded="${!collapsed}" aria-label="${collapsed ? "Expand" : "Collapse"}"><span class="collapse-icon">⌄</span></button>
+               <button class="delete-btn" onclick="deleteCategory(${categoryIndex})">Delete drawer</button>
+             </div>
           </div>
-          <div class="field-grid">
-            ${renderField("Display name", category.name, "category", categoryIndex, -1, -1, "name")}
-            ${renderField("ID", category.id, "category", categoryIndex, -1, -1, "id", "Keep this unchanged if products use this drawer.")}
-          </div>
-          <div class="children-heading">
-            <span>Groups inside this drawer</span>
-            <button class="add-btn" onclick="addSubcategory(${categoryIndex})">＋ Add group</button>
-          </div>
-          ${subcategories.length ? subcategories.map((subcategory, subcategoryIndex) =>
-            renderSubcategory(subcategory, categoryIndex, subcategoryIndex)
-          ).join("") : `<div class="empty-node">No groups yet. Add one to show content on the right side of the customer categories page.</div>`}
+           <div class="collapsible-body">
+             <div class="field-grid">
+               ${renderField("Display name", category.name, "category", categoryIndex, -1, -1, "name")}
+               ${renderField("ID", category.id, "category", categoryIndex, -1, -1, "id", "Keep this unchanged if products use this drawer.")}
+             </div>
+             <div class="children-heading">
+               <span>Groups inside this drawer</span>
+               <button class="add-btn" onclick="addSubcategory(${categoryIndex})">＋ Add group</button>
+             </div>
+             ${subcategories.length ? subcategories.map((subcategory, subcategoryIndex) =>
+               renderSubcategory(subcategory, categoryIndex, subcategoryIndex)
+             ).join("") : `<div class="empty-node">No groups yet. Add one to show content on the right side of the customer categories page.</div>`}
+           </div>
         </article>`;
       }).join("") + `<button class="add-category" onclick="addCategory()">＋ Add drawer</button>`;
     }
 
     function renderSubcategory(subcategory, categoryIndex, subcategoryIndex) {
       const sections = subcategory.sections || [];
-      return `<div class="subcat-card">
+      const collapsed = isCollapsed("subcategory", categoryIndex, subcategoryIndex, -1);
+      return `<div class="subcat-card collapsible-node${collapsed ? " is-collapsed" : ""}">
         <div class="node-heading">
           <div class="node-title">
             <span class="node-level">Group</span>
             <span class="node-count">${sections.length} tile${sections.length === 1 ? "" : "s"}</span>
           </div>
-          <button class="delete-btn" onclick="deleteSubcategory(${categoryIndex},${subcategoryIndex})">Delete group</button>
+           <div class="section-actions">
+             <button class="collapse-btn" type="button" onclick="toggleNode(this,'subcategory',${categoryIndex},${subcategoryIndex},-1)" aria-expanded="${!collapsed}" aria-label="${collapsed ? "Expand" : "Collapse"}"><span class="collapse-icon">⌄</span></button>
+             <button class="delete-btn" onclick="deleteSubcategory(${categoryIndex},${subcategoryIndex})">Delete group</button>
+           </div>
         </div>
-        <div class="field-grid">
-          ${renderField("Display name", subcategory.name, "subcategory", categoryIndex, subcategoryIndex, -1, "name")}
-          ${renderField("ID", subcategory.id, "subcategory", categoryIndex, subcategoryIndex, -1, "id", "Keep this unchanged if products use this group.")}
-        </div>
-        <div class="children-heading">
-          <span>Display tiles inside this group</span>
-          <button class="add-btn" onclick="addSection(${categoryIndex},${subcategoryIndex})">＋ Add tile</button>
-        </div>
-        ${sections.length ? sections.map((section, sectionIndex) =>
-          renderSection(section, categoryIndex, subcategoryIndex, sectionIndex)
-        ).join("") : `<div class="empty-node">No tiles yet. Add one to create a customer-facing section.</div>`}
+         <div class="collapsible-body">
+           <div class="field-grid">
+             ${renderField("Display name", subcategory.name, "subcategory", categoryIndex, subcategoryIndex, -1, "name")}
+             ${renderField("ID", subcategory.id, "subcategory", categoryIndex, subcategoryIndex, -1, "id", "Keep this unchanged if products already use this group.")}
+           </div>
+           <div class="children-heading">
+             <span>Display tiles inside this group</span>
+             <button class="add-btn" onclick="addSection(${categoryIndex},${subcategoryIndex})">＋ Add tile</button>
+           </div>
+           ${sections.length ? sections.map((section, sectionIndex) =>
+             renderSection(section, categoryIndex, subcategoryIndex, sectionIndex)
+           ).join("") : `<div class="empty-node">No tiles yet. Add one to create a customer-facing section.</div>`}
+         </div>
       </div>`;
     }
 
     function renderSection(section, categoryIndex, subcategoryIndex, sectionIndex) {
-      return `<div class="section-card">
+      const collapsed = isCollapsed("section", categoryIndex, subcategoryIndex, sectionIndex);
+      return `<div class="section-card collapsible-node${collapsed ? " is-collapsed" : ""}">
         <div class="node-heading">
           <div class="node-title"><span class="node-level">Tile ${sectionIndex + 1}</span></div>
           <div class="section-actions">
+             <button class="collapse-btn" type="button" onclick="toggleNode(this,'section',${categoryIndex},${subcategoryIndex},${sectionIndex})" aria-expanded="${!collapsed}" aria-label="${collapsed ? "Expand" : "Collapse"}"><span class="collapse-icon">⌄</span></button>
             <button class="delete-btn" onclick="deleteSection(${categoryIndex},${subcategoryIndex},${sectionIndex})">Delete tile</button>
           </div>
         </div>
-        <div class="field-grid">
-          ${renderField("Display name", section.name, "section", categoryIndex, subcategoryIndex, sectionIndex, "name")}
-          ${renderField("ID", section.id, "section", categoryIndex, subcategoryIndex, sectionIndex, "id", "Keep this unchanged if products use this tile.")}
-          ${imageControl("section", categoryIndex, subcategoryIndex, sectionIndex, section.image)}
+         <div class="collapsible-body">
+           <div class="field-grid">
+             ${renderField("Display name", section.name, "section", categoryIndex, subcategoryIndex, sectionIndex, "name")}
+             ${renderField("ID", section.id, "section", categoryIndex, subcategoryIndex, sectionIndex, "id", "Keep this unchanged if products use this tile.")}
+             ${imageControl("section", categoryIndex, subcategoryIndex, sectionIndex, section.image)}
+           </div>
         </div>
       </div>`;
     }
