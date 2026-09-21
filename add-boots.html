@@ -178,6 +178,48 @@ input::placeholder {
   cursor: not-allowed;
 }
 
+.feedback-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 35, 24, 0.42);
+}
+
+.feedback-backdrop.visible { display: flex; }
+
+.feedback-dialog {
+  width: min(100%, 360px);
+  padding: 25px 22px;
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.feedback-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 26px;
+  font-weight: 800;
+  background: green;
+}
+
+.feedback-dialog.error .feedback-icon { background: #c0392b; }
+.feedback-dialog h2 { margin: 0; font-size: 18px; }
+.feedback-dialog p { margin: 8px 0 18px; color: #657169; font-size: 13px; line-height: 1.5; }
+.feedback-close { border: 0; border-radius: 9px; padding: 10px 18px; background: green; color: #fff; cursor: pointer; font-weight: 700; }
+.spinner { width: 29px; height: 29px; margin: 0 auto 15px; border: 3px solid #dcefe4; border-top-color: green; border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
 .sizes {
   display: flex;
   flex-wrap: wrap;
@@ -316,6 +358,16 @@ input::placeholder {
   UPLOAD PRODUCT
 </button>
 
+<div class="feedback-backdrop" id="feedbackBackdrop" role="presentation">
+  <div class="feedback-dialog" id="feedbackDialog" role="status" aria-live="polite">
+    <div class="spinner" id="feedbackSpinner"></div>
+    <div class="feedback-icon" id="feedbackIcon" hidden>✓</div>
+    <h2 id="feedbackTitle">Processing product</h2>
+    <p id="feedbackMessage">Uploading the product image and saving the product details…</p>
+    <button class="feedback-close" id="feedbackClose" type="button" onclick="closeFeedback()" hidden>Close</button>
+  </div>
+</div>
+
 <script src="admin-auth.js"></script>
 <script>
 
@@ -415,25 +467,46 @@ document.querySelectorAll(".sp-option").forEach(box => {
     }
   };
 });
+
+function showFeedback(state, title, message) {
+  const backdrop = document.getElementById("feedbackBackdrop");
+  const dialog = document.getElementById("feedbackDialog");
+  const spinner = document.getElementById("feedbackSpinner");
+  const icon = document.getElementById("feedbackIcon");
+  const close = document.getElementById("feedbackClose");
+  dialog.className = "feedback-dialog " + state;
+  document.getElementById("feedbackTitle").textContent = title;
+  document.getElementById("feedbackMessage").textContent = message;
+  spinner.hidden = state !== "processing";
+  icon.hidden = state === "processing";
+  icon.textContent = state === "success" ? "✓" : "!";
+  close.hidden = state === "processing";
+  backdrop.classList.add("visible");
+  backdrop.setAttribute("aria-hidden", "false");
+}
+
+function closeFeedback() {
+  document.getElementById("feedbackBackdrop").classList.remove("visible");
+  document.getElementById("feedbackBackdrop").setAttribute("aria-hidden", "true");
+}
+
 // upload
 async function uploadProduct() {
   const btn = document.getElementById("uploadBtn");
+  const image = document.getElementById("image").files[0];
 
-  // lock button
+  if (!image) {
+    showFeedback("error", "Product not added", "Please select a product image before uploading.");
+    return;
+  }
+
   btn.disabled = true;
   btn.classList.add("loading");
   btn.innerText = "UPLOADING...";
+  showFeedback("processing", "Processing product", "Uploading the product image and saving the product details…");
 
   const formData = new FormData();
 
-  const image = document.getElementById("image").files[0];
-if (!image) {
-  alert("Please select an image");
-  btn.disabled = false;
-  btn.classList.remove("loading");
-  btn.innerText = "UPLOAD PRODUCT";
-  return;
-}
   formData.append("image", image);
 
   formData.append("brand", brand.value.toLowerCase().trim());
@@ -474,19 +547,16 @@ const res = await fetch("/add-product", {
   body: formData
 });
 
+    const data = await res.json().catch(() => ({}));
     if (res.ok) {
       btn.innerText = "SUCCESS ✔";
-
-      setTimeout(() => {
-        location.reload();
-      }, 800);
+      showFeedback("success", "Product added", "The boot was saved and is now available through the customer catalog.");
     } else {
-      throw new Error("Upload failed");
+      throw new Error(data.message || "Upload failed.");
     }
 
   } catch (err) {
-    alert("Upload failed. Try again.");
-
+    showFeedback("error", "Product not added", err.message || "The product could not be saved. Please try again.");
     btn.disabled = false;
     btn.classList.remove("loading");
     btn.innerText = "UPLOAD PRODUCT";

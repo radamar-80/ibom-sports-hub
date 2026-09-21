@@ -4167,6 +4167,14 @@ async function loadProducts() {
   setInterval(() => sliders.forEach(s => s.advance()), INTERVAL);
 })();
 
+  function getProductImageSrc(image) {
+  const value = String(image || "").trim();
+  if (!value) return "";
+  if (value.startsWith("data:") || value.startsWith("/") || /^https?:\/\//i.test(value)) return value;
+  if (/\.(?:png|jpe?g|webp|gif|svg)$/i.test(value)) return "/uploads/" + value;
+  return "data:image/jpeg;base64," + value;
+}
+
   function renderBootWall(products) {
   const bootWall = document.getElementById("bootItems");
   bootWall.innerHTML = "";
@@ -4174,7 +4182,7 @@ async function loadProducts() {
   products.forEach(p => {
     const div = document.createElement("div");
     const wishlisted = isWishlisted(p.name);
-    const imgSrc = `data:image/jpeg;base64,${p.image}`;
+    const imgSrc = getProductImageSrc(p.image);
     div.innerHTML = `
       <div class="product" style="position:relative">
         <img src="${imgSrc}">
@@ -4794,7 +4802,7 @@ function showFilterResults(type, value, label) {
 
     div.innerHTML = `
       <div class="product">
-        <img src="data:image/jpeg;base64,${p.image}">
+        <img src="${getProductImageSrc(p.image)}">
         <h3>${p.name}</h3>
         <p>N${p.price}</p>
       </div>
@@ -5408,7 +5416,7 @@ function runPageSearch(q) {
   }
   results.innerHTML = matches.map(p => `
     <div class="search-result-item">
-      <img class="search-result-img" src="data:image/jpeg;base64,${p.image}">
+        <img class="search-result-img" src="${getProductImageSrc(p.image)}">
       <div class="search-result-info">
         <h4>${p.name}</h4>
         <p>N${p.price}</p>
