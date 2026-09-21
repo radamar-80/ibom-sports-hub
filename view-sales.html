@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>View Sales — Ibom Sports Hub</title><link rel="icon" href="logo.png" type="image/png">
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f5f7f5;font-family:Arial,sans-serif;color:#18201b}.page{width:min(100% - 28px,980px);margin:auto;padding:20px 0 48px}.top{display:flex;align-items:center;gap:12px;margin-bottom:18px}.back{border:0;background:#fff;color:#087a48;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer}h1{font-size:21px;margin:0}.sub{color:#777;font-size:12px;margin-top:4px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card,.notice{background:#fff;border-radius:14px;padding:17px;box-shadow:0 2px 10px rgba(0,0,0,.06)}.label{font-size:12px;color:#777}.value{font-size:25px;font-weight:800;color:#087a48;margin-top:7px}.notice{margin-top:14px;border-left:4px solid #f0a000}.notice h2{font-size:15px;margin:0 0 6px}.notice p{font-size:13px;color:#666;line-height:1.5;margin:0}.table-wrap{margin-top:14px;overflow:auto;background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.06)}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:12px;border-bottom:1px solid #edf0ee;white-space:nowrap}th{font-size:11px;text-transform:uppercase;color:#777}td:last-child{text-align:right}@media(max-width:620px){.cards{grid-template-columns:1fr 1fr}.cards .card:last-child{grid-column:span 2}}
+  </style>
+</head>
+<body>
+  <main class="page"><div class="top"><button class="back" onclick="history.back()">← Back</button><div><h1>VIEW SALES</h1><div class="sub">Inventory and sales record overview</div></div></div>
+  <div class="cards"><div class="card"><div class="label">Recorded sales</div><div class="value" id="salesCount">—</div></div><div class="card"><div class="label">Catalog products</div><div class="value" id="productCount">—</div></div><div class="card"><div class="label">Inventory value</div><div class="value" id="inventoryValue">—</div></div></div>
+  <div class="notice"><h2>No sales records yet</h2><p>The current store data model does not contain completed orders or payment records, so there are no sales to list. Once order tracking is connected, this page can display sale history here.</p></div>
+  <div class="table-wrap"><table><thead><tr><th>Product</th><th>Stock</th><th>Unit price</th><th>Inventory value</th></tr></thead><tbody id="inventoryRows"><tr><td colspan="4">Loading inventory…</td></tr></tbody></table></div>
+  </main>
+  <script src="admin-auth.js"></script><script>
+    adminRequireSession();
+    const money = n => "₦" + Number(n || 0).toLocaleString();
+    (async function loadInventory() {
+      try {
+        const products = await (await fetch("/products")).json();
+        document.getElementById("salesCount").textContent = "0";
+        document.getElementById("productCount").textContent = products.length;
+        const total = products.reduce((sum,p) => sum + Number(p.price || 0) * Number(p.stock || 0), 0);
+        document.getElementById("inventoryValue").textContent = money(total);
+        document.getElementById("inventoryRows").innerHTML = products.length ? products.map(p => {
+          const stock = Number(p.stock || 0), value = Number(p.price || 0) * stock;
+          return `<tr><td>${String(p.name || p.model || "Unnamed product").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</td><td>${stock}</td><td>${money(p.price)}</td><td>${money(value)}</td></tr>`;
+        }).join("") : '<tr><td colspan="4">No products in the catalog.</td></tr>';
+      } catch (e) { document.getElementById("inventoryRows").innerHTML = '<tr><td colspan="4">Could not load inventory.</td></tr>'; }
+    })();
+  </script>
+</body>
+</html>

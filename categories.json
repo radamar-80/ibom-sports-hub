@@ -230,19 +230,19 @@
             "name": "Synthetic Leather"
           },
           {
-            "id": "microfibre-tile",
+            "id": "microfibre-upper-tile",
             "name": "Microfibre"
           },
           {
-            "id": "mesh-tile",
+            "id": "mesh-upper-tile",
             "name": "Mesh"
           },
           {
-            "id": "hybrid-tile",
+            "id": "hybrid-upper-tile",
             "name": "Hybrid"
           },
           {
-            "id": "textured-tile",
+            "id": "textured-upper-tile",
             "name": "Textured"
           }
         ]
@@ -252,33 +252,33 @@
         "name": "Toe Box",
         "sections": [
           {
-            "id": "narrow-toe-box",
+            "id": "narrow-toe-box-tile",
             "name": "Narrow"
           },
           {
-            "id": "medium-toe-box",
+            "id": "medium-toe-box-tile",
             "name": "Medium"
           },
           {
-            "id": "wide-toe-box",
+            "id": "wide-toe-box-tile",
             "name": "Wide"
           }
         ]
       },
       {
-        "id": "midfoot-group",
+        "id": "midfoot-group-tile",
         "name": "Midfoot",
         "sections": [
           {
-            "id": "narrow-midfoot",
+            "id": "narrow-midfoot-tile",
             "name": "Narrow"
           },
           {
-            "id": "medium-midfoot",
+            "id": "medium-midfoot-tile",
             "name": "Medium"
           },
           {
-            "id": "wide-midfoot",
+            "id": "wide-midfoot-tile",
             "name": "Wide"
           }
         ]
@@ -288,15 +288,15 @@
         "name": "Heel",
         "sections": [
           {
-            "id": "narrow-heel",
+            "id": "narrow-heel-tile",
             "name": "Narrow"
           },
           {
-            "id": "medium-heel",
+            "id": "medium-heel-tile",
             "name": "Medium"
           },
           {
-            "id": "wide-heel",
+            "id": "wide-heel-tile",
             "name": "Wide"
           }
         ]
@@ -306,23 +306,23 @@
         "name": "Feel",
         "sections": [
           {
-            "id": "ultra-soft-tile",
+            "id": "ultra-soft-feel-tile",
             "name": "Ultra Soft"
           },
           {
-            "id": "soft-tile",
+            "id": "soft-feel-tile",
             "name": "Soft"
           },
           {
-            "id": "medium-tile",
+            "id": "medium-feel-tile",
             "name": "Medium"
           },
           {
-            "id": "firm-tile",
+            "id": "firm-feel-tile",
             "name": "Firm"
           },
           {
-            "id": "very-firm-tile",
+            "id": "very-firm-feel-tile",
             "name": "Very Firm"
           }
         ]
@@ -332,19 +332,19 @@
         "name": "Weight",
         "sections": [
           {
-            "id": "ultra-light-tile",
+            "id": "ultra-light-weight-tile",
             "name": "Ultra Light"
           },
           {
-            "id": "light-tile",
+            "id": "light-weight-tile",
             "name": "Light"
           },
           {
-            "id": "standard-tile",
+            "id": "standard-weight-tile",
             "name": "Standard"
           },
           {
-            "id": "heavy-tile",
+            "id": "heavy-weight-tile",
             "name": "Heavy"
           }
         ]
@@ -354,19 +354,19 @@
         "name": "Breathability",
         "sections": [
           {
-            "id": "high-tile",
+            "id": "high-breathability-tile",
             "name": "High"
           },
           {
-            "id": "medium-tile",
+            "id": "medium-breathability-tile",
             "name": "Medium"
           },
           {
-            "id": "low-tile",
+            "id": "low-breathability-tile",
             "name": "Low"
           },
           {
-            "id": "minimal-tile",
+            "id": "minimal-breathability-tile",
             "name": "Minimal"
           }
         ]
@@ -376,67 +376,67 @@
         "name": "Traction",
         "sections": [
           {
-            "id": "aggressive-tile",
+            "id": "aggressive-traction-tile",
             "name": "Aggressive"
           },
           {
-            "id": "balanced-tile",
+            "id": "balanced-traction-tile",
             "name": "Balanced"
           },
           {
-            "id": "smooth-tile",
+            "id": "smooth-traction-tile",
             "name": "Smooth"
           },
           {
-            "id": "stable-tile",
+            "id": "stable-traction-tile",
             "name": "Stable"
           }
         ]
       },
       {
-        "id": "heel-support-tile",
+        "id": "heel-support-group",
         "name": "Heel Support",
         "sections": [
           {
-            "id": "high-tile",
+            "id": "high-heel-support-tile",
             "name": "High"
           },
           {
-            "id": "medium-heel-support",
+            "id": "medium-heel-support-tile",
             "name": "Medium"
           },
           {
-            "id": "flexible-heel-support",
+            "id": "flexible-heel-support-tile",
             "name": "Flexible"
           },
           {
-            "id": "minimal-heel-support",
+            "id": "minimal-heel-support-tile",
             "name": "Minimal"
           }
         ]
       },
       {
-        "id": "ball-comfort-group",
-        "name": "Ball Comfort",
+        "id": "ball-control-group",
+        "name": "Ball Control",
         "sections": [
           {
-            "id": "barefoot-tile",
+            "id": "barefoot-ball-control-tile",
             "name": "Barefoot"
           },
           {
-            "id": "grip-ball-control",
+            "id": "grip-ball-control-tile",
             "name": "Grip"
           },
           {
-            "id": "balanced-ball-control",
+            "id": "balanced-ball-control-tile",
             "name": "Balanced"
           },
           {
-            "id": "cushioned-ball-control",
+            "id": "cushioned-ball-control-tile",
             "name": "Cushioned"
           },
           {
-            "id": "structured-ball-control",
+            "id": "structured-ball-control-tile",
             "name": "Structured"
           }
         ]
@@ -446,37 +446,37 @@
         "name": "Durability",
         "sections": [
           {
-            "id": "high-durability",
+            "id": "high-durability-tile",
             "name": "High"
           },
           {
-            "id": "balanced-durability",
+            "id": "balanced-durability-tile",
             "name": "Balanced"
           },
           {
-            "id": "performance-durability",
+            "id": "performance-durability-tile",
             "name": "Performance"
           },
           {
-            "id": "low-durability",
+            "id": "low-durability-tile",
             "name": "Low"
           }
         ]
       },
       {
-        "id": "latest-drops-group",
+        "id": "latest-drops-group-",
         "name": "Latest Drops",
         "sections": [
           {
-            "id": "nike-drops",
+            "id": "nike-drops-tile",
             "name": "Nike"
           },
           {
-            "id": "adidas-drops",
+            "id": "adidas-drops-tile",
             "name": "Adidas"
           },
           {
-            "id": "puma-drops",
+            "id": "puma-drops-tile",
             "name": "Puma"
           }
         ]
@@ -486,15 +486,15 @@
         "name": "Special Editions",
         "sections": [
           {
-            "id": "nike-specials",
+            "id": "nike-specials-tile",
             "name": "Nike"
           },
           {
-            "id": "adidas-specials",
+            "id": "adidas-specials-tile",
             "name": "Adidas"
           },
           {
-            "id": "puma-specials",
+            "id": "puma-specials-tile",
             "name": "Puma"
           }
         ]

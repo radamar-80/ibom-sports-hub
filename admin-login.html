@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>Admin Login</title>
+<link rel="icon" href="logo.png" type="image/png">
 
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -117,14 +118,16 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 </div>
 
 <div class="box">
-  <h3>Admin Login</h3>
+  <form id="loginForm" onsubmit="event.preventDefault(); login()">
+    <h3>Admin Login</h3>
 
-  <input id="username" type="text" placeholder="Username" autocomplete="username" autocorrect="off" autocapitalize="off" spellcheck="false">
-  <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+    <input id="username" type="text" placeholder="Username" autocomplete="username" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <input id="password" type="password" placeholder="Password" autocomplete="current-password">
 
-  <div class="error-msg" id="errorMsg"></div>
+    <div class="error-msg" id="errorMsg"></div>
 
-  <button id="loginBtn" onclick="login()">LOGIN</button>
+    <button id="loginBtn" type="submit">LOGIN</button>
+  </form>
 </div>
 
 <script src="admin-auth.js"></script>

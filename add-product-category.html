@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="logo.png" type="image/png">
+  <title>Add Product — Ibom Sports Hub</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin:0; padding:24px 16px 48px; background:#f5f7f5; color:#18201b; font-family:Arial,sans-serif; }
+    .page { width:min(100%,720px); margin:auto; }
+    .top { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+    .back { border:0; background:#fff; border-radius:10px; padding:10px 13px; cursor:pointer; color:#087a48; font-weight:700; }
+    h1 { margin:0; font-size:22px; }
+    .sub { color:#777; font-size:13px; margin:5px 0 20px; }
+    .card { background:#fff; border-radius:16px; padding:18px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
+    .field { margin-top:13px; }
+    label { display:block; color:#777; font-size:12px; margin-bottom:5px; }
+    input,select { width:100%; border:1px solid #d8dfdb; border-radius:9px; padding:11px 12px; font:inherit; background:#fff; }
+    input:focus,select:focus { outline:2px solid rgba(40,181,112,.2); border-color:#28b570; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .image-box { height:210px; border:2px dashed #cdd8d1; border-radius:12px; display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:pointer; background:#fafcfb; color:#94a098; }
+    .image-box img { width:100%; height:100%; object-fit:contain; display:none; }
+    .image-box.has-image span { display:none; }
+    .image-box.has-image img { display:block; }
+    .chips { display:flex; flex-wrap:wrap; gap:8px; }
+    .chip { border:1px solid #cfd8d2; border-radius:8px; padding:7px 11px; font-size:12px; cursor:pointer; color:#66716b; }
+    .chip.active { border-color:#087a48; background:#effaf4; color:#087a48; font-weight:700; }
+    .actions { display:flex; gap:10px; margin-top:20px; }
+    button.primary { flex:1; border:0; border-radius:10px; padding:13px; background:#087a48; color:#fff; font-weight:700; cursor:pointer; }
+    button.primary:disabled { opacity:.6; cursor:not-allowed; }
+    .status { min-height:18px; margin-top:12px; font-size:13px; color:#087a48; }
+    .status.error { color:#c0392b; }
+    @media(max-width:560px) { .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="top">
+      <button class="back" onclick="history.back()">← Back</button>
+      <div><h1 id="pageTitle">Add Product</h1><div class="sub">Add a product to the store catalog.</div></div>
+    </div>
+    <form class="card" id="productForm">
+      <label>Product photo</label>
+      <div class="image-box" id="imageBox" onclick="document.getElementById('image').click()"><span>＋ Choose image</span><img id="preview" alt="Product preview"></div>
+      <input id="image" type="file" accept="image/*" hidden>
+      <div class="grid">
+        <div class="field"><label for="categoryId">Category</label><select id="categoryId" required></select></div>
+        <div class="field"><label for="subcategoryId">Subcategory</label><select id="subcategoryId"></select></div>
+      </div>
+      <div class="field"><label for="sectionId">Section</label><select id="sectionId"></select></div>
+      <div class="grid">
+        <div class="field"><label for="brand">Brand</label><input id="brand" required></div>
+        <div class="field"><label for="model">Model</label><input id="model"></div>
+      </div>
+      <div class="field"><label for="name">Product name</label><input id="name" required></div>
+      <div class="grid">
+        <div class="field"><label for="price">Price (₦)</label><input id="price" type="number" min="0" required></div>
+        <div class="field"><label for="stock">Stock quantity</label><input id="stock" type="number" min="0" value="0" required></div>
+      </div>
+      <div class="field"><label for="colors">Colorways (comma-separated)</label><input id="colors" placeholder="Black/White, Red"></div>
+      <div class="field"><label>Soleplate</label><div class="chips" id="soleplates"></div></div>
+      <div class="actions"><button class="primary" id="saveBtn" type="submit">Add Product</button></div>
+      <div class="status" id="status"></div>
+    </form>
+  </main>
+  <script src="admin-auth.js"></script>
+  <script>
+    adminRequireSession();
+    const kind = new URLSearchParams(location.search).get("kind") || "product";
+    const kindLabels = { "other-shoes":"Other Shoes", jerseys:"Jerseys", gear:"Gear", equipment:"Equipment" };
+    document.getElementById("pageTitle").textContent = "Add " + (kindLabels[kind] || "Product");
+    const preferredCategories = {
+      "other-shoes": "sneakers",
+      jerseys: "sportswear",
+      gear: "football",
+      equipment: "football"
+    };
+    let categories = [];
+    const soleplateValues = ["fg","ag","sg","tf","ic","mg"];
+    document.getElementById("soleplates").innerHTML = soleplateValues.map(v => `<span class="chip" data-value="${v}">${v.toUpperCase()}</span>`).join("");
+    document.querySelectorAll(".chip").forEach(chip => chip.onclick = () => {
+      document.querySelectorAll(".chip").forEach(x => x.classList.remove("active"));
+      chip.classList.add("active");
+    });
+    document.getElementById("image").addEventListener("change", event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById("preview").src = e.target.result;
+        document.getElementById("imageBox").classList.add("has-image");
+      };
+      reader.readAsDataURL(file);
+    });
+    function fillSubcategories() {
+      const category = categories.find(c => c.id === document.getElementById("categoryId").value);
+      const subs = category?.subcategories || [];
+      document.getElementById("subcategoryId").innerHTML = subs.length
+        ? subs.map(s => `<option value="${s.id}">${s.name}</option>`).join("")
+        : '<option value="">— none —</option>';
+      fillSections();
+    }
+    function fillSections() {
+      const category = categories.find(c => c.id === document.getElementById("categoryId").value);
+      const sub = category?.subcategories?.find(s => s.id === document.getElementById("subcategoryId").value);
+      const sections = sub?.sections || [];
+      document.getElementById("sectionId").innerHTML = sections.length
+        ? sections.map(s => `<option value="${s.id}">${s.name}</option>`).join("")
+        : '<option value="">— none —</option>';
+    }
+    document.getElementById("categoryId").onchange = fillSubcategories;
+    document.getElementById("subcategoryId").onchange = fillSections;
+    (async function loadCategories() {
+      try {
+        const res = await fetch("/categories");
+        categories = await res.json();
+        document.getElementById("categoryId").innerHTML = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
+        const preferred = preferredCategories[kind];
+        if (categories.some(c => c.id === preferred)) document.getElementById("categoryId").value = preferred;
+        fillSubcategories();
+      } catch (e) {
+        document.getElementById("status").textContent = "Could not load product categories.";
+        document.getElementById("status").className = "status error";
+      }
+    })();
+    document.getElementById("productForm").onsubmit = async event => {
+      event.preventDefault();
+      const file = document.getElementById("image").files[0];
+      const status = document.getElementById("status");
+      const button = document.getElementById("saveBtn");
+      if (!file) { status.textContent = "Choose a product image first."; status.className = "status error"; return; }
+      const form = new FormData();
+      form.append("image", file);
+      form.append("brand", document.getElementById("brand").value.trim());
+      form.append("model", document.getElementById("model").value.trim());
+      form.append("name", document.getElementById("name").value.trim());
+      form.append("price", document.getElementById("price").value);
+      form.append("stock", document.getElementById("stock").value || "0");
+      form.append("categoryId", document.getElementById("categoryId").value);
+      form.append("subcategoryId", document.getElementById("subcategoryId").value);
+      form.append("sectionId", document.getElementById("sectionId").value);
+      form.append("colorways", JSON.stringify(document.getElementById("colors").value.split(",").map(x => x.trim()).filter(Boolean)));
+      const selected = document.querySelector(".chip.active");
+      form.append("soleplates", JSON.stringify(selected ? [selected.dataset.value] : []));
+      button.disabled = true; button.textContent = "Saving…"; status.textContent = "";
+      try {
+        const res = await fetch("/add-product", { method:"POST", headers:{ "Authorization":"Bearer " + localStorage.getItem("adminToken") }, body:form });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.message || "Could not add product.");
+        status.textContent = "Product added successfully.";
+        document.getElementById("productForm").reset();
+        document.getElementById("imageBox").classList.remove("has-image");
+        document.getElementById("preview").removeAttribute("src");
+      } catch (e) {
+        status.textContent = e.message || "Could not add product.";
+        status.className = "status error";
+      } finally {
+        button.disabled = false; button.textContent = "Add Product";
+      }
+    };
+  </script>
+</body>
+</html>

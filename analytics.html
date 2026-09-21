@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analytics — Ibom Sports Hub</title><link rel="icon" href="logo.png" type="image/png">
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f5f7f5;font-family:Arial,sans-serif;color:#18201b}.page{width:min(100% - 28px,980px);margin:auto;padding:20px 0 48px}.top{display:flex;align-items:center;gap:12px;margin-bottom:18px}.back{border:0;background:#fff;color:#087a48;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer}h1{font-size:21px;margin:0}.sub{color:#777;font-size:12px;margin-top:4px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{background:#fff;border-radius:14px;padding:17px;box-shadow:0 2px 10px rgba(0,0,0,.06)}.label{font-size:12px;color:#777}.value{font-size:25px;font-weight:800;color:#087a48;margin-top:7px}.section{background:#fff;border-radius:14px;padding:17px;margin-top:14px;box-shadow:0 2px 10px rgba(0,0,0,.06)}.section h2{font-size:15px;margin:0 0 13px}.bar{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:12px}.bar-label{width:75px}.bar-track{height:9px;background:#edf1ee;border-radius:9px;flex:1;overflow:hidden}.bar-fill{height:100%;background:#28b570;border-radius:9px}.empty{color:#999;font-size:13px}@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <main class="page"><div class="top"><button class="back" onclick="history.back()">← Back</button><div><h1>SALES ANALYTICS DASHBOARD</h1><div class="sub">Live metrics from the store data currently available</div></div></div>
+  <div class="grid"><div class="card"><div class="label">Catalog products</div><div class="value" id="products">—</div></div><div class="card"><div class="label">Approved reviews</div><div class="value" id="reviews">—</div></div><div class="card"><div class="label">Open tickets</div><div class="value" id="tickets">—</div></div><div class="card"><div class="label">Support interactions</div><div class="value" id="interactions">—</div></div></div>
+  <section class="section"><h2>Support channel mix</h2><div id="channels" class="empty">Loading analytics…</div></section>
+  <section class="section"><h2>Data coverage</h2><p class="empty">These reports use current catalog, review, ticket, and support-event data. Completed order and payment analytics are not available until sales records are added to the store.</p></section>
+  </main>
+  <script src="admin-auth.js"></script><script>
+    const adminSessionReady = adminRequireSession();
+    const esc = v => String(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    (async function loadAnalytics() {
+      if (!adminSessionReady) return;
+      const token = localStorage.getItem("adminToken");
+      try {
+        const [products, reviews, tickets, stats] = await Promise.all([
+          fetch("/products").then(r=>r.json()),
+          fetch("/reviews").then(r=>r.json()),
+          fetch("/tickets",{headers:{Authorization:"Bearer "+token}}).then(r=>r.json()),
+          fetch("/support-analytics/stats",{headers:{Authorization:"Bearer "+token}}).then(r=>r.json())
+        ]);
+        document.getElementById("products").textContent = products.length;
+        document.getElementById("reviews").textContent = reviews.length;
+        document.getElementById("tickets").textContent = tickets.filter(t => t.status !== "closed").length;
+        document.getElementById("interactions").textContent = stats.totalEvents || 0;
+        const totals = stats.totals || {}, max = Math.max(1, ...Object.values(totals));
+        const labels = {ai:"AI Assistant",ticket:"Direct Tickets",email:"Email",phone:"Phone",whatsapp:"WhatsApp"};
+        document.getElementById("channels").innerHTML = Object.keys(labels).map(key => `<div class="bar"><span class="bar-label">${labels[key]}</span><span class="bar-track"><span class="bar-fill" style="display:block;width:${(Number(totals[key] || 0)/max)*100}%"></span></span><strong>${Number(totals[key] || 0)}</strong></div>`).join("");
+      } catch (e) {
+        document.getElementById("channels").textContent = "Could not load analytics.";
+      }
+    })();
+  </script>
+</body>
+</html>
