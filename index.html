@@ -657,9 +657,41 @@ body.dark .photo-upload-box { border-color: #444; }
 #reviewDetail { display: none; padding: 24px 20px; }
 .review-detail-name { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
 .review-detail-stars { font-size: 26px; color: gold; margin-bottom: 14px; }
-.review-detail-photo { width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; margin-bottom: 16px; display: block; }
+.review-detail-photo { width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; margin-bottom: 16px; display: block; cursor: zoom-in; }
 .review-detail-text { font-size: 15px; line-height: 1.7; color: #333; }
 body.dark .review-detail-text { color: #ccc; }
+
+.review-image-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  background: rgba(0,0,0,.92);
+}
+.review-image-lightbox.show { display: flex; }
+.review-image-lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+.review-image-lightbox-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.16);
+  color: white;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+}
 
 .submit-review{
   color:blue;
@@ -3424,6 +3456,11 @@ CLICK HERE TO VIEW INSTAGRAM CHANNEL
     <div id="reviewDetailContent"></div>
   </div>
 
+  <div id="reviewImageLightbox" class="review-image-lightbox" onclick="closeReviewImage(event)" role="dialog" aria-modal="true" aria-label="Full-size review image">
+    <button class="review-image-lightbox-close" type="button" onclick="closeReviewImage()" aria-label="Close full-size image">&times;</button>
+    <img id="reviewImageLightboxImg" alt="Full-size review photo" onclick="event.stopPropagation()">
+  </div>
+
   <div id="resultView" style="display:none; padding:20px;"></div>
 
   <!-- VIP PAGE -->
@@ -4589,7 +4626,7 @@ function renderReviewDetail(index) {
   const name   = r.name || 'Anonymous';
   const dateStr = r.timestamp ? (() => { const d = new Date(r.timestamp); return d.getDate()+'/'+(d.getMonth()+1)+'/'+String(d.getFullYear()).slice(-2); })() : '';
   const photoHtml = r.photo
-    ? `<img class="review-detail-photo" src="${r.photo}" alt="Product photo">`
+    ? `<img class="review-detail-photo" src="${r.photo}" alt="Product photo" onclick="openReviewImage(this.src)" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ') openReviewImage(this.src)">`
     : `<div style="text-align:center;padding:24px;color:#aaa;"><svg viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5" width="52" height="52"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`;
   const myVote   = localStorage.getItem('helpful_' + r.id);
   const yesCount = r.helpful ? r.helpful.yes : 0;
@@ -4610,6 +4647,28 @@ function renderReviewDetail(index) {
       </div>
     </div>`;
 }
+
+function openReviewImage(src) {
+  if (!src) return;
+  const lightbox = document.getElementById('reviewImageLightbox');
+  const image = document.getElementById('reviewImageLightboxImg');
+  image.src = src;
+  lightbox.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeReviewImage(event) {
+  if (event && event.target !== document.getElementById('reviewImageLightbox')) return;
+  const lightbox = document.getElementById('reviewImageLightbox');
+  const image = document.getElementById('reviewImageLightboxImg');
+  lightbox.classList.remove('show');
+  image.removeAttribute('src');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') closeReviewImage();
+});
 
 async function voteHelpful(reviewId, vote) {
   const userId = getOrCreateUserId();

@@ -1,57 +1,466 @@
 [
   {
-    "id": "boots",
+    "id": "boots-drawer",
     "name": "Boots",
     "subcategories": [
       {
-        "id": "speed-boots",
-        "name": "Speed Boots",
+        "id": "model-group",
+        "name": "Model",
         "sections": [
-          { "id": "nike-mercurial", "name": "Nike Mercurial" },
-          { "id": "adidas-f50", "name": "Adidas F50" },
-          { "id": "puma-ultra", "name": "Puma Ultra" },
-          { "id": "mizuno-speed", "name": "Mizuno Speed" },
-          { "id": "nb-speed", "name": "New Balance Speed" },
-          { "id": "other-speed", "name": "Other" }
+          {
+            "id": "vapor-tile",
+            "name": "Vapor"
+          },
+          {
+            "id": "superfly-tile",
+            "name": "Superfly"
+          },
+          {
+            "id": "predator-tile",
+            "name": "Predator"
+          }
         ]
       },
       {
-        "id": "control-boots",
-        "name": "Control Boots",
+        "id": "brand-group",
+        "name": "Brand",
         "sections": [
-          { "id": "nike-tiempo", "name": "Nike Tiempo" },
-          { "id": "adidas-mundial", "name": "Adidas Mundial" },
-          { "id": "copa-sense", "name": "Copa Sense" },
-          { "id": "other-control", "name": "Other" }
+          {
+            "id": "nike-tile",
+            "name": "Nike"
+          },
+          {
+            "id": "adidas-tile",
+            "name": "Adidas"
+          },
+          {
+            "id": "puma-tile",
+            "name": "Puma"
+          }
         ]
       },
       {
-        "id": "power-boots",
-        "name": "Power Boots",
+        "id": "soleplate-group",
+        "name": "Soleplate",
         "sections": [
-          { "id": "adidas-predator", "name": "Adidas Predator" },
-          { "id": "nike-hypervenom", "name": "Nike Hypervenom" },
-          { "id": "puma-king", "name": "Puma King" },
-          { "id": "other-power", "name": "Other" }
+          {
+            "id": "fg-tile",
+            "name": "FG"
+          },
+          {
+            "id": "ag-tile",
+            "name": "AG"
+          },
+          {
+            "id": "sg-tile",
+            "name": "SG"
+          }
         ]
       },
       {
-        "id": "leather-boots",
-        "name": "Leather Boots",
+        "id": "performance-group",
+        "name": "Performance",
         "sections": [
-          { "id": "classic-leather", "name": "Classic Leather" },
-          { "id": "kangaroo-leather", "name": "Kangaroo" },
-          { "id": "other-leather", "name": "Other" }
+          {
+            "id": "speed-tile",
+            "name": "Speed"
+          },
+          {
+            "id": "control-tile",
+            "name": "Control"
+          },
+          {
+            "id": "power-tile",
+            "name": "Power"
+          },
+          {
+            "id": "comfort-tile",
+            "name": "Comfort"
+          }
         ]
       },
       {
-        "id": "turf-boots",
-        "name": "Turf & AG",
+        "id": "fit-group",
+        "name": "Fit",
         "sections": [
-          { "id": "turf-nike", "name": "Nike TF" },
-          { "id": "turf-adidas", "name": "Adidas TF" },
-          { "id": "ag-boots", "name": "AG Boots" },
-          { "id": "other-turf", "name": "Other" }
+          {
+            "id": "narrow-tile",
+            "name": "Narrow"
+          },
+          {
+            "id": "medium-tile",
+            "name": "Medium"
+          },
+          {
+            "id": "wide-tile",
+            "name": "Wide"
+          }
+        ]
+      },
+      {
+        "id": "closure-group",
+        "name": "Closure",
+        "sections": [
+          {
+            "id": "laced-tile",
+            "name": "Laced"
+          },
+          {
+            "id": "laceless-tile",
+            "name": "Laceless"
+          },
+          {
+            "id": "ft-tile",
+            "name": "Foldover Tongue"
+          }
+        ]
+      },
+      {
+        "id": "lockdown-group",
+        "name": "Lockdown",
+        "sections": [
+          {
+            "id": "standard-tile",
+            "name": "Standard"
+          },
+          {
+            "id": "enhanced-tile",
+            "name": "Enhanced"
+          },
+          {
+            "id": "adaptive-tile",
+            "name": "Adaptive"
+          },
+          {
+            "id": "fly-tile",
+            "name": "Fly"
+          },
+          {
+            "id": "dynamic-tile",
+            "name": "Dynamic (Sock)"
+          }
+        ]
+      },
+      {
+        "id": "height-group",
+        "name": "Height",
+        "sections": [
+          {
+            "id": "low-tile",
+            "name": "Low Cut"
+          },
+          {
+            "id": "mid-tile",
+            "name": "Mid Cut"
+          },
+          {
+            "id": "high-tile",
+            "name": "High-Cut"
+          }
+        ]
+      },
+      {
+        "id": "responsiveness-group",
+        "name": "Responsiveness",
+        "sections": [
+          {
+            "id": "stiff-tile",
+            "name": "High Stiffness"
+          },
+          {
+            "id": "balanced-response-tile",
+            "name": "Balance Responsiveness"
+          },
+          {
+            "id": "flexible-tile",
+            "name": "Flexible Responsiveness"
+          }
+        ]
+      },
+      {
+        "id": "upper-group",
+        "name": "Upper",
+        "sections": [
+          {
+            "id": "knit-tile",
+            "name": "Knit"
+          },
+          {
+            "id": "leather-tile",
+            "name": "Leather"
+          },
+          {
+            "id": "synth-leather-tile",
+            "name": "Synthetic Leather"
+          },
+          {
+            "id": "microfibre-tile",
+            "name": "Microfibre"
+          },
+          {
+            "id": "mesh-tile",
+            "name": "Mesh"
+          },
+          {
+            "id": "hybrid-tile",
+            "name": "Hybrid"
+          },
+          {
+            "id": "textured-tile",
+            "name": "Textured"
+          }
+        ]
+      },
+      {
+        "id": "toe-box-group",
+        "name": "Toe Box",
+        "sections": [
+          {
+            "id": "narrow-toe-box",
+            "name": "Narrow"
+          },
+          {
+            "id": "medium-toe-box",
+            "name": "Medium"
+          },
+          {
+            "id": "wide-toe-box",
+            "name": "Wide"
+          }
+        ]
+      },
+      {
+        "id": "midfoot-group",
+        "name": "Midfoot",
+        "sections": [
+          {
+            "id": "narrow-midfoot",
+            "name": "Narrow"
+          },
+          {
+            "id": "medium-midfoot",
+            "name": "Medium"
+          },
+          {
+            "id": "wide-midfoot",
+            "name": "Wide"
+          }
+        ]
+      },
+      {
+        "id": "heel-group",
+        "name": "Heel",
+        "sections": [
+          {
+            "id": "narrow-heel",
+            "name": "Narrow"
+          },
+          {
+            "id": "medium-heel",
+            "name": "Medium"
+          },
+          {
+            "id": "wide-heel",
+            "name": "Wide"
+          }
+        ]
+      },
+      {
+        "id": "feel-group",
+        "name": "Feel",
+        "sections": [
+          {
+            "id": "ultra-soft-tile",
+            "name": "Ultra Soft"
+          },
+          {
+            "id": "soft-tile",
+            "name": "Soft"
+          },
+          {
+            "id": "medium-tile",
+            "name": "Medium"
+          },
+          {
+            "id": "firm-tile",
+            "name": "Firm"
+          },
+          {
+            "id": "very-firm-tile",
+            "name": "Very Firm"
+          }
+        ]
+      },
+      {
+        "id": "weight-group",
+        "name": "Weight",
+        "sections": [
+          {
+            "id": "ultra-light-tile",
+            "name": "Ultra Light"
+          },
+          {
+            "id": "light-tile",
+            "name": "Light"
+          },
+          {
+            "id": "standard-tile",
+            "name": "Standard"
+          },
+          {
+            "id": "heavy-tile",
+            "name": "Heavy"
+          }
+        ]
+      },
+      {
+        "id": "breathability-group",
+        "name": "Breathability",
+        "sections": [
+          {
+            "id": "high-tile",
+            "name": "High"
+          },
+          {
+            "id": "medium-tile",
+            "name": "Medium"
+          },
+          {
+            "id": "low-tile",
+            "name": "Low"
+          },
+          {
+            "id": "minimal-tile",
+            "name": "Minimal"
+          }
+        ]
+      },
+      {
+        "id": "traction-group",
+        "name": "Traction",
+        "sections": [
+          {
+            "id": "aggressive-tile",
+            "name": "Aggressive"
+          },
+          {
+            "id": "balanced-tile",
+            "name": "Balanced"
+          },
+          {
+            "id": "smooth-tile",
+            "name": "Smooth"
+          },
+          {
+            "id": "stable-tile",
+            "name": "Stable"
+          }
+        ]
+      },
+      {
+        "id": "heel-support-tile",
+        "name": "Heel Support",
+        "sections": [
+          {
+            "id": "high-tile",
+            "name": "High"
+          },
+          {
+            "id": "medium-heel-support",
+            "name": "Medium"
+          },
+          {
+            "id": "flexible-heel-support",
+            "name": "Flexible"
+          },
+          {
+            "id": "minimal-heel-support",
+            "name": "Minimal"
+          }
+        ]
+      },
+      {
+        "id": "ball-comfort-group",
+        "name": "Ball Comfort",
+        "sections": [
+          {
+            "id": "barefoot-tile",
+            "name": "Barefoot"
+          },
+          {
+            "id": "grip-ball-control",
+            "name": "Grip"
+          },
+          {
+            "id": "balanced-ball-control",
+            "name": "Balanced"
+          },
+          {
+            "id": "cushioned-ball-control",
+            "name": "Cushioned"
+          },
+          {
+            "id": "structured-ball-control",
+            "name": "Structured"
+          }
+        ]
+      },
+      {
+        "id": "durability-group",
+        "name": "Durability",
+        "sections": [
+          {
+            "id": "high-durability",
+            "name": "High"
+          },
+          {
+            "id": "balanced-durability",
+            "name": "Balanced"
+          },
+          {
+            "id": "performance-durability",
+            "name": "Performance"
+          },
+          {
+            "id": "low-durability",
+            "name": "Low"
+          }
+        ]
+      },
+      {
+        "id": "latest-drops-group",
+        "name": "Latest Drops",
+        "sections": [
+          {
+            "id": "nike-drops",
+            "name": "Nike"
+          },
+          {
+            "id": "adidas-drops",
+            "name": "Adidas"
+          },
+          {
+            "id": "puma-drops",
+            "name": "Puma"
+          }
+        ]
+      },
+      {
+        "id": "special-editions-group",
+        "name": "Special Editions",
+        "sections": [
+          {
+            "id": "nike-specials",
+            "name": "Nike"
+          },
+          {
+            "id": "adidas-specials",
+            "name": "Adidas"
+          },
+          {
+            "id": "puma-specials",
+            "name": "Puma"
+          }
         ]
       }
     ]
@@ -64,19 +473,40 @@
         "id": "football-balls",
         "name": "Football",
         "sections": [
-          { "id": "match-balls", "name": "Match Balls" },
-          { "id": "training-balls", "name": "Training" },
-          { "id": "futsal-balls", "name": "Futsal" },
-          { "id": "mini-balls", "name": "Mini Balls" }
+          {
+            "id": "match-balls",
+            "name": "Match Balls"
+          },
+          {
+            "id": "training-balls",
+            "name": "Training"
+          },
+          {
+            "id": "futsal-balls",
+            "name": "Futsal"
+          },
+          {
+            "id": "mini-balls",
+            "name": "Mini Balls"
+          }
         ]
       },
       {
         "id": "other-balls",
         "name": "Other Sports",
         "sections": [
-          { "id": "basketball-ball", "name": "Basketball" },
-          { "id": "tennis-ball", "name": "Tennis" },
-          { "id": "other-balls", "name": "Other" }
+          {
+            "id": "basketball-ball",
+            "name": "Basketball"
+          },
+          {
+            "id": "tennis-ball",
+            "name": "Tennis"
+          },
+          {
+            "id": "other-balls",
+            "name": "Other"
+          }
         ]
       }
     ]
@@ -89,29 +519,62 @@
         "id": "jerseys",
         "name": "Jerseys",
         "sections": [
-          { "id": "club-jerseys", "name": "Club Kits" },
-          { "id": "national-jerseys", "name": "National" },
-          { "id": "retro-jerseys", "name": "Retro" },
-          { "id": "training-jerseys", "name": "Training" }
+          {
+            "id": "club-jerseys",
+            "name": "Club Kits"
+          },
+          {
+            "id": "national-jerseys",
+            "name": "National"
+          },
+          {
+            "id": "retro-jerseys",
+            "name": "Retro"
+          },
+          {
+            "id": "training-jerseys",
+            "name": "Training"
+          }
         ]
       },
       {
         "id": "training-wear",
         "name": "Training Wear",
         "sections": [
-          { "id": "training-tops", "name": "Tops" },
-          { "id": "training-bottoms", "name": "Bottoms" },
-          { "id": "full-kits", "name": "Full Kits" },
-          { "id": "compression", "name": "Compression" }
+          {
+            "id": "training-tops",
+            "name": "Tops"
+          },
+          {
+            "id": "training-bottoms",
+            "name": "Bottoms"
+          },
+          {
+            "id": "full-kits",
+            "name": "Full Kits"
+          },
+          {
+            "id": "compression",
+            "name": "Compression"
+          }
         ]
       },
       {
         "id": "goalkeeper-kits",
         "name": "Goalkeeper",
         "sections": [
-          { "id": "gk-jersey", "name": "GK Jerseys" },
-          { "id": "gk-shorts", "name": "GK Shorts" },
-          { "id": "gk-pants", "name": "GK Pants" }
+          {
+            "id": "gk-jersey",
+            "name": "GK Jerseys"
+          },
+          {
+            "id": "gk-shorts",
+            "name": "GK Shorts"
+          },
+          {
+            "id": "gk-pants",
+            "name": "GK Pants"
+          }
         ]
       }
     ]
@@ -124,28 +587,76 @@
         "id": "lifestyle-sneakers",
         "name": "Lifestyle",
         "sections": [
-          { "id": "nike-lifestyle", "name": "Nike" },
-          { "id": "adidas-lifestyle", "name": "Adidas" },
-          { "id": "puma-lifestyle", "name": "Puma" },
-          { "id": "other-lifestyle", "name": "Other" }
+          {
+            "id": "nike-lifestyle",
+            "name": "Nike"
+          },
+          {
+            "id": "adidas-lifestyle",
+            "name": "Adidas"
+          },
+          {
+            "id": "puma-lifestyle",
+            "name": "Puma"
+          },
+          {
+            "id": "other-lifestyle",
+            "name": "Other"
+          }
         ]
       },
       {
         "id": "running-sneakers",
         "name": "Running",
         "sections": [
-          { "id": "nike-running", "name": "Nike" },
-          { "id": "adidas-running", "name": "Adidas" },
-          { "id": "nb-running", "name": "New Balance" },
-          { "id": "other-running", "name": "Other" }
+          {
+            "id": "nike-running",
+            "name": "Nike"
+          },
+          {
+            "id": "adidas-running",
+            "name": "Adidas"
+          },
+          {
+            "id": "nb-running",
+            "name": "New Balance"
+          },
+          {
+            "id": "other-running",
+            "name": "Other"
+          }
         ]
       }
     ]
   },
-  { "id": "football", "name": "Football", "subcategories": [] },
-  { "id": "tennis", "name": "Tennis", "subcategories": [] },
-  { "id": "basketball", "name": "Basketball", "subcategories": [] },
-  { "id": "track", "name": "Track", "subcategories": [] },
-  { "id": "bodybuilding", "name": "Bodybuilding", "subcategories": [] },
-  { "id": "snooker", "name": "Snooker", "subcategories": [] }
+  {
+    "id": "football",
+    "name": "Football",
+    "subcategories": []
+  },
+  {
+    "id": "tennis",
+    "name": "Tennis",
+    "subcategories": []
+  },
+  {
+    "id": "basketball",
+    "name": "Basketball",
+    "subcategories": []
+  },
+  {
+    "id": "track",
+    "name": "Track",
+    "subcategories": []
+  },
+  {
+    "id": "bodybuilding",
+    "name": "Bodybuilding",
+    "subcategories": []
+  },
+  {
+    "id": "snooker",
+    "name": "Snooker",
+    "subcategories": []
+  }
 ]
