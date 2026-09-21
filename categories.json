@@ -8,16 +8,28 @@
         "name": "Model",
         "sections": [
           {
-            "id": "vapor-tile",
+            "id": "vapor-model-tile",
             "name": "Vapor"
           },
           {
-            "id": "superfly-tile",
+            "id": "superfly-model-tile",
             "name": "Superfly"
           },
           {
-            "id": "predator-tile",
+            "id": "predator-model-tile",
             "name": "Predator"
+          },
+          {
+            "id": "f50-model-tile",
+            "name": "F50"
+          },
+          {
+            "id": "phantom-model-tile",
+            "name": "Phantom"
+          },
+          {
+            "id": "future-model-tile",
+            "name": "Future"
           }
         ]
       },
@@ -26,16 +38,28 @@
         "name": "Brand",
         "sections": [
           {
-            "id": "nike-tile",
+            "id": "nike-brand-tile",
             "name": "Nike"
           },
           {
-            "id": "adidas-tile",
+            "id": "adidas-brand-tile",
             "name": "Adidas"
           },
           {
-            "id": "puma-tile",
+            "id": "puma-brand-tile",
             "name": "Puma"
+          },
+          {
+            "id": "new-balance-brand-tile",
+            "name": "New Balance"
+          },
+          {
+            "id": "sketchers-brand-tile",
+            "name": "Sketcher"
+          },
+          {
+            "id": "brandless-brand-tile",
+            "name": "Brandless Boots"
           }
         ]
       },
@@ -44,16 +68,28 @@
         "name": "Soleplate",
         "sections": [
           {
-            "id": "fg-tile",
+            "id": "fg-soleplate-tile",
             "name": "FG"
           },
           {
-            "id": "ag-tile",
+            "id": "ag-soleplate-tile",
             "name": "AG"
           },
           {
-            "id": "sg-tile",
+            "id": "sg-soleplate-tile",
             "name": "SG"
+          },
+          {
+            "id": "tf-soleplate-tile",
+            "name": "TF"
+          },
+          {
+            "id": "in-court-soleplate-tile",
+            "name": "IC"
+          },
+          {
+            "id": "mg-soleplate-tile",
+            "name": "MG"
           }
         ]
       },
@@ -62,19 +98,19 @@
         "name": "Performance",
         "sections": [
           {
-            "id": "speed-tile",
+            "id": "speed-performance-tile",
             "name": "Speed"
           },
           {
-            "id": "control-tile",
+            "id": "control-performance-tile",
             "name": "Control"
           },
           {
-            "id": "power-tile",
+            "id": "power-performance-tile",
             "name": "Power"
           },
           {
-            "id": "comfort-tile",
+            "id": "comfort-performance-tile",
             "name": "Comfort"
           }
         ]
@@ -84,15 +120,15 @@
         "name": "Fit",
         "sections": [
           {
-            "id": "narrow-tile",
+            "id": "narrow-fit-tile",
             "name": "Narrow"
           },
           {
-            "id": "medium-tile",
+            "id": "medium-fit-tile",
             "name": "Medium"
           },
           {
-            "id": "wide-tile",
+            "id": "wide-fit-tile",
             "name": "Wide"
           }
         ]
@@ -102,16 +138,16 @@
         "name": "Closure",
         "sections": [
           {
-            "id": "laced-tile",
+            "id": "laced-closure-tile",
             "name": "Laced"
           },
           {
-            "id": "laceless-tile",
+            "id": "laceless-closure-tile",
             "name": "Laceless"
           },
           {
-            "id": "ft-tile",
-            "name": "Foldover Tongue"
+            "id": "ft-closure-tile",
+            "name": "Foldover Tongue (FT)"
           }
         ]
       },
@@ -120,23 +156,23 @@
         "name": "Lockdown",
         "sections": [
           {
-            "id": "standard-tile",
+            "id": "standard-lockdown-tile",
             "name": "Standard"
           },
           {
-            "id": "enhanced-tile",
+            "id": "enhanced-lockdown-tile",
             "name": "Enhanced"
           },
           {
-            "id": "adaptive-tile",
+            "id": "adaptive-lockdown-tile",
             "name": "Adaptive"
           },
           {
-            "id": "fly-tile",
+            "id": "fly-lockdown-tile",
             "name": "Fly"
           },
           {
-            "id": "dynamic-tile",
+            "id": "dynamic-lockdown-tile",
             "name": "Dynamic (Sock)"
           }
         ]
@@ -146,15 +182,15 @@
         "name": "Height",
         "sections": [
           {
-            "id": "low-tile",
+            "id": "low-height-tile",
             "name": "Low Cut"
           },
           {
-            "id": "mid-tile",
+            "id": "mid-height-tile",
             "name": "Mid Cut"
           },
           {
-            "id": "high-tile",
+            "id": "high-height-tile",
             "name": "High-Cut"
           }
         ]
@@ -164,7 +200,7 @@
         "name": "Responsiveness",
         "sections": [
           {
-            "id": "stiff-tile",
+            "id": "stiff-response-tile",
             "name": "High Stiffness"
           },
           {
@@ -172,7 +208,7 @@
             "name": "Balance Responsiveness"
           },
           {
-            "id": "flexible-tile",
+            "id": "flexible-response-tile",
             "name": "Flexible Responsiveness"
           }
         ]
@@ -182,15 +218,15 @@
         "name": "Upper",
         "sections": [
           {
-            "id": "knit-tile",
+            "id": "knit-upper-tile",
             "name": "Knit"
           },
           {
-            "id": "leather-tile",
+            "id": "leather-upper-tile",
             "name": "Leather"
           },
           {
-            "id": "synth-leather-tile",
+            "id": "synth-leather-upper-tile",
             "name": "Synthetic Leather"
           },
           {

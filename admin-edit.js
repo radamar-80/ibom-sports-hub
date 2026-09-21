@@ -10,4 +10,10 @@ function authHeaders(json) {
 }
 
 async function apiGet(url) {
-  const res = await fetch(url, { headers: authHeaders()
+  const res = await fetch(url, { headers: authHeaders() });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.message || `Request failed (${res.status})`);
+  }
+  return res.json();
+}
