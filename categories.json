@@ -80,27 +80,33 @@
         "sections": [
           {
             "id": "fg-soleplate-tile",
-            "name": "FG"
+            "name": "FG",
+            "image": "fg.jpg"
           },
           {
             "id": "ag-soleplate-tile",
-            "name": "AG"
+            "name": "AG",
+            "image": "ag.jpg"
           },
           {
             "id": "sg-soleplate-tile",
-            "name": "SG"
+            "name": "SG",
+            "image": "sg.jpg"
           },
           {
             "id": "tf-soleplate-tile",
-            "name": "TF"
+            "name": "TF",
+            "image": "tf.jpg"
           },
           {
             "id": "in-court-soleplate-tile",
-            "name": "IC"
+            "name": "IC",
+            "image": "ic.jpg"
           },
           {
             "id": "mg-soleplate-tile",
-            "name": "MG"
+            "name": "MG",
+            "image": "mg.jpg"
           }
         ]
       },
