@@ -188,6 +188,22 @@ async function login() {
     btn.textContent = "LOGIN";
   }
 }
+
+  const btn = document.getElementById('github-login');
+
+  btn.addEventListener('click', async () => {
+    const { data, error } = await supabase.auth.signInWith0Auth({
+      provider: 'github',
+      options: {
+        redirectTo: 'https://radamar-80.github.io/ibom-sports-hub',
+    },
+    });
+
+    if (error) {
+      console.error('Error logging in:', error.message);
+    }
+  });
+  
 </script>
 
 </body>
