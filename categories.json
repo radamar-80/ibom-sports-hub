@@ -127,6 +127,11 @@
         ]
       },
       {
+        "id": "color-group",
+        "name": "COLOR",
+        "sections": []
+      },
+      {
         "id": "performance-group",
         "name": "Performance",
         "sections": [
